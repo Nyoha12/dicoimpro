@@ -33,6 +33,49 @@ class StatutUniteClassable(StrEnum):
     A_VERIFIER = "a_verifier"
 
 
+class StatutTraitement(StrEnum):
+    JAMAIS_TRAITE = "jamais_traite"
+    CONTROLE_TRIAGE_FAIT = "controle_triage_fait"
+    RUN_001_FAIT = "RUN_001_fait"
+    RUN_002_FAIT = "RUN_002_fait"
+    STABLE = "stable"
+    ACCEPTE_AVEC_PRUDENCE = "accepté_avec_prudence"
+    FICHE_CADRE = "fiche_cadre"
+    A_REVOIR = "à_revoir"
+    TRAITE_NON_PUBLIABLE = "traité_non_publiable"
+    A_REJOUER = "a_rejouer"
+
+
+class DecisionFinaleProvisoire(StrEnum):
+    STABLE = "stable"
+    STABLE_COMME_FICHE_CADRE = "stable_comme_fiche_cadre"
+    ACCEPTE_AVEC_PRUDENCE = "accepté_avec_prudence"
+    RESTER_FICHE_FAMILLE = "rester_fiche_famille"
+    CONTROLE_PERIMETRE_AVANT_RUN = "controle_perimetre_avant_RUN"
+    MECANISME_PASSERELLE = "mecanisme_passerelle"
+    VERIFIER_ALIAS_DOUBLON = "verifier_alias_doublon"
+    A_SCINDER_PLUS_TARD = "a_scinder_plus_tard"
+    A_REVOIR_APRES_RUN_002 = "à_revoir_après_RUN_002"
+    BLOQUE_PAR_INCOHERENCE_PROTOCOLE = "bloqué_par_incohérence_protocolaire"
+    NON_RETRAITER_COMME_NOUVEAU = "non_retraiter_comme_nouveau"
+
+
+class PublicationStatus(StrEnum):
+    PUBLIABLE = "publiable"
+    PUBLIABLE_AVEC_NOTE = "publiable_avec_note"
+    PUBLICATION_BLOQUEE = "publication_bloquée"
+    NON_PUBLIABLE_COMME_FICHE_PRATIQUE = "non_publiable_comme_fiche_pratique"
+    PUBLICATION_DIFFEREE = "publication_differee"
+
+
+class AuditStatus(StrEnum):
+    AUDIT_ROUGE = "audit_rouge"
+    AUDIT_ORANGE = "audit_orange"
+    AUDIT_JAUNE = "audit_jaune"
+    AUDIT_INFO = "audit_info"
+    AUCUN_AUDIT_REQUIS = "aucun_audit_requis"
+
+
 class Indices(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
@@ -118,3 +161,70 @@ class ClassificationInput(BaseModel):
     preuve_improvisation_centrale_explicitement_documentee: bool = False
     perimetre_stable: bool = False
     exception_S_A_justifiee: bool = False
+
+
+class DeltaRecord(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    object_type: Literal["DeltaRecord"] = "DeltaRecord"
+    delta_id: str
+    id_entree_original: str
+    champ_modifie: str
+    valeur_avant: str | None
+    valeur_apres: str | None
+    raison_delta: str
+    impact_decision: str
+    source_ou_regle_declencheuse: str | None = None
+
+
+class FinalProvisionalDecision(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    object_type: Literal["FinalProvisionalDecision"] = "FinalProvisionalDecision"
+    id_entree_original: str
+    titre_original_exact: str
+    statut_traitement: StatutTraitement
+    decision_finale_provisoire: DecisionFinaleProvisoire
+    type_unite_RUN: TypeUniteRun
+    indices_finaux: Indices
+    publication_status: PublicationStatus
+    audit_status: AuditStatus = AuditStatus.AUCUN_AUDIT_REQUIS
+    note_prudence: str | None = None
+    deltas_associes: list[str] = Field(default_factory=list)
+    alertes_associees: list[str] = Field(default_factory=list)
+
+
+class JournalPatchEntry(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    id_entree_original: str
+    titre_original_exact: str
+    operation: Literal["append", "update"]
+    statut_traitement: StatutTraitement
+    dernier_controle: str | None = None
+    dernier_RUN: str | None = None
+    decision_finale_provisoire: DecisionFinaleProvisoire
+    type_unite_RUN: TypeUniteRun
+    lien_archive_RUN: str | None = None
+    remarque: str | None = None
+    a_ne_pas_retraiter_nouveau: bool = True
+
+
+class JournalPatchControl(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    nb_entries: int
+    contains_direct_journal_write: bool = False
+    requires_human_review_before_publication: bool = False
+    schema_valid: bool = True
+
+
+class JournalPatch(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    object_type: Literal["JournalPatch"] = "JournalPatch"
+    patch_id: str
+    active_journal_cible: str
+    mode: Literal["append_or_update_controlled"] = "append_or_update_controlled"
+    entries: list[JournalPatchEntry]
+    controle_patch: JournalPatchControl
