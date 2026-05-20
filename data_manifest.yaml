@@ -3,57 +3,66 @@ protocol_version: v0.2.3
 automation_layer: v0.2.3-auto
 
 # IMPORTANT
-# This manifest separates control/state files from documentary musical sources.
-# A file being listed here does NOT mean it is an active musical source.
-# The pipeline must use role/status/may_be_used_as_documentary_source before reading anything.
+# Les chemins de fichiers ne portent AUCUNE autorite methodologique.
+# Le pipeline ne doit jamais inferer le statut d'un fichier a partir d'un nom de dossier.
+# La seule autorite technique est ce manifest : file_name + status + role + flags.
+# Donc tous les fichiers locaux peuvent etre places dans data/local_files/.
 
-project_control_sources:
-  # These files define method, schema, base state, or conservative triage.
-  # They guide the workflow but are not documentary proof for a musical claim.
+local_files_root: data/local_files/
+
+files:
   - file_name: PROTOCOLE_BASE_IMPROVISATION_v0.2.3.md
-    local_path: data/project_control/PROTOCOLE_BASE_IMPROVISATION_v0.2.3.md
+    local_path: data/local_files/PROTOCOLE_BASE_IMPROVISATION_v0.2.3.md
     status: protocol_active
     role: methodological_protocol
+    layer: project_control
     may_be_used_as_documentary_source: false
+    may_be_written_directly_by_pipeline: false
+
   - file_name: DICTIONNAIRE_DONNEES_IMPROVISATION_v0.2.3.xlsx
-    local_path: data/project_control/DICTIONNAIRE_DONNEES_IMPROVISATION_v0.2.3.xlsx
+    local_path: data/local_files/DICTIONNAIRE_DONNEES_IMPROVISATION_v0.2.3.xlsx
     status: data_dictionary_active
     role: schema_and_columns_reference
+    layer: project_control
     may_be_used_as_documentary_source: false
+    may_be_written_directly_by_pipeline: false
+
   - file_name: improvisation_musicale_base_collecte_001_300_ENRICHIE.xlsx
-    local_path: data/project_control/improvisation_musicale_base_collecte_001_300_ENRICHIE.xlsx
+    local_path: data/local_files/improvisation_musicale_base_collecte_001_300_ENRICHIE.xlsx
     status: base_001_300_active
     role: original_entries_base
+    layer: project_control
     may_be_used_as_documentary_source: false
+    may_be_written_directly_by_pipeline: false
+
   - file_name: TRIAGE_STRUCTUREL_300_CONSERVATOIRE_v0.2.2.xlsx
-    local_path: data/project_control/TRIAGE_STRUCTUREL_300_CONSERVATOIRE_v0.2.2.xlsx
+    local_path: data/local_files/TRIAGE_STRUCTUREL_300_CONSERVATOIRE_v0.2.2.xlsx
     status: triage_conservatoire_temporaire
     role: non_validating_conservative_triage
+    layer: project_control
     may_be_used_as_documentary_source: false
+    may_be_written_directly_by_pipeline: false
 
-journal_pilotage:
-  # This is a temporary steering journal. It records treatment state.
-  # It is NOT documentary proof and NOT a consolidated publication state.
-  file_name: JOURNAL_PILOTAGE_ACTIF_TEMP_v0.2.3_POST005_RUN002_026030_NON_SOURCE_DOC.xlsx
-  local_path: data/journal_pilotage/JOURNAL_PILOTAGE_ACTIF_TEMP_v0.2.3_POST005_RUN002_026030_NON_SOURCE_DOC.xlsx
-  status: active_temporary_steering_journal_readonly
-  role: treatment_state_and_anti_reprocessing_guard
-  scope_warning: post005_run002_026030_partial_project_state
-  may_be_used_as_documentary_source: false
-  may_be_written_directly_by_pipeline: false
+  - file_name: JOURNAL_PILOTAGE_ACTIF_TEMP_v0.2.3_POST005_RUN002_026030_NON_SOURCE_DOC.xlsx
+    local_path: data/local_files/JOURNAL_PILOTAGE_ACTIF_TEMP_v0.2.3_POST005_RUN002_026030_NON_SOURCE_DOC.xlsx
+    status: active_temporary_steering_journal_readonly
+    role: treatment_state_and_anti_reprocessing_guard
+    layer: steering_journal
+    scope_warning: post005_run002_026030_partial_project_state
+    may_be_used_as_documentary_source: false
+    may_be_written_directly_by_pipeline: false
+    publication_authority: false
 
-reference_documentaire:
-  # Only files explicitly listed here may be treated as documentary reference material.
-  # Even then, specific claims still need source audit.
   - file_name: Improvisation musicale mondiale.pdf
-    local_path: data/reference_documentaire/Improvisation musicale mondiale.pdf
-    status: reference_documentaire_active
+    local_path: data/local_files/Improvisation musicale mondiale.pdf
+    status: documentary_reference_active
     role: documentary_context_reference
+    layer: documentary_reference
     may_be_used_as_documentary_source: true
     requires_source_audit_for_claims: true
+    may_be_written_directly_by_pipeline: false
 
 archives_non_actives:
-  local_path: data/archives_non_actives/
   policy: Les archives de RUN documentent une execution. Elles ne remplacent ni la base 001-300, ni le triage conservatoire, ni le protocole, ni le journal de pilotage.
   may_be_used_as_documentary_source: false
 
