@@ -2,34 +2,66 @@ project: dicoimpro
 protocol_version: v0.2.3
 automation_layer: v0.2.3-auto
 
-active_journal:
-  file_name: JOURNAL_PILOTAGE_ACTIF_TEMP_v0.2.3_POST005_RUN002_026030_NON_SOURCE_DOC.xlsx
-  local_path: data/active_journal/JOURNAL_PILOTAGE_ACTIF_TEMP_v0.2.3_POST005_RUN002_026030_NON_SOURCE_DOC.xlsx
-  status: active_journal_readonly
-  role: pilotage_non_source_documentaire
-  may_be_used_as_documentary_source: false
+# IMPORTANT
+# This manifest separates control/state files from documentary musical sources.
+# A file being listed here does NOT mean it is an active musical source.
+# The pipeline must use role/status/may_be_used_as_documentary_source before reading anything.
 
-active_sources:
+project_control_sources:
+  # These files define method, schema, base state, or conservative triage.
+  # They guide the workflow but are not documentary proof for a musical claim.
   - file_name: PROTOCOLE_BASE_IMPROVISATION_v0.2.3.md
-    local_path: data/active_sources/PROTOCOLE_BASE_IMPROVISATION_v0.2.3.md
-    status: active_source
+    local_path: data/project_control/PROTOCOLE_BASE_IMPROVISATION_v0.2.3.md
+    status: protocol_active
+    role: methodological_protocol
     may_be_used_as_documentary_source: false
   - file_name: DICTIONNAIRE_DONNEES_IMPROVISATION_v0.2.3.xlsx
-    local_path: data/active_sources/DICTIONNAIRE_DONNEES_IMPROVISATION_v0.2.3.xlsx
-    status: active_source
+    local_path: data/project_control/DICTIONNAIRE_DONNEES_IMPROVISATION_v0.2.3.xlsx
+    status: data_dictionary_active
+    role: schema_and_columns_reference
     may_be_used_as_documentary_source: false
   - file_name: improvisation_musicale_base_collecte_001_300_ENRICHIE.xlsx
-    local_path: data/active_sources/improvisation_musicale_base_collecte_001_300_ENRICHIE.xlsx
-    status: active_source
+    local_path: data/project_control/improvisation_musicale_base_collecte_001_300_ENRICHIE.xlsx
+    status: base_001_300_active
+    role: original_entries_base
     may_be_used_as_documentary_source: false
   - file_name: TRIAGE_STRUCTUREL_300_CONSERVATOIRE_v0.2.2.xlsx
-    local_path: data/active_sources/TRIAGE_STRUCTUREL_300_CONSERVATOIRE_v0.2.2.xlsx
-    status: active_source_temporaire
+    local_path: data/project_control/TRIAGE_STRUCTUREL_300_CONSERVATOIRE_v0.2.2.xlsx
+    status: triage_conservatoire_temporaire
+    role: non_validating_conservative_triage
     may_be_used_as_documentary_source: false
+
+journal_pilotage:
+  # This is a temporary steering journal. It records treatment state.
+  # It is NOT documentary proof and NOT a consolidated publication state.
+  file_name: JOURNAL_PILOTAGE_ACTIF_TEMP_v0.2.3_POST005_RUN002_026030_NON_SOURCE_DOC.xlsx
+  local_path: data/journal_pilotage/JOURNAL_PILOTAGE_ACTIF_TEMP_v0.2.3_POST005_RUN002_026030_NON_SOURCE_DOC.xlsx
+  status: active_temporary_steering_journal_readonly
+  role: treatment_state_and_anti_reprocessing_guard
+  scope_warning: post005_run002_026030_partial_project_state
+  may_be_used_as_documentary_source: false
+  may_be_written_directly_by_pipeline: false
+
+reference_documentaire:
+  # Only files explicitly listed here may be treated as documentary reference material.
+  # Even then, specific claims still need source audit.
   - file_name: Improvisation musicale mondiale.pdf
-    local_path: data/active_sources/Improvisation musicale mondiale.pdf
-    status: active_source
+    local_path: data/reference_documentaire/Improvisation musicale mondiale.pdf
+    status: reference_documentaire_active
+    role: documentary_context_reference
     may_be_used_as_documentary_source: true
+    requires_source_audit_for_claims: true
 
 archives_non_actives:
-  policy: Les archives de RUN documentent une execution. Elles ne remplacent ni la base 001-300, ni le triage conservatoire, ni le protocole, ni le journal actif.
+  local_path: data/archives_non_actives/
+  policy: Les archives de RUN documentent une execution. Elles ne remplacent ni la base 001-300, ni le triage conservatoire, ni le protocole, ni le journal de pilotage.
+  may_be_used_as_documentary_source: false
+
+outputs:
+  local_path: data/outputs/
+
+logs:
+  local_path: data/logs/
+
+audit_queue:
+  local_path: data/audit_queue/
