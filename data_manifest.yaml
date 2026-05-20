@@ -1,0 +1,35 @@
+project: dicoimpro
+protocol_version: v0.2.3
+automation_layer: v0.2.3-auto
+
+active_journal:
+  file_name: JOURNAL_PILOTAGE_ACTIF_TEMP_v0.2.3_POST005_RUN002_026030_NON_SOURCE_DOC.xlsx
+  local_path: data/active_journal/JOURNAL_PILOTAGE_ACTIF_TEMP_v0.2.3_POST005_RUN002_026030_NON_SOURCE_DOC.xlsx
+  status: active_journal_readonly
+  role: pilotage_non_source_documentaire
+  may_be_used_as_documentary_source: false
+
+active_sources:
+  - file_name: PROTOCOLE_BASE_IMPROVISATION_v0.2.3.md
+    local_path: data/active_sources/PROTOCOLE_BASE_IMPROVISATION_v0.2.3.md
+    status: active_source
+    may_be_used_as_documentary_source: false
+  - file_name: DICTIONNAIRE_DONNEES_IMPROVISATION_v0.2.3.xlsx
+    local_path: data/active_sources/DICTIONNAIRE_DONNEES_IMPROVISATION_v0.2.3.xlsx
+    status: active_source
+    may_be_used_as_documentary_source: false
+  - file_name: improvisation_musicale_base_collecte_001_300_ENRICHIE.xlsx
+    local_path: data/active_sources/improvisation_musicale_base_collecte_001_300_ENRICHIE.xlsx
+    status: active_source
+    may_be_used_as_documentary_source: false
+  - file_name: TRIAGE_STRUCTUREL_300_CONSERVATOIRE_v0.2.2.xlsx
+    local_path: data/active_sources/TRIAGE_STRUCTUREL_300_CONSERVATOIRE_v0.2.2.xlsx
+    status: active_source_temporaire
+    may_be_used_as_documentary_source: false
+  - file_name: Improvisation musicale mondiale.pdf
+    local_path: data/active_sources/Improvisation musicale mondiale.pdf
+    status: active_source
+    may_be_used_as_documentary_source: true
+
+archives_non_actives:
+  policy: Les archives de RUN documentent une execution. Elles ne remplacent ni la base 001-300, ni le triage conservatoire, ni le protocole, ni le journal actif.
