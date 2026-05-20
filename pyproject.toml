@@ -21,6 +21,9 @@ dev = [
   "ruff>=0.5.0"
 ]
 
+[project.scripts]
+dico-impro = "dico_impro.cli:main"
+
 [tool.setuptools.packages.find]
 where = ["src"]
 
