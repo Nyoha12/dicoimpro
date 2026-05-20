@@ -5,13 +5,18 @@ __pycache__/
 .pytest_cache/
 
 # Local project data: kept outside normal Git versioning
-data/active_sources/*
-data/active_journal/*
+data/project_control/*
+data/journal_pilotage/*
+data/reference_documentaire/*
 data/archives_non_actives/*
 data/outputs/*
 data/logs/*
 data/audit_queue/*
 data/tmp/*
+
+# Legacy folder names kept ignored in case they exist locally
+data/active_sources/*
+data/active_journal/*
 
 !data/**/.gitkeep
 
