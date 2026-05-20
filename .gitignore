@@ -1,0 +1,21 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Local project data: kept outside normal Git versioning
+data/active_sources/*
+data/active_journal/*
+data/archives_non_actives/*
+data/outputs/*
+data/logs/*
+data/audit_queue/*
+data/tmp/*
+
+!data/**/.gitkeep
+
+# Binary source files should stay local unless Git LFS/DVC is introduced intentionally
+*.xlsx
+*.xls
+*.pdf
