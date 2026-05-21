@@ -16,7 +16,7 @@ class AuditGravite(StrEnum):
 
 
 class EntryState(BatchScopedContract):
-    object_type: Literal["EntryState"] = "EntryState"
+    object_type: Literal["EntryState"]
     id_entree_original: NonEmptyStr
     titre_original_exact: NonEmptyStr
     source_base_ref: NonEmptyStr | None = None
@@ -31,7 +31,7 @@ class EntryState(BatchScopedContract):
 
 
 class AuditQueueRecord(BatchScopedContract):
-    object_type: Literal["AuditQueueRecord"] = "AuditQueueRecord"
+    object_type: Literal["AuditQueueRecord"]
     id_entree_original: NonEmptyStr
     titre_original_exact: NonEmptyStr | None = None
     audit_id: NonEmptyStr
