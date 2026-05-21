@@ -6,6 +6,8 @@ from dico_impro.contracts import BatchReport, BatchState, BatchStatus
 
 def valid_batch_state_data() -> dict[str, object]:
     return {
+        "object_type": "BatchState",
+        "schema_version": "v0.2.3-auto",
         "created_by": "tests",
         "batch_id": "BATCH_001",
         "created_at": "2026-05-21T00:00:00Z",
@@ -21,6 +23,8 @@ def valid_batch_state_data() -> dict[str, object]:
 
 def valid_batch_report_data() -> dict[str, object]:
     return {
+        "object_type": "BatchReport",
+        "schema_version": "v0.2.3-auto",
         "created_by": "tests",
         "batch_id": "BATCH_001",
         "protocol_version": "v0.2.3",
@@ -58,6 +62,22 @@ def test_valid_batch_report_is_accepted():
 def test_batch_state_rejects_missing_required_field():
     data = valid_batch_state_data()
     data.pop("created_at")
+
+    with pytest.raises(ValidationError):
+        BatchState.model_validate(data)
+
+
+def test_batch_state_rejects_missing_schema_version():
+    data = valid_batch_state_data()
+    data.pop("schema_version")
+
+    with pytest.raises(ValidationError):
+        BatchState.model_validate(data)
+
+
+def test_batch_state_rejects_missing_object_type():
+    data = valid_batch_state_data()
+    data.pop("object_type")
 
     with pytest.raises(ValidationError):
         BatchState.model_validate(data)
