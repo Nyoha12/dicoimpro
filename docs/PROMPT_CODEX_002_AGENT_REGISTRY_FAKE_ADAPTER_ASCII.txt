@@ -1,0 +1,105 @@
+You are working in the dicoimpro repository.
+
+Goal: create the minimal local agent mechanics for v0.2.3-auto: AgentRegistry, AgentAdapter, FakeAgentAdapter, and a local QualityGate. Do not call OpenAI. Do not add dry-run orchestration. Do not select candidates.
+
+Read first, in this order:
+1. docs/README.md
+2. docs/REGISTRE_DECISIONS_CONSOLIDEES_v0.2.3-auto.md
+3. docs/PLAN_ARCHITECTURE_SDK_DICO_IMPRO_v0.2.3-auto.md
+4. docs/CONTRATS_JSON_v0.2.3-auto.md
+5. docs/STRATEGIE_TESTS_PRUDENCE_v0.2.3-auto.md
+6. docs/SPEC_ADAPTATEURS_AGENTS_v0.2.3-auto.md
+7. docs/FEUILLE_ROUTE_IMPLEMENTATION_SDK_v0.2.3-auto.md
+8. docs/AUDIT_CONCEPTION_AVANT_CODEX_v0.2.3-auto.md
+9. docs/MISSIONS_CODEX_v0.2.3-auto.md
+
+Important: docs/ARCHITECTURE_SDK_v0.2.3-auto.md is superseded. Do not use it as the main reference.
+
+Expected starting state: Codex Mission 001 is merged into main and pytest passes.
+
+Tasks:
+1. Create these modules:
+   - src/dico_impro/agents/__init__.py
+   - src/dico_impro/agents/registry.py
+   - src/dico_impro/agents/adapters/__init__.py
+   - src/dico_impro/agents/adapters/base.py
+   - src/dico_impro/agents/adapters/fake.py
+   - src/dico_impro/agents/quality_gates.py
+2. Create an AgentAdapter interface or Protocol with method:
+   run_task(task: AgentTask, contract: AgentContract) -> AgentResult
+3. Create AgentRegistry.
+   - It only registers already-valid AgentContract objects.
+   - It must reject a disabled agent.
+   - It must reject a missing agent.
+   - It must check agent_name / expected_schema coherence at minimum.
+4. Create FakeAgentAdapter.
+   - It consumes AgentTask + AgentContract.
+   - It always returns a valid Pydantic AgentResult for controlled scenarios.
+   - It reads no local project files.
+   - It performs no network call.
+5. Simulate at least these scenarios:
+   - success_valid
+   - success_with_warning
+   - schema_invalid
+   - non_parseable_output
+   - protocol_violation
+   - source_confusion
+   - publication_blocking
+   - run_002_required
+6. Create a simple local quality gate classification in quality_gates.py:
+   - recoverable
+   - blocking
+   - prudence
+   - ok
+7. Add tests:
+   - tests/test_agent_registry.py
+   - tests/test_fake_adapter.py
+   - tests/test_agent_quality_gates.py
+8. Tests must verify:
+   - registry accepts a valid contract;
+   - registry rejects a missing agent;
+   - registry rejects a disabled agent;
+   - FakeAgentAdapter returns valid AgentResult objects;
+   - every fake scenario listed above is covered;
+   - errors are classified correctly;
+   - no object without schema_version or object_type passes;
+   - no file/source/journal operation is performed.
+9. Run pytest.
+
+Absolute prohibitions:
+- do not launch a RUN;
+- do not identify candidates;
+- do not process any real entry;
+- do not modify the active journal;
+- do not modify any file in data/local_files;
+- do not use the old PDF;
+- do not add any OpenAI call;
+- do not add any network call;
+- do not create OpenAIAdapter;
+- do not create src/dico_impro/agents/prompts.py;
+- do not create a dry-run CLI;
+- do not create an orchestration package;
+- do not create an exports package;
+- do not create SourceDiscoveryAgent;
+- do not turn Validation, DeltaBuilder, JournalPatchBuilder, or BatchReporter into autonomous agents;
+- do not delete existing tests;
+- do not weaken existing rules to make pytest pass.
+
+Success criteria:
+- pytest passes;
+- existing tests remain green;
+- new tests cover all fake scenarios listed above;
+- no local source file is modified;
+- no network call is added;
+- no dry-run orchestration is added;
+- no automatic documentary discovery agent is added.
+
+At the end, summarize exactly:
+1. modified files;
+2. added files;
+3. added tests;
+4. commands executed;
+5. pytest result;
+6. important technical choices;
+7. unresolved points;
+8. guarantee that data/local_files, the active journal, OpenAI/network calls, dry-run orchestration, and SourceDiscoveryAgent were not touched.
