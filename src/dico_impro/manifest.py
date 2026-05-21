@@ -17,6 +17,7 @@ class ManifestFile(BaseModel):
     layer: str | None = None
     may_be_used_as_documentary_source: bool = False
     may_be_written_directly_by_pipeline: bool = False
+    required_for_bootstrap: bool = True
 
 
 class DataManifest(BaseModel):
@@ -36,6 +37,12 @@ class DataManifest(BaseModel):
 
     def writable_files(self) -> list[ManifestFile]:
         return [item for item in self.files if item.may_be_written_directly_by_pipeline]
+
+    def required_files(self) -> list[ManifestFile]:
+        return [item for item in self.files if item.required_for_bootstrap]
+
+    def optional_files(self) -> list[ManifestFile]:
+        return [item for item in self.files if not item.required_for_bootstrap]
 
 
 def load_manifest(path: str | Path = "data_manifest.yaml") -> DataManifest:
