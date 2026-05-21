@@ -16,7 +16,7 @@ class StrictContractModel(BaseModel):
 
 
 class VersionedContract(StrictContractModel):
-    schema_version: SchemaVersion = SCHEMA_VERSION
+    schema_version: SchemaVersion
     created_by: NonEmptyStr
 
 
@@ -50,7 +50,7 @@ class PublicationStatus(StrEnum):
 
 
 class GoldenSetCase(VersionedContract):
-    object_type: Literal["GoldenSetCase"] = "GoldenSetCase"
+    object_type: Literal["GoldenSetCase"]
     case_id: NonEmptyStr
     id_entree_original: NonEmptyStr
     titre_original_exact: NonEmptyStr | None = None
