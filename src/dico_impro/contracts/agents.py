@@ -8,7 +8,7 @@ from dico_impro.contracts.common import BatchScopedContract, NonEmptyStr, Valida
 
 
 class AgentContract(VersionedContract):
-    object_type: Literal["AgentContract"] = "AgentContract"
+    object_type: Literal["AgentContract"]
     agent_name: NonEmptyStr
     agent_version: NonEmptyStr
     mission: NonEmptyStr
@@ -20,7 +20,7 @@ class AgentContract(VersionedContract):
 
 
 class AgentTask(BatchScopedContract):
-    object_type: Literal["AgentTask"] = "AgentTask"
+    object_type: Literal["AgentTask"]
     task_id: NonEmptyStr
     id_entree_original: NonEmptyStr | None = None
     titre_original_exact: NonEmptyStr | None = None
@@ -33,7 +33,7 @@ class AgentTask(BatchScopedContract):
 
 
 class AgentResult(BatchScopedContract):
-    object_type: Literal["AgentResult"] = "AgentResult"
+    object_type: Literal["AgentResult"]
     result_id: NonEmptyStr
     task_id: NonEmptyStr
     agent_name: NonEmptyStr
