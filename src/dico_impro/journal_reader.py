@@ -74,7 +74,7 @@ def load_journal_records(path: str | Path, sheet_name: str | None = None) -> lis
         except ValueError:
             continue
 
-        for row in rows[header_index + 1 :]:
+        for row_index, row in enumerate(rows[header_index + 1 :], start=header_index + 2):
             values = _row_values(row)
             if not any(value not in (None, "") for value in values):
                 continue
@@ -84,7 +84,7 @@ def load_journal_records(path: str | Path, sheet_name: str | None = None) -> lis
                 if headers[col_index]
             }
             record["_sheet"] = name
-            record["_row_index"] = header_index + 2
+            record["_row_index"] = row_index
             records.append(record)
 
     if not records:
