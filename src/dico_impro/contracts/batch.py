@@ -19,7 +19,7 @@ class BatchStatus(StrEnum):
 
 
 class BatchState(BatchScopedContract):
-    object_type: Literal["BatchState"] = "BatchState"
+    object_type: Literal["BatchState"]
     created_at: NonEmptyStr
     status: BatchStatus
     steps_completed: list[NonEmptyStr] = Field(default_factory=list)
@@ -31,7 +31,7 @@ class BatchState(BatchScopedContract):
 
 
 class BatchReport(BatchScopedContract):
-    object_type: Literal["BatchReport"] = "BatchReport"
+    object_type: Literal["BatchReport"]
     protocol_version: NonEmptyStr
     automation_layer: NonEmptyStr
     entries_total: NonNegativeInt
