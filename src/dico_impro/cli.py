@@ -25,26 +25,30 @@ def _find_journal_file(manifest: DataManifest) -> Path:
 def cmd_check_manifest(args: argparse.Namespace) -> int:
     manifest = load_manifest(args.manifest)
     root = Path(args.root)
-    missing: list[str] = []
+    missing_required: list[str] = []
+    missing_optional: list[str] = []
     present: list[str] = []
 
     for item in manifest.files:
         path = root / item.local_path
         if path.exists():
             present.append(item.file_name)
+        elif item.required_for_bootstrap:
+            missing_required.append(item.file_name)
         else:
-            missing.append(item.file_name)
+            missing_optional.append(item.file_name)
 
     result = {
         "project": manifest.project,
         "protocol_version": manifest.protocol_version,
         "automation_layer": manifest.automation_layer,
         "present": present,
-        "missing": missing,
-        "ok": not missing,
+        "missing_required": missing_required,
+        "missing_optional": missing_optional,
+        "ok": not missing_required,
     }
     _print_json(result)
-    return 0 if not missing else 1
+    return 0 if not missing_required else 1
 
 
 def cmd_check_journal_post005(args: argparse.Namespace) -> int:
