@@ -21,9 +21,20 @@ def test_manifest_flags_journal_as_non_documentary_and_readonly():
     assert journal.status == "active_temporary_steering_journal_readonly"
 
 
-def test_manifest_has_only_pdf_as_documentary_reference_for_now():
+def test_manifest_has_no_default_documentary_reference_for_now():
     manifest = load_manifest("data_manifest.yaml")
     documentary = manifest.documentary_files()
 
-    assert [item.file_name for item in documentary] == ["Improvisation musicale mondiale.pdf"]
-    assert all(not item.required_for_bootstrap for item in documentary)
+    assert documentary == []
+
+
+def test_manifest_marks_old_pdf_as_legacy_optional_reference():
+    manifest = load_manifest("data_manifest.yaml")
+    legacy_refs = [item for item in manifest.files if item.file_name == "Improvisation musicale mondiale.pdf"]
+
+    assert len(legacy_refs) == 1
+    old_pdf = legacy_refs[0]
+    assert old_pdf.status == "legacy_optional_reference"
+    assert old_pdf.layer == "legacy_reference"
+    assert old_pdf.may_be_used_as_documentary_source is False
+    assert old_pdf.required_for_bootstrap is False
