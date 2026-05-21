@@ -1,4 +1,7 @@
-from dico_impro.manifest import load_manifest
+import pytest
+from pydantic import ValidationError
+
+from dico_impro.manifest import DataManifest, load_manifest
 
 
 def test_manifest_loads_and_uses_single_local_files_root():
@@ -38,3 +41,24 @@ def test_manifest_marks_old_pdf_as_legacy_optional_reference():
     assert old_pdf.layer == "legacy_reference"
     assert old_pdf.may_be_used_as_documentary_source is False
     assert old_pdf.required_for_bootstrap is False
+    assert old_pdf.requires_explicit_activation is True
+
+
+def test_manifest_rejects_unknown_file_fields():
+    raw_manifest = {
+        "project": "dicoimpro",
+        "protocol_version": "v0.2.3",
+        "automation_layer": "v0.2.3-auto",
+        "files": [
+            {
+                "file_name": "bad.xlsx",
+                "local_path": "data/local_files/bad.xlsx",
+                "status": "bad",
+                "role": "bad",
+                "may_be_used_as_doc_source": True,
+            }
+        ],
+    }
+
+    with pytest.raises(ValidationError):
+        DataManifest.model_validate(raw_manifest)
