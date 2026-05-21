@@ -12,12 +12,13 @@ def test_manifest_loads_and_uses_single_local_files_root():
 
 def test_manifest_flags_journal_as_non_documentary_and_readonly():
     manifest = load_manifest("data_manifest.yaml")
-    files = manifest.by_file_name()
-    journal = files["JOURNAL_PILOTAGE_ACTIF_TEMP_v0.2.3_POST005_RUN002_026030_NON_SOURCE_DOC.xlsx"]
+    journals = [item for item in manifest.files if item.layer == "steering_journal"]
 
+    assert len(journals) == 1
+    journal = journals[0]
     assert journal.may_be_used_as_documentary_source is False
     assert journal.may_be_written_directly_by_pipeline is False
-    assert journal.layer == "steering_journal"
+    assert journal.status == "active_temporary_steering_journal_readonly"
 
 
 def test_manifest_has_only_pdf_as_documentary_reference_for_now():
@@ -25,3 +26,4 @@ def test_manifest_has_only_pdf_as_documentary_reference_for_now():
     documentary = manifest.documentary_files()
 
     assert [item.file_name for item in documentary] == ["Improvisation musicale mondiale.pdf"]
+    assert all(not item.required_for_bootstrap for item in documentary)
