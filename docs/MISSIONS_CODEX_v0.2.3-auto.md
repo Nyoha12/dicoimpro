@@ -9,14 +9,17 @@ Objet : fournir des missions prêtes à donner à Codex, bornées, testables, sa
 
 Codex est autorisé à modifier le code, mais pas à modifier la doctrine.
 
-Codex doit respecter les documents suivants :
+Codex doit respecter les documents suivants, dans cet ordre de priorité :
 
 ```text
-docs/PLAN_ARCHITECTURE_SDK_DICO_IMPRO_v0.2.3-auto.md
-docs/CONTRATS_JSON_v0.2.3-auto.md
-docs/STRATEGIE_TESTS_PRUDENCE_v0.2.3-auto.md
-docs/SPEC_ADAPTATEURS_AGENTS_v0.2.3-auto.md
-docs/FEUILLE_ROUTE_IMPLEMENTATION_SDK_v0.2.3-auto.md
+1. docs/REGISTRE_DECISIONS_CONSOLIDEES_v0.2.3-auto.md
+2. docs/PLAN_ARCHITECTURE_SDK_DICO_IMPRO_v0.2.3-auto.md
+3. docs/CONTRATS_JSON_v0.2.3-auto.md
+4. docs/STRATEGIE_TESTS_PRUDENCE_v0.2.3-auto.md
+5. docs/SPEC_ADAPTATEURS_AGENTS_v0.2.3-auto.md
+6. docs/FEUILLE_ROUTE_IMPLEMENTATION_SDK_v0.2.3-auto.md
+7. docs/AUDIT_CONCEPTION_AVANT_CODEX_v0.2.3-auto.md
+8. docs/MISSIONS_CODEX_v0.2.3-auto.md
 ```
 
 Codex ne doit pas :
@@ -52,12 +55,14 @@ Tu travailles dans le repo dicoimpro.
 
 Objectif : implémenter les contrats Pydantic de base pour la couche SDK v0.2.3-auto.
 
-Lis d'abord :
+Lis d'abord, dans cet ordre :
+- docs/REGISTRE_DECISIONS_CONSOLIDEES_v0.2.3-auto.md
 - docs/PLAN_ARCHITECTURE_SDK_DICO_IMPRO_v0.2.3-auto.md
 - docs/CONTRATS_JSON_v0.2.3-auto.md
 - docs/STRATEGIE_TESTS_PRUDENCE_v0.2.3-auto.md
 - docs/SPEC_ADAPTATEURS_AGENTS_v0.2.3-auto.md
 - docs/FEUILLE_ROUTE_IMPLEMENTATION_SDK_v0.2.3-auto.md
+- docs/AUDIT_CONCEPTION_AVANT_CODEX_v0.2.3-auto.md
 
 À faire :
 1. Créer un package src/dico_impro/contracts/.
@@ -72,16 +77,26 @@ Lis d'abord :
    - AuditQueueRecord
 3. Réutiliser les modèles existants dans src/dico_impro/models.py quand c'est pertinent, sans casser les tests existants.
 4. Ajouter des tests unitaires pour objets valides et invalides.
-5. Ne pas ajouter d'appel OpenAI.
-6. Ne pas ajouter de logique de sélection de candidats.
-7. Ne pas modifier les fichiers data/local_files.
-8. Ne pas affaiblir les règles existantes.
+5. Utiliser des valeurs machine ASCII dans les nouveaux enums/contrats :
+   - accepte_avec_prudence, pas accepté_avec_prudence ;
+   - a_revoir, pas à_revoir ;
+   - publication_bloquee, pas publication_bloquée.
+   Si un label humain accentué est nécessaire, ajouter un champ label ou description séparé.
+6. Ne pas modifier models.py sauf nécessité minimale ; préférer créer contracts/ et préserver la compatibilité existante.
+7. Ne pas créer AgentRegistry, FakeAdapter, OpenAIAdapter ou orchestration dans cette mission.
+8. Ne pas créer SourceDiscoveryAgent.
+9. Ne pas ajouter d'appel OpenAI.
+10. Ne pas ajouter de logique de sélection de candidats.
+11. Ne pas modifier les fichiers data/local_files.
+12. Ne pas affaiblir les règles existantes.
 
 Critères de réussite :
 - pytest passe ;
 - les objets invalides sont rejetés ;
 - les objets minimaux valides sont acceptés ;
-- les tests existants restent verts.
+- les tests existants restent verts ;
+- aucun appel réseau ;
+- aucun fichier source local n'est modifié.
 ```
 
 ### Fichiers attendus
@@ -105,6 +120,7 @@ aucun appel réseau
 aucune écriture data/local_files
 aucune modification du journal
 aucune suppression de tests existants
+valeurs machine ASCII dans les nouveaux contrats
 ```
 
 ---
@@ -113,7 +129,7 @@ aucune suppression de tests existants
 
 ### Prérequis
 
-Mission 001 terminée et tests verts.
+Mission 001 terminée, relue et tests verts.
 
 ### Prompt à donner
 
@@ -123,9 +139,11 @@ Tu travailles dans le repo dicoimpro.
 Objectif : créer la mécanique agent locale sans appel OpenAI réel.
 
 Lis :
+- docs/REGISTRE_DECISIONS_CONSOLIDEES_v0.2.3-auto.md
 - docs/SPEC_ADAPTATEURS_AGENTS_v0.2.3-auto.md
 - docs/CONTRATS_JSON_v0.2.3-auto.md
 - docs/FEUILLE_ROUTE_IMPLEMENTATION_SDK_v0.2.3-auto.md
+- docs/AUDIT_CONCEPTION_AVANT_CODEX_v0.2.3-auto.md
 
 À faire :
 1. Créer AgentRegistry.
@@ -148,7 +166,9 @@ Interdictions :
 - aucun appel réseau ;
 - aucune sélection de candidats ;
 - aucune écriture journal ;
-- aucune modification data/local_files.
+- aucune modification data/local_files ;
+- ne pas implémenter SourceDiscoveryAgent ;
+- ne pas transformer Validation, DeltaBuilder, JournalPatchBuilder ou BatchReporter en agents autonomes.
 
 Critères de réussite :
 - pytest passe ;
@@ -176,7 +196,7 @@ tests/test_agent_quality_gates.py
 
 ### Prérequis
 
-Missions 001 et 002 terminées et tests verts.
+Missions 001 et 002 terminées, relues et tests verts.
 
 ### Prompt à donner
 
@@ -393,4 +413,6 @@ utilise le PDF ancien par défaut
 transforme un test de prudence en test de production de fiche
 supprime des tests existants
 introduit un appel réseau dans les tests
+crée SourceDiscoveryAgent avant arbitrage explicite
+transforme les modules déterministes en agents autonomes
 ```
