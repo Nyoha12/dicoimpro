@@ -3,8 +3,10 @@
 __pycache__/
 *.pyc
 .pytest_cache/
+*.egg-info/
 
 # Local project data: kept outside normal Git versioning
+data/local_files/*
 data/project_control/*
 data/journal_pilotage/*
 data/reference_documentaire/*
