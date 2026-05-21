@@ -139,7 +139,7 @@ Champs conceptuels :
 ```text
 agent_name
 agent_version
-contract_ref
+contract
 adapter_type
 enabled
 default_temperature
@@ -152,7 +152,8 @@ Règles :
 - un agent absent du registry ne peut pas être appelé ;
 - un agent disabled ne peut pas être appelé ;
 - un agent sans contrat validé ne peut pas être appelé ;
-- un agent dont la sortie attendue n'existe pas dans les contrats JSON est invalide.
+- un agent dont la sortie attendue n'existe pas dans les contrats JSON est invalide ;
+- le registry ne crée pas de nouvelle doctrine : il enregistre seulement des agents autorisés.
 
 ---
 
@@ -183,16 +184,14 @@ Un handoff n'est pas une conversation libre entre agents.
 
 C'est un passage structuré d'un objet validé à une autre tâche.
 
-Exemple :
+Exemple conceptuel, non implémenté en Mission Codex 002 :
 
 ```text
 RoutingDecision validé
         ↓
 ConservationAgent si risque_perte_donnees ou fiche_famille
         ↓
-SourceDiscoveryAgent si RUN documentaire autorisé
-        ↓
-SourceAuditAgent
+SourceAuditAgent si sources fournies et RUN documentaire autorisé plus tard
         ↓
 ClassificationAgent
         ↓
@@ -204,7 +203,9 @@ Règles :
 - un agent ne déclenche pas directement le suivant ;
 - l'orchestrateur décide du handoff ;
 - chaque handoff est inscrit dans `BatchState` ;
-- un handoff peut être refusé par QualityGate.
+- un handoff peut être refusé par QualityGate ;
+- `SourceDiscoveryAgent` n'est pas autorisé à ce stade ;
+- toute découverte documentaire automatique reste suspendue jusqu'à décision explicite.
 
 ---
 
@@ -322,7 +323,7 @@ ne faire aucun appel modèle réel si fake adapter activé
 ne modifier aucun fichier source
 ```
 
-Commande cible :
+Commande cible, pas en Mission Codex 002 :
 
 ```text
 dico-impro plan-batch --dry-run
@@ -398,26 +399,32 @@ Réponse système : BatchState + entries_scope + interdiction hors scope.
 
 ## 14. Implémentation recommandée
 
-Modules cibles :
+Modules cibles Mission Codex 002 :
 
 ```text
-src/dico_impro/agents/contracts.py
+src/dico_impro/agents/__init__.py
 src/dico_impro/agents/registry.py
+src/dico_impro/agents/adapters/__init__.py
 src/dico_impro/agents/adapters/base.py
 src/dico_impro/agents/adapters/fake.py
-src/dico_impro/agents/adapters/openai.py
-src/dico_impro/agents/prompts.py
 src/dico_impro/agents/quality_gates.py
 ```
 
-Tests cibles :
+Modules explicitement hors Mission Codex 002 :
 
 ```text
-tests/test_agent_contracts.py
+src/dico_impro/agents/adapters/openai.py
+src/dico_impro/agents/prompts.py
+src/dico_impro/orchestration/*
+src/dico_impro/exports/*
+```
+
+Tests cibles Mission Codex 002 :
+
+```text
 tests/test_agent_registry.py
 tests/test_fake_adapter.py
 tests/test_agent_quality_gates.py
-tests/test_orchestration_dry_run.py
 ```
 
 ---
@@ -427,10 +434,10 @@ tests/test_orchestration_dry_run.py
 Avant implémentation, valider :
 
 ```text
-1. liste finale des agents
-2. liste finale des contrats
-3. stratégie fake adapter
-4. erreurs récupérables vs bloquantes
-5. statut exact du mode dry-run
-6. format minimal des traces
+1. Mission Codex 001 intégrée et tests verts
+2. aucun appel OpenAI réel
+3. pas de SourceDiscoveryAgent
+4. pas de dry-run CLI dans cette mission
+5. pas de sélection de candidats
+6. format minimal des erreurs récupérables/bloquantes
 ```
