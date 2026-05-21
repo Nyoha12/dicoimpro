@@ -6,6 +6,8 @@ from dico_impro.contracts import AuditGravite, AuditQueueRecord, EntryState, Gol
 
 def valid_entry_state_data() -> dict[str, object]:
     return {
+        "object_type": "EntryState",
+        "schema_version": "v0.2.3-auto",
         "created_by": "tests",
         "batch_id": "BATCH_001",
         "id_entree_original": "026",
@@ -24,6 +26,8 @@ def valid_entry_state_data() -> dict[str, object]:
 
 def valid_audit_queue_record_data() -> dict[str, object]:
     return {
+        "object_type": "AuditQueueRecord",
+        "schema_version": "v0.2.3-auto",
         "created_by": "tests",
         "batch_id": "BATCH_001",
         "id_entree_original": "026",
@@ -40,6 +44,8 @@ def valid_audit_queue_record_data() -> dict[str, object]:
 
 def valid_golden_set_case_data() -> dict[str, object]:
     return {
+        "object_type": "GoldenSetCase",
+        "schema_version": "v0.2.3-auto",
         "created_by": "tests",
         "case_id": "GOLDEN_032_RESERVE",
         "id_entree_original": "032",
@@ -86,6 +92,22 @@ def test_entry_state_rejects_missing_required_field():
         EntryState.model_validate(data)
 
 
+def test_entry_state_rejects_missing_schema_version():
+    data = valid_entry_state_data()
+    data.pop("schema_version")
+
+    with pytest.raises(ValidationError):
+        EntryState.model_validate(data)
+
+
+def test_entry_state_rejects_missing_object_type():
+    data = valid_entry_state_data()
+    data.pop("object_type")
+
+    with pytest.raises(ValidationError):
+        EntryState.model_validate(data)
+
+
 def test_entry_state_rejects_extra_field():
     data = valid_entry_state_data()
     data["extra"] = "forbidden"
@@ -116,6 +138,22 @@ def test_audit_queue_record_rejects_missing_batch_id():
 
     with pytest.raises(ValidationError):
         AuditQueueRecord.model_validate(data)
+
+
+def test_golden_set_case_rejects_missing_schema_version():
+    data = valid_golden_set_case_data()
+    data.pop("schema_version")
+
+    with pytest.raises(ValidationError):
+        GoldenSetCase.model_validate(data)
+
+
+def test_golden_set_case_rejects_missing_object_type():
+    data = valid_golden_set_case_data()
+    data.pop("object_type")
+
+    with pytest.raises(ValidationError):
+        GoldenSetCase.model_validate(data)
 
 
 def test_golden_set_case_rejects_non_ascii_publication_status_value():
