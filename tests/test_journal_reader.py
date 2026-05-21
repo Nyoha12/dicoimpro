@@ -30,7 +30,24 @@ def test_load_journal_records_finds_header_row(tmp_path: Path):
 
     assert len(records) == 1
     assert records[0]["titre_original_exact"] == "Raga hindoustani"
+    assert records[0]["_row_index"] == 3
     assert index_records_by_id(records)["026"]["statut_traitement"] == "RUN_002_fait"
+
+
+def test_load_journal_records_tracks_real_row_index(tmp_path: Path):
+    path = tmp_path / "journal.xlsx"
+    workbook = Workbook()
+    sheet = workbook.active
+    sheet.title = "JOURNAL"
+    sheet.append(["Mode emploi", None])
+    sheet.append(["id_entree_original", "titre_original_exact", "statut_traitement"])
+    sheet.append([26, "Raga hindoustani", "RUN_002_fait"])
+    sheet.append([30, "Maqam", "RUN_002_fait"])
+    workbook.save(path)
+
+    records = load_journal_records(path)
+
+    assert [record["_row_index"] for record in records] == [3, 4]
 
 
 def test_post005_guards_accept_expected_state():
