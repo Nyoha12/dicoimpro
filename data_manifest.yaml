@@ -66,13 +66,14 @@ files:
   - file_name: Improvisation musicale mondiale.pdf
     canonical_name: Improvisation musicale mondiale.pdf
     local_path: data/local_files/Improvisation musicale mondiale.pdf
-    status: documentary_reference_active
-    role: documentary_context_reference
-    layer: documentary_reference
-    may_be_used_as_documentary_source: true
-    requires_source_audit_for_claims: true
+    status: legacy_optional_reference
+    role: deprecated_context_reference
+    layer: legacy_reference
+    may_be_used_as_documentary_source: false
+    requires_explicit_activation: true
     may_be_written_directly_by_pipeline: false
     required_for_bootstrap: false
+    warning: Ancienne reference documentaire. Ne pas utiliser par defaut et jamais comme source decisive automatique.
 
 ignored_local_files:
   - file_name: JOURNAL_ENTREES_TRAITEES_v0.2.3_MAJ_MINI_RUN_004_CORRIGE_STRUCTURE (2) (1).xlsx
