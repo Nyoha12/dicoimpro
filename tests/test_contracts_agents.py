@@ -6,6 +6,8 @@ from dico_impro.contracts import AgentContract, AgentResult, AgentTask, Validati
 
 def valid_agent_contract_data() -> dict[str, object]:
     return {
+        "object_type": "AgentContract",
+        "schema_version": "v0.2.3-auto",
         "created_by": "tests",
         "agent_name": "RoutingAgent",
         "agent_version": "v0.2.3-auto",
@@ -20,6 +22,8 @@ def valid_agent_contract_data() -> dict[str, object]:
 
 def valid_agent_task_data() -> dict[str, object]:
     return {
+        "object_type": "AgentTask",
+        "schema_version": "v0.2.3-auto",
         "created_by": "tests",
         "task_id": "TASK_BATCH_001_026_ROUTING",
         "batch_id": "BATCH_001",
@@ -36,6 +40,8 @@ def valid_agent_task_data() -> dict[str, object]:
 
 def valid_agent_result_data() -> dict[str, object]:
     return {
+        "object_type": "AgentResult",
+        "schema_version": "v0.2.3-auto",
         "created_by": "tests",
         "result_id": "RESULT_TASK_BATCH_001_026_ROUTING",
         "task_id": "TASK_BATCH_001_026_ROUTING",
@@ -76,6 +82,22 @@ def test_valid_agent_result_is_accepted():
 def test_agent_contract_rejects_missing_required_field():
     data = valid_agent_contract_data()
     data.pop("required_output_schema")
+
+    with pytest.raises(ValidationError):
+        AgentContract.model_validate(data)
+
+
+def test_agent_contract_rejects_missing_schema_version():
+    data = valid_agent_contract_data()
+    data.pop("schema_version")
+
+    with pytest.raises(ValidationError):
+        AgentContract.model_validate(data)
+
+
+def test_agent_contract_rejects_missing_object_type():
+    data = valid_agent_contract_data()
+    data.pop("object_type")
 
     with pytest.raises(ValidationError):
         AgentContract.model_validate(data)
