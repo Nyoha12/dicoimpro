@@ -9,9 +9,7 @@ from dico_impro.agents import (
     FakeAgentAdapter,
     QualityGateClassification,
     QualityGateResult,
-    build_agent_evaluation_record,
-    build_agent_trace_metadata,
-    evaluate_agent_result,
+    run_agent_task_with_evaluation,
 )
 from dico_impro.contracts import AgentResult, AgentTask, BatchReport, BatchState, BatchStatus
 from dico_impro.contracts.common import SCHEMA_VERSION
@@ -67,21 +65,17 @@ def run_dry_run(
     for task in tasks:
         registered = resolved_registry.get(task.agent_name)
         contract = resolved_registry.validate_task(task)
-        result = resolved_adapter.run_task(task, contract)
-        gate_result = evaluate_agent_result(result)
-        trace_metadata = build_agent_trace_metadata(
+        outcome = run_agent_task_with_evaluation(
             task,
-            result,
             contract,
+            resolved_adapter,
             adapter_type=registered.adapter_type,
             duration_ms=0,
             retry_count=0,
         )
-        results.append(result)
-        gate_results.append(gate_result)
-        evaluation_records.append(
-            build_agent_evaluation_record(task, result, gate_result, trace_metadata)
-        )
+        results.append(outcome.result)
+        gate_results.append(outcome.quality_gate_result)
+        evaluation_records.append(outcome.evaluation_record)
 
     batch_state = _build_batch_state(scope, tuple(gate_results), created_at=created_at)
     batch_report = _build_batch_report(scope, tuple(gate_results))

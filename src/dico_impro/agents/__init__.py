@@ -13,6 +13,10 @@ from dico_impro.agents.evaluation import (
     AgentEvaluationRecord,
     build_agent_evaluation_record,
 )
+from dico_impro.agents.execution import (
+    AgentExecutionOutcome,
+    run_agent_task_with_evaluation,
+)
 from dico_impro.agents.payload_validation import (
     PayloadValidationResult,
     validate_agent_result_payload,
@@ -42,6 +46,7 @@ __all__ = [
     "AgentContractMismatchError",
     "AgentDisabledError",
     "AgentEvaluationRecord",
+    "AgentExecutionOutcome",
     "AgentNotFoundError",
     "AgentRegistry",
     "AgentRegistryError",
@@ -63,5 +68,6 @@ __all__ = [
     "canonical_payload_hash",
     "classify_agent_result",
     "evaluate_agent_result",
+    "run_agent_task_with_evaluation",
     "validate_agent_result_payload",
 ]
