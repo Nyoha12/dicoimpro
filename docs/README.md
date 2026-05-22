@@ -73,6 +73,9 @@ Codex 004 - exports JSON deterministes du resultat de dry-run.
 Codex 005 - CLI dry-run plan-batch avec ecriture des exports JSON.
 Codex 006 - golden set de prudence et scenarios d'erreur conservateurs.
 Codex 007 - evaluation records par tache/resultat et validation minimale des payloads avant futur adaptateur OpenAI.
+Codex 008 - payload validation bloquante integree aux quality gates.
+Codex 009 - trace metadata deterministe par tache/resultat.
+Codex 010 - squelette OpenAIAdapter desactive par defaut, mock-only, sans appel OpenAI/reseau reel.
 ```
 
 ## Règles non négociables
