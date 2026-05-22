@@ -65,6 +65,8 @@ def test_exporter_creates_expected_json_files_in_tmp_path(tmp_path):
     assert batch_report["entries_processed"] == 2
     assert batch_report["entries_skipped"] == 0
     assert batch_report["entries_blocked"] == 0
+    assert len(parsed["evaluation_records.json"]) == 2
+    assert parsed["evaluation_records.json"][0]["payload_validation_ok"] is True
 
     master = parsed["master.json"]
     assert master["batch_id"] == "BATCH_EXPORT"

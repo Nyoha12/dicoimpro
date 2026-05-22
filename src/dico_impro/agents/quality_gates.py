@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from enum import StrEnum
 
+from dico_impro.agents.payload_validation import validate_agent_result_payload
 from dico_impro.contracts import AgentResult, ValidationStatus
 
 
@@ -31,16 +32,14 @@ PRUDENCE_ERROR_TYPES = frozenset({"run_002_required", "warning"})
 
 
 def evaluate_agent_result(result: AgentResult) -> QualityGateResult:
+    payload_validation = validate_agent_result_payload(result)
+    if not payload_validation.ok:
+        return QualityGateResult(
+            QualityGateClassification.BLOCKING,
+            payload_validation.reasons,
+        )
+
     payload = result.payload
-    reasons: list[str] = []
-
-    if payload.get("object_type") is None:
-        reasons.append("payload missing object_type")
-    if payload.get("schema_version") is None:
-        reasons.append("payload missing schema_version")
-    if reasons:
-        return QualityGateResult(QualityGateClassification.BLOCKING, tuple(reasons))
-
     error_type = payload.get("error_type")
     if error_type in BLOCKING_ERROR_TYPES:
         return QualityGateResult(QualityGateClassification.BLOCKING, (str(error_type),))

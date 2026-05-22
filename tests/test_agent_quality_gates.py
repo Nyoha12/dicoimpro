@@ -50,6 +50,11 @@ def result_for(scenario: FakeScenario) -> AgentResult:
     return FakeAgentAdapter().run_task(make_task(scenario), make_contract())
 
 
+def result_with_payload(payload: dict[str, object]) -> AgentResult:
+    result = result_for(FakeScenario.SUCCESS_VALID)
+    return AgentResult.model_validate({**result.model_dump(), "payload": payload})
+
+
 def test_quality_gate_classifies_ok_result():
     assert (
         classify_agent_result(result_for(FakeScenario.SUCCESS_VALID))
@@ -94,16 +99,52 @@ def test_quality_gate_classifies_prudence_results():
     )
 
 
-def test_quality_gate_blocks_payload_missing_contract_metadata():
+def test_evaluate_agent_result_blocks_missing_payload_object_type():
     result = result_for(FakeScenario.SUCCESS_VALID)
     broken_payload = dict(result.payload)
-    broken_payload.pop("schema_version")
-    broken = AgentResult.model_validate({**result.model_dump(), "payload": broken_payload})
+    broken_payload.pop("object_type")
+    broken = result_with_payload(broken_payload)
 
     evaluation = evaluate_agent_result(broken)
 
     assert evaluation.classification == QualityGateClassification.BLOCKING
-    assert "payload missing schema_version" in evaluation.reasons
+    assert evaluation.reasons == ("payload missing object_type",)
+
+
+def test_evaluate_agent_result_blocks_missing_payload_schema_version():
+    result = result_for(FakeScenario.SUCCESS_VALID)
+    broken_payload = dict(result.payload)
+    broken_payload.pop("schema_version")
+    broken = result_with_payload(broken_payload)
+
+    evaluation = evaluate_agent_result(broken)
+
+    assert evaluation.classification == QualityGateClassification.BLOCKING
+    assert evaluation.reasons == ("payload missing schema_version",)
+
+
+def test_evaluate_agent_result_blocks_payload_object_type_mismatch():
+    result = result_for(FakeScenario.SUCCESS_VALID)
+    broken_payload = {**result.payload, "object_type": "OtherSchema"}
+    broken = result_with_payload(broken_payload)
+
+    evaluation = evaluate_agent_result(broken)
+
+    assert evaluation.classification == QualityGateClassification.BLOCKING
+    assert evaluation.reasons == ("payload object_type does not match result.schema_name",)
+
+
+def test_evaluate_agent_result_blocks_payload_schema_version_mismatch():
+    result = result_for(FakeScenario.SUCCESS_VALID)
+    broken_payload = {**result.payload, "schema_version": "v0.0.0-test"}
+    broken = result_with_payload(broken_payload)
+
+    evaluation = evaluate_agent_result(broken)
+
+    assert evaluation.classification == QualityGateClassification.BLOCKING
+    assert evaluation.reasons == (
+        "payload schema_version does not match result.schema_version",
+    )
 
 
 def test_quality_gate_uses_validation_status_when_no_error_type_is_present():

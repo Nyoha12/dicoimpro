@@ -1,7 +1,7 @@
 import builtins
 from pathlib import Path
 
-from dico_impro.agents import FakeAgentAdapter
+from dico_impro.agents import FakeAgentAdapter, QualityGateClassification
 from dico_impro.contracts import BatchReport, BatchState, BatchStatus
 from dico_impro.orchestration import DryRunResult, ExplicitScope, run_dry_run
 
@@ -53,6 +53,37 @@ def test_dry_run_uses_fake_agent_adapter():
         "success_valid",
         "success_valid",
     ]
+
+
+def test_dry_run_reports_blocking_status_for_invalid_payload():
+    class MissingPayloadSchemaVersionAdapter(FakeAgentAdapter):
+        def run_task(self, task, contract):
+            result = super().run_task(task, contract)
+            payload = dict(result.payload)
+            payload.pop("schema_version")
+            return type(result).model_validate({**result.model_dump(), "payload": payload})
+
+    scope = ExplicitScope.model_validate(
+        {
+            "batch_id": "BATCH_INVALID_PAYLOAD",
+            "entries": [{"id_entree_original": "026", "titre_original_exact": "First"}],
+        }
+    )
+
+    result = run_dry_run(
+        scope,
+        adapter=MissingPayloadSchemaVersionAdapter(),
+        created_at="2026-05-21T00:00:00Z",
+    )
+
+    assert result.quality_gate_results[0].classification == QualityGateClassification.BLOCKING
+    assert result.batch_state.status == BatchStatus.FAILED_BLOCKING
+    assert result.batch_state.errors_blocking == ["payload missing schema_version"]
+    assert result.batch_state.errors_recoverable == []
+    assert result.batch_report.entries_total == 1
+    assert result.batch_report.entries_processed == 0
+    assert result.batch_report.entries_blocked == 1
+    assert result.batch_report.entries_skipped == 0
 
 
 def test_dry_run_writes_no_file_output(monkeypatch):
