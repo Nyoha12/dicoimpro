@@ -257,6 +257,8 @@ def test_mock_openai_planner_source_has_no_forbidden_integrations():
         ".xlsx",
         ".csv",
         "journalpatch",
+        "prompt_contracts",
+        "promptpackage",
         "prompts.py",
         "sourcediscoveryagent",
     ):
