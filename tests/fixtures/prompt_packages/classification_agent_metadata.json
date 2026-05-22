@@ -1,0 +1,32 @@
+{
+  "package_id": "prompt-package.classification-agent.v0.2.3-auto",
+  "schema_version": "v0.2.3-auto",
+  "agent_name": "ClassificationAgent",
+  "required_output_schema": "ClassificationResult",
+  "input_schema": "EntryState",
+  "output_schema": "ClassificationResult",
+  "allowed_context_keys": [
+    "entry_state",
+    "batch_scope",
+    "classification_policy"
+  ],
+  "forbidden_context_keys": [
+    "active_journal",
+    "candidate_selection",
+    "data/local_files",
+    "legacy_pdf"
+  ],
+  "required_guardrails": [
+    "no_real_openai_call_by_default",
+    "no_network_by_default",
+    "structured_output_only",
+    "payload_validation_required",
+    "quality_gate_required",
+    "trace_metadata_required",
+    "no_candidate_selection",
+    "no_active_journal_write",
+    "no_data_local_files"
+  ],
+  "prompt_body_ref": "prompt-package:ClassificationAgent:v0.2.3-auto",
+  "enabled": false
+}
