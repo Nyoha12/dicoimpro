@@ -8,7 +8,7 @@ from typing import Any
 
 import pytest
 
-from dico_impro.agents import FakeScenario
+from dico_impro.agents import FakeScenario, QualityGateClassification
 from dico_impro.contracts import BatchStatus
 from dico_impro.orchestration import ExplicitScope, run_dry_run
 
@@ -139,9 +139,20 @@ def test_golden_set_prudence_and_error_behavior(fixture_name: str):
     assert len(result.tasks) == 1
     assert len(result.agent_results) == 1
     assert len(result.quality_gate_results) == 1
+    assert len(result.evaluation_records) == 1
     assert result.tasks[0].allowed_files == []
     assert result.tasks[0].input_payload["fake_scenario"] == scenario.value
     assert result.agent_results[0].payload["scenario"] == scenario.value
+
+    expected_classification = {
+        BatchStatus.COMPLETED_CLEAN: QualityGateClassification.OK,
+        BatchStatus.COMPLETED_WITH_WARNINGS: QualityGateClassification.PRUDENCE,
+        BatchStatus.FAILED_RECOVERABLE: QualityGateClassification.RECOVERABLE,
+        BatchStatus.FAILED_BLOCKING: QualityGateClassification.BLOCKING,
+    }[expected["status"]]
+    assert result.evaluation_records[0].id_entree_original == scope.entries[0].id_entree_original
+    assert result.evaluation_records[0].quality_gate_classification == expected_classification
+    assert result.evaluation_records[0].payload_validation_ok is True
 
 
 def test_golden_set_dry_run_is_in_memory(monkeypatch: pytest.MonkeyPatch):

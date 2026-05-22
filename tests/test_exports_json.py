@@ -21,6 +21,7 @@ EXPECTED_BASE_FILES = {
     "batch_state.json",
     "agent_results.json",
     "quality_gates.json",
+    "evaluation_records.json",
 }
 
 
@@ -71,9 +72,15 @@ def test_exporter_creates_expected_json_files_in_tmp_path(tmp_path):
         "agent_results": "agent_results.json",
         "batch_report": "batch_report.json",
         "batch_state": "batch_state.json",
+        "evaluation_records": "evaluation_records.json",
         "quality_gates": "quality_gates.json",
     }
-    assert master["counts"] == {"agent_results": 2, "quality_gates": 2, "tasks": 2}
+    assert master["counts"] == {
+        "agent_results": 2,
+        "evaluation_records": 2,
+        "quality_gates": 2,
+        "tasks": 2,
+    }
     assert "journal_patch" not in master["files"]
     assert "audit_queue" not in master["files"]
 
@@ -120,6 +127,7 @@ def test_exporter_includes_future_optional_payloads_only_when_present(tmp_path):
         tasks=result.tasks,
         agent_results=result.agent_results,
         quality_gate_results=result.quality_gate_results,
+        evaluation_records=result.evaluation_records,
         journal_patch={"patch_id": "PATCH_001"},
         audit_queue=None,
     )

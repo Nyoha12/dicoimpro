@@ -16,6 +16,7 @@ EXPECTED_EXPORT_FILES = {
     "batch_report.json",
     "agent_results.json",
     "quality_gates.json",
+    "evaluation_records.json",
 }
 
 EXPECTED_SUMMARY_FIELDS = {

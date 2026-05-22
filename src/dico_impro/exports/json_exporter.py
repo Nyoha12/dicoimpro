@@ -18,6 +18,7 @@ BASE_EXPORT_FILES = {
     "batch_state": "batch_state.json",
     "agent_results": "agent_results.json",
     "quality_gates": "quality_gates.json",
+    "evaluation_records": "evaluation_records.json",
 }
 OPTIONAL_EXPORT_FILES = {
     "journal_patch": "journal_patch.json",
@@ -49,6 +50,7 @@ def export_dry_run_result_json(
         "batch_state": _to_json_compatible(result.batch_state),
         "agent_results": _to_json_compatible(result.agent_results),
         "quality_gates": _to_json_compatible(result.quality_gate_results),
+        "evaluation_records": _to_json_compatible(result.evaluation_records),
     }
     for logical_name in OPTIONAL_EXPORT_FILES:
         optional_payload = getattr(result, logical_name, None)
@@ -88,6 +90,7 @@ def _build_master_payload(result: DryRunResult, created_files: Mapping[str, Path
             "tasks": len(result.tasks),
             "agent_results": len(result.agent_results),
             "quality_gates": len(result.quality_gate_results),
+            "evaluation_records": len(result.evaluation_records),
         },
     }
 
