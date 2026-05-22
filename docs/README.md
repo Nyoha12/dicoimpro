@@ -16,6 +16,7 @@ En cas de contradiction, lire dans cet ordre :
 7. AUDIT_CONCEPTION_AVANT_CODEX_v0.2.3-auto.md
 8. CHECKLIST_VALIDATION_AVANT_CODEX_v0.2.3-auto.md
 9. MISSIONS_CODEX_v0.2.3-auto.md
+10. REVUE_ARCHITECTURE_POST_015_v0.2.3-auto.md
 ```
 
 ## Documents actifs
@@ -57,6 +58,11 @@ Checklist à vérifier avant toute délégation à Codex.
 
 Prompts de missions Codex bornées et testables.
 
+### `REVUE_ARCHITECTURE_POST_015_v0.2.3-auto.md`
+
+Revue documentaire post-Codex 015 : état courant, garde-fous, risques et conditions
+avant tout futur travail OpenAI réel ou prompt réel.
+
 ## Document superseded
 
 ### `ARCHITECTURE_SDK_v0.2.3-auto.md`
@@ -81,6 +87,7 @@ Codex 012 - planification batch mock-only via OpenAIAdapter injecte et wrapper d
 Codex 013 - construction partagee BatchState/BatchReport pour dry-run et planification OpenAI mock-only, sans changement de comportement.
 Codex 014 - contrat strict OpenAIClientResponse pour clients mock injectes, sans appel OpenAI/reseau reel ni champs prompt/modele/API.
 Codex 015 - contrat strict PromptPackage metadata-only pour futurs packages prompts, desactive par defaut, sans prompt reel/rendu/chargement ni appel OpenAI/reseau.
+Codex 016 - revue architecture post-015 documentation-only, sans changement de code ni activation OpenAI/prompt/source/RUN.
 ```
 
 ## Règles non négociables
