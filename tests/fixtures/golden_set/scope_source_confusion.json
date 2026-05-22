@@ -1,0 +1,10 @@
+{
+  "batch_id": "GOLDEN_SOURCE_CONFUSION",
+  "entries": [
+    {
+      "id_entree_original": "GOLDEN_ENTRY_SOURCE_CONFUSION",
+      "titre_original_exact": "Golden source confusion",
+      "fake_scenario": "source_confusion"
+    }
+  ]
+}

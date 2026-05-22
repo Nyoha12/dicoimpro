@@ -1,0 +1,10 @@
+{
+  "batch_id": "GOLDEN_NON_PARSEABLE_OUTPUT",
+  "entries": [
+    {
+      "id_entree_original": "GOLDEN_ENTRY_NON_PARSEABLE_OUTPUT",
+      "titre_original_exact": "Golden non parseable output",
+      "fake_scenario": "non_parseable_output"
+    }
+  ]
+}

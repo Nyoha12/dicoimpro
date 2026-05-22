@@ -1,0 +1,10 @@
+{
+  "batch_id": "GOLDEN_PUBLICATION_BLOCKING",
+  "entries": [
+    {
+      "id_entree_original": "GOLDEN_ENTRY_PUBLICATION_BLOCKING",
+      "titre_original_exact": "Golden publication blocking",
+      "fake_scenario": "publication_blocking"
+    }
+  ]
+}

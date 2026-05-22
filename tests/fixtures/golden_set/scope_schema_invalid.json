@@ -1,0 +1,10 @@
+{
+  "batch_id": "GOLDEN_SCHEMA_INVALID",
+  "entries": [
+    {
+      "id_entree_original": "GOLDEN_ENTRY_SCHEMA_INVALID",
+      "titre_original_exact": "Golden schema invalid",
+      "fake_scenario": "schema_invalid"
+    }
+  ]
+}

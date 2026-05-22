@@ -1,0 +1,10 @@
+{
+  "batch_id": "GOLDEN_RUN_002_REQUIRED",
+  "entries": [
+    {
+      "id_entree_original": "GOLDEN_ENTRY_RUN_002_REQUIRED",
+      "titre_original_exact": "Golden run 002 required",
+      "fake_scenario": "run_002_required"
+    }
+  ]
+}

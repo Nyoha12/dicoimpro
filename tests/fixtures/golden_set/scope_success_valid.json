@@ -1,0 +1,10 @@
+{
+  "batch_id": "GOLDEN_SUCCESS_VALID",
+  "entries": [
+    {
+      "id_entree_original": "GOLDEN_ENTRY_SUCCESS_VALID",
+      "titre_original_exact": "Golden success valid",
+      "fake_scenario": "success_valid"
+    }
+  ]
+}
