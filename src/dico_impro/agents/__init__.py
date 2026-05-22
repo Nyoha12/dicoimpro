@@ -26,6 +26,11 @@ from dico_impro.agents.registry import (
     AgentRegistryError,
     RegisteredAgent,
 )
+from dico_impro.agents.tracing import (
+    AgentTraceMetadata,
+    build_agent_trace_metadata,
+    canonical_payload_hash,
+)
 
 __all__ = [
     "AgentAdapter",
@@ -35,6 +40,7 @@ __all__ = [
     "AgentNotFoundError",
     "AgentRegistry",
     "AgentRegistryError",
+    "AgentTraceMetadata",
     "FakeAdapterError",
     "FakeAgentAdapter",
     "FakeScenario",
@@ -43,6 +49,8 @@ __all__ = [
     "QualityGateResult",
     "RegisteredAgent",
     "build_agent_evaluation_record",
+    "build_agent_trace_metadata",
+    "canonical_payload_hash",
     "classify_agent_result",
     "evaluate_agent_result",
     "validate_agent_result_payload",

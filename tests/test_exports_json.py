@@ -67,6 +67,13 @@ def test_exporter_creates_expected_json_files_in_tmp_path(tmp_path):
     assert batch_report["entries_blocked"] == 0
     assert len(parsed["evaluation_records.json"]) == 2
     assert parsed["evaluation_records.json"][0]["payload_validation_ok"] is True
+    trace_metadata = parsed["evaluation_records.json"][0]["trace_metadata"]
+    assert trace_metadata["adapter_type"] == "fake"
+    assert trace_metadata["retry_count"] == 0
+    assert trace_metadata["duration_ms"] == 0
+    assert trace_metadata["raw_trace_ref"].startswith("fake_trace:")
+    assert len(trace_metadata["input_hash"]) == 64
+    assert len(trace_metadata["output_hash"]) == 64
 
     master = parsed["master.json"]
     assert master["batch_id"] == "BATCH_EXPORT"

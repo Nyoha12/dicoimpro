@@ -53,6 +53,21 @@ def test_dry_run_uses_fake_agent_adapter():
         "success_valid",
         "success_valid",
     ]
+    assert [record.trace_metadata.adapter_type for record in result.evaluation_records] == [
+        "fake",
+        "fake",
+    ]
+    assert [record.trace_metadata.retry_count for record in result.evaluation_records] == [0, 0]
+    assert [record.trace_metadata.duration_ms for record in result.evaluation_records] == [0, 0]
+
+
+def test_dry_run_trace_metadata_is_deterministic_for_same_scope_and_results():
+    first = run_dry_run(make_scope(), created_at="2026-05-21T00:00:00Z")
+    second = run_dry_run(make_scope(), created_at="2026-05-21T00:00:00Z")
+
+    assert [record.trace_metadata for record in first.evaluation_records] == [
+        record.trace_metadata for record in second.evaluation_records
+    ]
 
 
 def test_dry_run_reports_blocking_status_for_invalid_payload():
