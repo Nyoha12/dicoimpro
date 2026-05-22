@@ -134,7 +134,7 @@ def cmd_plan_batch(args: argparse.Namespace) -> int:
         return 1
 
     try:
-        scope_payload = json.loads(scope_path.read_text(encoding="utf-8"))
+        scope_payload = json.loads(scope_path.read_text(encoding="utf-8-sig"))
         scope = ExplicitScope.model_validate(scope_payload)
         result = run_dry_run(scope)
         export_report = export_dry_run_result_json(result, output_dir)
