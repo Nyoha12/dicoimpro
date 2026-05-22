@@ -165,6 +165,12 @@ PromptPackage est strictement metadata-only et disabled-only. Le contrat peut va
 métadonnées d'un futur package, mais ne doit pas contenir, lire, charger ou rendre un corps
 de prompt.
 
+### PromptPackage test fixtures
+
+Les fixtures PromptPackage de tests restent strictement metadata-only et disabled-only.
+Elles ne contiennent aucun prompt reel, aucun champ prompt inline, aucun rendu de prompt
+et aucun chargement de prompt hors lecture JSON de metadata par les tests.
+
 ## 6. Verdict Go/No-Go
 
 ```text
