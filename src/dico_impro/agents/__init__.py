@@ -3,6 +3,11 @@ from dico_impro.agents.adapters import (
     FakeAdapterError,
     FakeAgentAdapter,
     FakeScenario,
+    OpenAIAdapter,
+    OpenAIAdapterConfigurationError,
+    OpenAIAdapterDisabledError,
+    OpenAIAdapterError,
+    OpenAIAdapterResponseError,
 )
 from dico_impro.agents.evaluation import (
     AgentEvaluationRecord,
@@ -44,6 +49,11 @@ __all__ = [
     "FakeAdapterError",
     "FakeAgentAdapter",
     "FakeScenario",
+    "OpenAIAdapter",
+    "OpenAIAdapterConfigurationError",
+    "OpenAIAdapterDisabledError",
+    "OpenAIAdapterError",
+    "OpenAIAdapterResponseError",
     "PayloadValidationResult",
     "QualityGateClassification",
     "QualityGateResult",
