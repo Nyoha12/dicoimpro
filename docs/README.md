@@ -77,6 +77,7 @@ Codex 008 - payload validation bloquante integree aux quality gates.
 Codex 009 - trace metadata deterministe par tache/resultat.
 Codex 010 - squelette OpenAIAdapter desactive par defaut, mock-only, sans appel OpenAI/reseau reel.
 Codex 011 - wrapper local d'execution agent avec payload validation, quality gates, trace metadata et AgentEvaluationRecord, sans appel OpenAI/reseau reel.
+Codex 012 - planification batch mock-only via OpenAIAdapter injecte et wrapper d'execution, sans CLI ni appel OpenAI/reseau reel.
 ```
 
 ## Règles non négociables

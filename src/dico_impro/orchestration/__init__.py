@@ -1,4 +1,8 @@
 from dico_impro.orchestration.dry_run import DryRunResult, build_default_registry, run_dry_run
+from dico_impro.orchestration.mock_openai_plan import (
+    build_mock_openai_planning_registry,
+    plan_batch_with_mock_openai,
+)
 from dico_impro.orchestration.scope import ExplicitScope, ScopeEntry
 from dico_impro.orchestration.task_builder import (
     DEFAULT_DRY_RUN_AGENT_NAME,
@@ -18,5 +22,7 @@ __all__ = [
     "build_agent_tasks",
     "build_default_registry",
     "build_dry_run_agent_contract",
+    "build_mock_openai_planning_registry",
+    "plan_batch_with_mock_openai",
     "run_dry_run",
 ]
