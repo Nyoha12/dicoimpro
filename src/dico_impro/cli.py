@@ -194,7 +194,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     plan_batch = subparsers.add_parser(
         "plan-batch",
-        help="PrÃ©pare un batch local en dry-run Ã  partir d'un scope JSON explicite.",
+        help="Prepare a local dry-run batch from an explicit JSON scope.",
     )
     plan_batch.add_argument("--dry-run", action="store_true", required=True)
     plan_batch.add_argument("--scope", required=True)
