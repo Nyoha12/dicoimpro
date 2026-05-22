@@ -63,6 +63,18 @@ Prompts de missions Codex bornées et testables.
 
 Document exploratoire conservé comme trace. Ne pas l'utiliser comme référence principale.
 
+## Etat courant
+
+```text
+Codex 001 - contrats Pydantic SDK : AgentTask, AgentResult, BatchState, BatchReport et garde-fous de base.
+Codex 002 - registry, fake adapter et quality gates locaux, sans appel OpenAI.
+Codex 003 - dry-run en memoire sur ExplicitScope uniquement.
+Codex 004 - exports JSON deterministes du resultat de dry-run.
+Codex 005 - CLI dry-run plan-batch avec ecriture des exports JSON.
+Codex 006 - golden set de prudence et scenarios d'erreur conservateurs.
+Codex 007 - evaluation records par tache/resultat et validation minimale des payloads avant futur adaptateur OpenAI.
+```
+
 ## Règles non négociables
 
 ```text
@@ -74,17 +86,4 @@ Document exploratoire conservé comme trace. Ne pas l'utiliser comme référence
 - Codex ne modifie pas la doctrine ;
 - JSON validé = vérité technique ;
 - XLSX/CSV = vues lisibles ou opératoires.
-```
-
-## Prochaine étape recommandée
-
-```text
-Mission Codex 001 — Contrats Pydantic SDK
-```
-
-Mais uniquement après validation humaine rapide de :
-
-```text
-AUDIT_CONCEPTION_AVANT_CODEX_v0.2.3-auto.md
-MISSIONS_CODEX_v0.2.3-auto.md
 ```

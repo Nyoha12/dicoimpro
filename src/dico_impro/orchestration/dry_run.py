@@ -4,10 +4,12 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 
 from dico_impro.agents import (
+    AgentEvaluationRecord,
     AgentRegistry,
     FakeAgentAdapter,
     QualityGateClassification,
     QualityGateResult,
+    build_agent_evaluation_record,
     evaluate_agent_result,
 )
 from dico_impro.contracts import AgentResult, AgentTask, BatchReport, BatchState, BatchStatus
@@ -27,6 +29,7 @@ class DryRunResult:
     tasks: tuple[AgentTask, ...]
     agent_results: tuple[AgentResult, ...]
     quality_gate_results: tuple[QualityGateResult, ...]
+    evaluation_records: tuple[AgentEvaluationRecord, ...]
 
 
 def build_default_registry() -> AgentRegistry:
@@ -58,12 +61,15 @@ def run_dry_run(
     tasks = build_agent_tasks(scope, resolved_registry, agent_name=DEFAULT_DRY_RUN_AGENT_NAME)
     results: list[AgentResult] = []
     gate_results: list[QualityGateResult] = []
+    evaluation_records: list[AgentEvaluationRecord] = []
 
     for task in tasks:
         contract = resolved_registry.validate_task(task)
         result = resolved_adapter.run_task(task, contract)
+        gate_result = evaluate_agent_result(result)
         results.append(result)
-        gate_results.append(evaluate_agent_result(result))
+        gate_results.append(gate_result)
+        evaluation_records.append(build_agent_evaluation_record(task, result, gate_result))
 
     batch_state = _build_batch_state(scope, tuple(gate_results), created_at=created_at)
     batch_report = _build_batch_report(scope, tuple(gate_results))
@@ -74,6 +80,7 @@ def run_dry_run(
         tasks=tasks,
         agent_results=tuple(results),
         quality_gate_results=tuple(gate_results),
+        evaluation_records=tuple(evaluation_records),
     )
 
 
@@ -96,6 +103,7 @@ def _build_batch_state(
                 "agent_tasks_built",
                 "fake_agent_tasks_executed",
                 "quality_gates_evaluated",
+                "agent_evaluation_records_built",
                 "in_memory_report_built",
             ],
             "entries_scope": scope.entry_ids,
