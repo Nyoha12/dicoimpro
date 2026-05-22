@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import inspect
 
-from dico_impro.agents import AgentEvaluationRecord, QualityGateClassification
+from dico_impro.agents import AgentEvaluationRecord, FakeAgentAdapter, QualityGateClassification
 import dico_impro.agents.evaluation as evaluation_module
 import dico_impro.agents.payload_validation as payload_validation_module
 from dico_impro.orchestration import ExplicitScope, run_dry_run
@@ -57,6 +57,34 @@ def test_evaluation_records_include_quality_gate_classification_and_payload_vali
     assert second.quality_gate_reasons == ("run_002_required",)
     assert second.payload_validation_ok is True
     assert second.payload_validation_reasons == ()
+
+
+def test_evaluation_record_classification_is_blocking_when_payload_validation_fails():
+    class MissingPayloadObjectTypeAdapter(FakeAgentAdapter):
+        def run_task(self, task, contract):
+            result = super().run_task(task, contract)
+            payload = dict(result.payload)
+            payload.pop("object_type")
+            return type(result).model_validate({**result.model_dump(), "payload": payload})
+
+    scope = ExplicitScope.model_validate(
+        {
+            "batch_id": "BATCH_EVALUATION_INVALID",
+            "entries": [{"id_entree_original": "026", "titre_original_exact": "First"}],
+        }
+    )
+
+    result = run_dry_run(
+        scope,
+        adapter=MissingPayloadObjectTypeAdapter(),
+        created_at="2026-05-21T00:00:00Z",
+    )
+
+    record = result.evaluation_records[0]
+    assert record.quality_gate_classification == QualityGateClassification.BLOCKING
+    assert record.quality_gate_reasons == ("payload missing object_type",)
+    assert record.payload_validation_ok is False
+    assert record.payload_validation_reasons == ("payload missing object_type",)
 
 
 def test_evaluation_modules_have_no_openai_or_network_integration():
