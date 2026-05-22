@@ -1,0 +1,10 @@
+{
+  "batch_id": "GOLDEN_PROTOCOL_VIOLATION",
+  "entries": [
+    {
+      "id_entree_original": "GOLDEN_ENTRY_PROTOCOL_VIOLATION",
+      "titre_original_exact": "Golden protocol violation",
+      "fake_scenario": "protocol_violation"
+    }
+  ]
+}

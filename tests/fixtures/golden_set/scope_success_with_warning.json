@@ -1,0 +1,10 @@
+{
+  "batch_id": "GOLDEN_SUCCESS_WITH_WARNING",
+  "entries": [
+    {
+      "id_entree_original": "GOLDEN_ENTRY_SUCCESS_WITH_WARNING",
+      "titre_original_exact": "Golden success with warning",
+      "fake_scenario": "success_with_warning"
+    }
+  ]
+}
