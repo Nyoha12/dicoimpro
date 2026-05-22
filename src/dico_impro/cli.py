@@ -3,16 +3,25 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
+import sys
 from typing import Sequence
 
+from pydantic import ValidationError
+
+from dico_impro.exports import export_dry_run_result_json
 from dico_impro.journal_reader import check_post005_guards, load_journal_records
 from dico_impro.manifest import DataManifest, load_manifest
 from dico_impro.models import ClassificationInput, Indices, SourceAuditInput
+from dico_impro.orchestration import ExplicitScope, run_dry_run
 from dico_impro.validators import validate_classification
 
 
 def _print_json(data: object) -> None:
     print(json.dumps(data, ensure_ascii=False, indent=2, default=str))
+
+
+def _print_error(data: object) -> None:
+    print(json.dumps(data, ensure_ascii=False, indent=2, default=str), file=sys.stderr)
 
 
 def _find_journal_file(manifest: DataManifest) -> Path:
@@ -100,6 +109,63 @@ def cmd_validate_sample(_: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_plan_batch(args: argparse.Namespace) -> int:
+    scope_path = Path(args.scope)
+    output_dir = Path(args.output_dir)
+
+    if not scope_path.is_file():
+        _print_error(
+            {
+                "ok": False,
+                "error": "scope_file_missing",
+                "scope": str(scope_path),
+            }
+        )
+        return 1
+
+    if output_dir.exists() and not output_dir.is_dir():
+        _print_error(
+            {
+                "ok": False,
+                "error": "output_path_not_directory",
+                "output_dir": str(output_dir),
+            }
+        )
+        return 1
+
+    try:
+        scope_payload = json.loads(scope_path.read_text(encoding="utf-8"))
+        scope = ExplicitScope.model_validate(scope_payload)
+        result = run_dry_run(scope)
+        export_report = export_dry_run_result_json(result, output_dir)
+    except (OSError, json.JSONDecodeError, ValidationError, TypeError, ValueError) as exc:
+        _print_error(
+            {
+                "ok": False,
+                "error": "dry_run_failed",
+                "detail": str(exc),
+            }
+        )
+        return 1
+
+    batch_report = result.batch_report
+    _print_json(
+        {
+            "ok": True,
+            "batch_id": batch_report.batch_id,
+            "output_dir": str(export_report.output_dir),
+            "created_files": sorted(
+                path.name for path in export_report.created_files.values()
+            ),
+            "entries_total": batch_report.entries_total,
+            "entries_processed": batch_report.entries_processed,
+            "entries_skipped": batch_report.entries_skipped,
+            "entries_blocked": batch_report.entries_blocked,
+        }
+    )
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="dico-impro")
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -125,6 +191,15 @@ def build_parser() -> argparse.ArgumentParser:
         help="Exécute un exemple de validation automatique sans lire ni écrire de fichier projet.",
     )
     validate_sample.set_defaults(func=cmd_validate_sample)
+
+    plan_batch = subparsers.add_parser(
+        "plan-batch",
+        help="Prepare a local dry-run batch from an explicit JSON scope.",
+    )
+    plan_batch.add_argument("--dry-run", action="store_true", required=True)
+    plan_batch.add_argument("--scope", required=True)
+    plan_batch.add_argument("--output-dir", required=True)
+    plan_batch.set_defaults(func=cmd_plan_batch)
 
     return parser
 
