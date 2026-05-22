@@ -79,6 +79,7 @@ Codex 010 - squelette OpenAIAdapter desactive par defaut, mock-only, sans appel 
 Codex 011 - wrapper local d'execution agent avec payload validation, quality gates, trace metadata et AgentEvaluationRecord, sans appel OpenAI/reseau reel.
 Codex 012 - planification batch mock-only via OpenAIAdapter injecte et wrapper d'execution, sans CLI ni appel OpenAI/reseau reel.
 Codex 013 - construction partagee BatchState/BatchReport pour dry-run et planification OpenAI mock-only, sans changement de comportement.
+Codex 014 - contrat strict OpenAIClientResponse pour clients mock injectes, sans appel OpenAI/reseau reel ni champs prompt/modele/API.
 ```
 
 ## Règles non négociables

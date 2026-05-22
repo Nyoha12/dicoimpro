@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import ast
 import builtins
 import importlib
 import inspect
@@ -13,6 +14,7 @@ from dico_impro.agents import (
     OpenAIAdapter,
     OpenAIAdapterConfigurationError,
     OpenAIAdapterDisabledError,
+    OpenAIAdapterResponseError,
     QualityGateClassification,
     evaluate_agent_result,
     validate_agent_result_payload,
@@ -130,11 +132,15 @@ def test_importing_openai_adapter_does_not_import_openai_package(
 
 def test_openai_adapter_source_has_no_network_library_imports():
     source = inspect.getsource(openai_adapter_module)
-    lowered_source = source.lower()
 
-    assert "import openai" not in lowered_source
-    for forbidden in ("requests", "httpx", "urllib", "socket"):
-        assert forbidden not in lowered_source
+    for node in ast.walk(ast.parse(source)):
+        imported_roots: list[str] = []
+        if isinstance(node, ast.Import):
+            imported_roots = [alias.name.partition(".")[0] for alias in node.names]
+        elif isinstance(node, ast.ImportFrom) and node.module is not None:
+            imported_roots = [node.module.partition(".")[0]]
+
+        assert FORBIDDEN_IMPORT_ROOTS.isdisjoint(imported_roots)
 
 
 def test_disabled_openai_adapter_raises_before_client_use():
@@ -176,6 +182,53 @@ def test_enabled_openai_adapter_with_mock_client_returns_valid_agent_result():
     validation = validate_agent_result_payload(result)
     assert validation.ok is True
     assert validation.reasons == ()
+
+
+def test_openai_adapter_uses_openai_client_response_normalization():
+    class TupleResponseClient:
+        def __init__(self) -> None:
+            self.calls = 0
+
+        def run_task(self, *, task: AgentTask, contract: AgentContract) -> dict[str, object]:
+            self.calls += 1
+            return {
+                "payload": {
+                    "object_type": "RoutingDecision",
+                    "schema_version": "v0.2.3-auto",
+                    "scenario": "success_valid",
+                    "status": "ok",
+                },
+                "warnings": ("tuple warning",),
+                "audit_notes": ("tuple audit note",),
+                "raw_model_trace_ref": f"mock_trace:{task.task_id}:tuple",
+                "validation_status": "schema_valid",
+            }
+
+    client = TupleResponseClient()
+    result = OpenAIAdapter(enabled=True, client=client).run_task(make_task(), make_contract())
+
+    assert result.result_id == "OPENAI_RESULT_TASK_BATCH_001_026_ROUTING"
+    assert result.warnings == ["tuple warning"]
+    assert result.audit_notes == ["tuple audit note"]
+    assert result.validation_status.value == "schema_valid"
+    assert client.calls == 1
+
+
+def test_openai_adapter_rejects_free_form_text_only_response():
+    class TextOnlyClient:
+        def __init__(self) -> None:
+            self.calls = 0
+
+        def run_task(self, *, task: AgentTask, contract: AgentContract) -> dict[str, object]:
+            self.calls += 1
+            return {"text": "unstructured model output"}
+
+    client = TextOnlyClient()
+
+    with pytest.raises(OpenAIAdapterResponseError, match="OpenAIClientResponse"):
+        OpenAIAdapter(enabled=True, client=client).run_task(make_task(), make_contract())
+
+    assert client.calls == 1
 
 
 def test_openai_adapter_run_task_uses_no_forbidden_imports(monkeypatch: pytest.MonkeyPatch):

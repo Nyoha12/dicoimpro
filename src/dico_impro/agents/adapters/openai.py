@@ -1,8 +1,9 @@
 from __future__ import annotations
 
-from collections.abc import Mapping
+from pydantic import ValidationError
 
-from dico_impro.contracts import AgentContract, AgentResult, AgentTask, ValidationStatus
+from dico_impro.agents.adapters.openai_contracts import OpenAIClientResponse
+from dico_impro.contracts import AgentContract, AgentResult, AgentTask
 
 
 class OpenAIAdapterError(ValueError):
@@ -66,71 +67,34 @@ class OpenAIAdapter:
         task: AgentTask,
         contract: AgentContract,
     ) -> AgentResult:
-        if not isinstance(response, Mapping):
-            raise OpenAIAdapterResponseError("OpenAIAdapter client response must be a mapping.")
-
-        payload = response.get("payload")
-        if not isinstance(payload, Mapping):
+        try:
+            client_response = OpenAIClientResponse.model_validate(response)
+        except ValidationError as exc:
             raise OpenAIAdapterResponseError(
-                "OpenAIAdapter client response must include a structured payload mapping."
-            )
-
-        raw_model_trace_ref = response.get("raw_model_trace_ref")
-        if not isinstance(raw_model_trace_ref, str) or not raw_model_trace_ref.strip():
-            raise OpenAIAdapterResponseError(
-                "OpenAIAdapter client response must include raw_model_trace_ref."
-            )
+                "OpenAIAdapter client response does not match OpenAIClientResponse."
+            ) from exc
 
         return AgentResult.model_validate(
             {
                 "object_type": "AgentResult",
                 "schema_version": task.schema_version,
                 "created_by": "OpenAIAdapter",
-                "result_id": _optional_string(
-                    response,
-                    "result_id",
-                    default=f"OPENAI_RESULT_{task.task_id}",
-                ),
+                "result_id": client_response.result_id or f"OPENAI_RESULT_{task.task_id}",
                 "task_id": task.task_id,
                 "batch_id": task.batch_id,
                 "agent_name": contract.agent_name,
                 "schema_name": contract.required_output_schema,
-                "payload": dict(payload),
-                "warnings": _optional_string_list(response, "warnings"),
-                "audit_notes": _optional_string_list(response, "audit_notes"),
-                "raw_model_trace_ref": raw_model_trace_ref,
-                "validation_status": _optional_validation_status(response),
+                "payload": dict(client_response.payload),
+                "warnings": list(client_response.warnings),
+                "audit_notes": list(client_response.audit_notes),
+                "raw_model_trace_ref": client_response.raw_model_trace_ref,
+                "validation_status": client_response.validation_status,
             }
         )
 
 
-def _optional_string(response: Mapping[str, object], field_name: str, *, default: str) -> str:
-    value = response.get(field_name, default)
-    if not isinstance(value, str) or not value.strip():
-        raise OpenAIAdapterResponseError(f"OpenAIAdapter response field {field_name} must be text.")
-    return value
-
-
-def _optional_string_list(response: Mapping[str, object], field_name: str) -> list[str]:
-    value = response.get(field_name, [])
-    if not isinstance(value, list) or not all(isinstance(item, str) for item in value):
-        raise OpenAIAdapterResponseError(
-            f"OpenAIAdapter response field {field_name} must be a list of text values."
-        )
-    return value
-
-
-def _optional_validation_status(response: Mapping[str, object]) -> ValidationStatus:
-    value = response.get("validation_status", ValidationStatus.SCHEMA_VALID)
-    try:
-        return ValidationStatus(value)
-    except ValueError as exc:
-        raise OpenAIAdapterResponseError(
-            "OpenAIAdapter response field validation_status is unknown."
-        ) from exc
-
-
 __all__ = [
+    "OpenAIClientResponse",
     "OpenAIAdapter",
     "OpenAIAdapterConfigurationError",
     "OpenAIAdapterDisabledError",

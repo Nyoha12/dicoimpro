@@ -1,6 +1,7 @@
 from dico_impro.agents.adapters.base import AgentAdapter
 from dico_impro.agents.adapters.fake import FakeAdapterError, FakeAgentAdapter, FakeScenario
 from dico_impro.agents.adapters.openai import (
+    OpenAIClientResponse,
     OpenAIAdapter,
     OpenAIAdapterConfigurationError,
     OpenAIAdapterDisabledError,
@@ -13,6 +14,7 @@ __all__ = [
     "FakeAdapterError",
     "FakeAgentAdapter",
     "FakeScenario",
+    "OpenAIClientResponse",
     "OpenAIAdapter",
     "OpenAIAdapterConfigurationError",
     "OpenAIAdapterDisabledError",
