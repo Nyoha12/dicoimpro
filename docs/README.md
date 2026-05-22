@@ -80,6 +80,7 @@ Codex 011 - wrapper local d'execution agent avec payload validation, quality gat
 Codex 012 - planification batch mock-only via OpenAIAdapter injecte et wrapper d'execution, sans CLI ni appel OpenAI/reseau reel.
 Codex 013 - construction partagee BatchState/BatchReport pour dry-run et planification OpenAI mock-only, sans changement de comportement.
 Codex 014 - contrat strict OpenAIClientResponse pour clients mock injectes, sans appel OpenAI/reseau reel ni champs prompt/modele/API.
+Codex 015 - contrat strict PromptPackage metadata-only pour futurs packages prompts, desactive par defaut, sans prompt reel/rendu/chargement ni appel OpenAI/reseau.
 ```
 
 ## Règles non négociables

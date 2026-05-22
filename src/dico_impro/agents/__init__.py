@@ -22,6 +22,12 @@ from dico_impro.agents.payload_validation import (
     PayloadValidationResult,
     validate_agent_result_payload,
 )
+from dico_impro.agents.prompt_contracts import (
+    FORBIDDEN_INLINE_PROMPT_FIELDS,
+    PromptPackage,
+    REQUIRED_FORBIDDEN_CONTEXT_KEYS,
+    REQUIRED_PROMPT_GUARDRAILS,
+)
 from dico_impro.agents.quality_gates import (
     QualityGateClassification,
     QualityGateResult,
@@ -62,8 +68,12 @@ __all__ = [
     "OpenAIAdapterError",
     "OpenAIAdapterResponseError",
     "PayloadValidationResult",
+    "FORBIDDEN_INLINE_PROMPT_FIELDS",
+    "PromptPackage",
     "QualityGateClassification",
     "QualityGateResult",
+    "REQUIRED_FORBIDDEN_CONTEXT_KEYS",
+    "REQUIRED_PROMPT_GUARDRAILS",
     "RegisteredAgent",
     "build_agent_evaluation_record",
     "build_agent_trace_metadata",
