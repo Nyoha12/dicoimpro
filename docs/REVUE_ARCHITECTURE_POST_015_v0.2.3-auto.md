@@ -1,6 +1,6 @@
 # Revue architecture post-015 — dicoimpro v0.2.3-auto
 
-Statut : revue documentaire post-Codex 015, synchronisee apres Codex 023.
+Statut : revue documentaire post-Codex 015, synchronisee apres Codex 024.
 Objet : consolider l'état courant, les garde-fous, les risques et les conditions
 obligatoires avant tout futur travail sur un appel OpenAI réel ou sur des prompts réels.
 
@@ -14,7 +14,7 @@ aucun prompt, ne rend aucun prompt et n'active aucun accès modèle ou réseau.
 Etat attendu au moment de cette revue :
 
 ```text
-Codex 001 à Codex 022 sont fusionnés dans main.
+Codex 001 à Codex 023 sont fusionnés dans main.
 pytest passe.
 Etat courant de main avant Codex 019 : 252 tests passing.
 Etat courant apres Codex 019 : 253 tests passing.
@@ -24,6 +24,8 @@ Etat courant apres Codex 021 : 258 tests passing (refactor tests/docs uniquement
 Etat courant apres Codex 022 : 258 tests passing (protocole documentaire uniquement).
 Etat courant de main avant Codex 023 : 264 tests passing.
 Etat courant apres Codex 023 : 270 tests passing (audit-only docs/tests uniquement).
+Etat courant de main avant Codex 024 : 270 tests passing.
+Etat courant apres Codex 024 : 278 tests passing (clarification-only docs/tests uniquement).
 Le dry-run CLI manuel post-015 a été validé par l'utilisateur.
 Les fixtures PromptPackage metadata-only sont présentes et désactivées.
 Codex 019 ajoute le smoke test CLI dry-run fake-only end-to-end.
@@ -31,6 +33,7 @@ Codex 020 ajoute les tests de garde-fous runtime fake-only/mock-only.
 Codex 021 sanitise/refactore uniquement les tests/docs de garde-fous CLI/runtime.
 Codex 022 ajoute le protocole documentaire de controle pour future activation de prompts reels, sans creation de prompt.
 Codex 023 ajoute un audit-only des regles existantes vs couverture d'implementation courante, sans nouvelle doctrine ni activation runtime.
+Codex 024 ajoute une clarification-only des blockers pre-prompt issus de Codex 023, sans doctrine nouvelle ni activation runtime.
 ```
 
 Résumé des couches déjà matérialisées :
@@ -59,6 +62,7 @@ Codex 020 - tests de garde-fous runtime pour les chemins autorisés fake-only/mo
 Codex 021 - sanitisation/refactor tests/docs des garde-fous CLI/runtime, sans nouvelle capacité fonctionnelle ni changement de comportement.
 Codex 022 - protocole documentaire de controle pour future activation de prompts reels, sans creation de prompt ni activation OpenAI/runtime.
 Codex 023 - audit-only des regles existantes vs couverture d'implementation courante, sans nouvelle doctrine, sans prompt reel, sans redaction de prompt commencee ni activation OpenAI/runtime.
+Codex 024 - clarification-only des blockers pre-prompt issus de Codex 023, sans doctrine nouvelle, sans prompt reel, sans redaction de prompt commencee ni activation OpenAI/runtime.
 ```
 
 ## 2. Statut du dry-run CLI manuel
@@ -93,7 +97,7 @@ Garde-fous confirmés pour ce chemin :
 
 ## 3. Chemins actuellement autorisés
 
-Les seuls chemins autorisés après Codex 023 restent ceux de Codex 020, Codex 021 et Codex 022 :
+Les seuls chemins autorisés après Codex 024 restent ceux de Codex 020, Codex 021 et Codex 022 :
 
 ```text
 1. fake CLI dry-run ;
@@ -207,6 +211,14 @@ pas de doctrine, ne demarre pas la redaction de prompt, ne cree aucun prompt
 reel, ne charge aucun prompt, ne rend aucun prompt, n'active pas OpenAI et ne
 change aucun chemin runtime autorise.
 
+### Pre-prompt blockers clarification
+
+`PRE_PROMPT_BLOCKERS_CLARIFICATION_v0.2.3-auto.md` clarifie les blockers
+pre-prompt identifies par l'audit Codex 023. Codex 024 est clarification-only :
+il ne cree pas de doctrine nouvelle, ne demarre pas la redaction de prompt, ne
+cree aucun prompt reel, ne charge aucun prompt, ne rend aucun prompt, n'active
+pas OpenAI et ne change aucun chemin runtime autorise.
+
 ## 6. Verdict Go/No-Go
 
 ```text
@@ -261,7 +273,8 @@ Ces conditions sont cumulatives. L'absence d'une seule condition maintient le st
 5. Codex 021 sanitise/refactore uniquement les tests/docs des garde-fous CLI/runtime, sans nouvelle capacité fonctionnelle ; ce point est courant et complété.
 6. Codex 022 ajoute le protocole documentaire de controle pour future activation de prompts reels, sans creation de prompt ni activation OpenAI/runtime ; ce point est courant et complété.
 7. Codex 023 ajoute un audit-only des regles existantes vs couverture d'implementation courante, sans nouvelle doctrine, sans prompt reel, sans redaction de prompt commencee ni activation OpenAI/runtime ; ce point est courant et complété.
-8. Maintenir un contrôle de synchronisation documentation/tests.
+8. Codex 024 ajoute une clarification-only des blockers pre-prompt issus de Codex 023, sans doctrine nouvelle, sans prompt reel, sans redaction de prompt commencee ni activation OpenAI/runtime ; ce point est courant et complété.
+9. Maintenir un contrôle de synchronisation documentation/tests.
 ```
 
 Ces étapes restent documentaires ou mock-only. Elles ne doivent pas introduire de prompt

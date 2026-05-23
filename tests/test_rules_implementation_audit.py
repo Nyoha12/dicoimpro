@@ -81,6 +81,8 @@ def test_rules_implementation_audit_includes_status_taxonomy_and_prompt_blockers
             "out_of_scope_for_v0.2.3_auto",
             "Prompt-drafting blockers",
             "not found in repository evidence",
+            "PRE_PROMPT_BLOCKERS_CLARIFICATION_v0.2.3-auto.md",
+            "does not change the implementation coverage statuses",
         ),
     )
 

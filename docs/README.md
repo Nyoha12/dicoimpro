@@ -19,6 +19,7 @@ En cas de contradiction, lire dans cet ordre :
 10. REVUE_ARCHITECTURE_POST_015_v0.2.3-auto.md
 11. PROMPT_ACTIVATION_PROTOCOL_v0.2.3-auto.md
 12. RULES_IMPLEMENTATION_AUDIT_v0.2.3-auto.md
+13. PRE_PROMPT_BLOCKERS_CLARIFICATION_v0.2.3-auto.md
 ```
 
 ## Documents actifs
@@ -76,6 +77,12 @@ Audit Codex 023 audit-only : regles existantes vs couverture d'implementation
 courante. Ne cree pas de doctrine, ne demarre pas la redaction de prompt et
 n'active aucun comportement runtime.
 
+### `PRE_PROMPT_BLOCKERS_CLARIFICATION_v0.2.3-auto.md`
+
+Clarification Codex 024 clarification-only des blockers pre-prompt issus de
+l'audit Codex 023. Ne cree pas de doctrine nouvelle, ne demarre pas la redaction
+de prompt et n'active aucun comportement runtime.
+
 ## Document superseded
 
 ### `ARCHITECTURE_SDK_v0.2.3-auto.md`
@@ -108,6 +115,7 @@ Codex 020 - tests de garde-fous runtime pour les chemins autorises fake-only/moc
 Codex 021 - sanitisation/refactor tests/docs des garde-fous CLI/runtime, sans nouvelle capacite fonctionnelle ni changement de comportement.
 Codex 022 - protocole documentaire de controle pour future activation de prompts reels, sans creation de prompt ni activation OpenAI/runtime.
 Codex 023 - audit-only des regles existantes vs couverture d'implementation courante, sans nouvelle doctrine, sans prompt reel, sans redaction de prompt commencee ni activation OpenAI/runtime.
+Codex 024 - clarification-only des blockers pre-prompt issus de Codex 023, sans doctrine nouvelle, sans prompt reel, sans redaction de prompt commencee ni activation OpenAI/runtime.
 ```
 
 ## Règles non négociables

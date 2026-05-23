@@ -20,11 +20,14 @@ README_PATH = DOCS_DIR / "README.md"
 POST_015_REVIEW_PATH = DOCS_DIR / "REVUE_ARCHITECTURE_POST_015_v0.2.3-auto.md"
 PROMPT_ACTIVATION_PROTOCOL_PATH = DOCS_DIR / "PROMPT_ACTIVATION_PROTOCOL_v0.2.3-auto.md"
 RULES_IMPLEMENTATION_AUDIT_PATH = DOCS_DIR / "RULES_IMPLEMENTATION_AUDIT_v0.2.3-auto.md"
+PRE_PROMPT_BLOCKERS_CLARIFICATION_PATH = (
+    DOCS_DIR / "PRE_PROMPT_BLOCKERS_CLARIFICATION_v0.2.3-auto.md"
+)
 PROMPT_PACKAGE_FIXTURE_DIR = REPO_ROOT / "tests" / "fixtures" / "prompt_packages"
 SRC_DIR = REPO_ROOT / "src" / "dico_impro"
 
 EXPECTED_CODEX_FIRST = 1
-EXPECTED_CODEX_LAST = 23
+EXPECTED_CODEX_LAST = 24
 EXPECTED_CODEX_IDS = tuple(
     f"{number:03d}" for number in range(EXPECTED_CODEX_FIRST, EXPECTED_CODEX_LAST + 1)
 )
@@ -125,6 +128,7 @@ def test_readme_active_docs_include_current_review_and_prompt_protocol():
         POST_015_REVIEW_PATH.name,
         PROMPT_ACTIVATION_PROTOCOL_PATH.name,
         RULES_IMPLEMENTATION_AUDIT_PATH.name,
+        PRE_PROMPT_BLOCKERS_CLARIFICATION_PATH.name,
     )
 
     active_hierarchy = extract_markdown_section(readme, "Hiérarchie active")
@@ -239,6 +243,20 @@ def test_post_015_review_next_steps_mark_recent_fake_only_milestones_current():
     assert "sans redaction de prompt commencee" in normalized_next_steps, (
         "Post-015 review next steps must state that Codex 023 does not start prompt drafting."
     )
+    assert "codex 024" in normalized_next_steps, (
+        "Post-015 review next steps must mention Codex 024 as the current pre-prompt "
+        "blocker clarification milestone."
+    )
+    assert "clarification-only" in normalized_next_steps, (
+        "Post-015 review next steps must keep Codex 024 framed as clarification-only."
+    )
+    assert "blockers pre-prompt issus de codex 023" in normalized_next_steps, (
+        "Post-015 review next steps must describe Codex 024 as clarifying Codex 023 "
+        "pre-prompt blockers."
+    )
+    assert "sans doctrine nouvelle" in normalized_next_steps, (
+        "Post-015 review next steps must state that Codex 024 creates no new doctrine."
+    )
     assert any(
         marker in normalized_next_steps
         for marker in ("complete", "courant", "termine", "realise", "fait")
@@ -275,6 +293,39 @@ def test_codex_023_is_audit_only_in_readme_and_review():
         )
         assert "activation openai/runtime" in normalized_document, (
             f"{source_name} must state that Codex 023 does not activate OpenAI/runtime."
+        )
+
+
+def test_codex_024_is_clarification_only_in_readme_and_review():
+    readme = read_text(README_PATH)
+    review = read_text(POST_015_REVIEW_PATH)
+
+    for source_name, document in (
+        ("README", readme),
+        ("post-015 architecture review", review),
+    ):
+        normalized_document = normalize_text(document)
+        assert "codex 024" in normalized_document, (
+            f"{source_name} must list Codex 024."
+        )
+        assert "clarification-only" in normalized_document, (
+            f"{source_name} must frame Codex 024 as clarification-only."
+        )
+        assert "blockers pre-prompt issus de codex 023" in normalized_document, (
+            f"{source_name} must describe Codex 024 as clarifying Codex 023 "
+            "pre-prompt blockers."
+        )
+        assert "sans doctrine nouvelle" in normalized_document, (
+            f"{source_name} must state that Codex 024 creates no new doctrine."
+        )
+        assert "sans prompt reel" in normalized_document, (
+            f"{source_name} must state that Codex 024 creates no real prompt."
+        )
+        assert "sans redaction de prompt commencee" in normalized_document, (
+            f"{source_name} must state that Codex 024 does not start prompt drafting."
+        )
+        assert "activation openai/runtime" in normalized_document, (
+            f"{source_name} must state that Codex 024 does not activate OpenAI/runtime."
         )
 
 
