@@ -22,7 +22,7 @@ PROMPT_PACKAGE_FIXTURE_DIR = REPO_ROOT / "tests" / "fixtures" / "prompt_packages
 SRC_DIR = REPO_ROOT / "src" / "dico_impro"
 
 EXPECTED_CODEX_FIRST = 1
-EXPECTED_CODEX_LAST = 19
+EXPECTED_CODEX_LAST = 20
 EXPECTED_CODEX_IDS = tuple(
     f"{number:03d}" for number in range(EXPECTED_CODEX_FIRST, EXPECTED_CODEX_LAST + 1)
 )
@@ -189,6 +189,13 @@ def test_post_015_review_next_steps_mark_recent_fake_only_milestones_current():
     )
     assert "smoke test cli dry-run" in normalized_next_steps, (
         "Post-015 review next steps must mention the CLI dry-run smoke test."
+    )
+    assert "codex 020" in normalized_next_steps, (
+        "Post-015 review next steps must mention Codex 020 as the current runtime "
+        "boundary guard milestone."
+    )
+    assert "garde-fous runtime" in normalized_next_steps, (
+        "Post-015 review next steps must mention runtime boundary guard tests."
     )
     assert any(
         marker in normalized_next_steps

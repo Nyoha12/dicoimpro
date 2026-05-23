@@ -1,6 +1,6 @@
 # Revue architecture post-015 — dicoimpro v0.2.3-auto
 
-Statut : revue documentaire post-Codex 015, synchronisee apres Codex 019.
+Statut : revue documentaire post-Codex 015, synchronisee apres Codex 020.
 Objet : consolider l'état courant, les garde-fous, les risques et les conditions
 obligatoires avant tout futur travail sur un appel OpenAI réel ou sur des prompts réels.
 
@@ -14,13 +14,16 @@ aucun prompt, ne rend aucun prompt et n'active aucun accès modèle ou réseau.
 Etat attendu au moment de cette revue :
 
 ```text
-Codex 001 à Codex 018 sont fusionnés dans main.
+Codex 001 à Codex 019 sont fusionnés dans main.
 pytest passe.
 Etat courant de main avant Codex 019 : 252 tests passing.
 Etat courant apres Codex 019 : 253 tests passing.
+Etat courant de main avant Codex 020 : 253 tests passing.
+Etat courant apres Codex 020 : 258 tests passing.
 Le dry-run CLI manuel post-015 a été validé par l'utilisateur.
 Les fixtures PromptPackage metadata-only sont présentes et désactivées.
 Codex 019 ajoute le smoke test CLI dry-run fake-only end-to-end.
+Codex 020 ajoute les tests de garde-fous runtime fake-only/mock-only.
 ```
 
 Résumé des couches déjà matérialisées :
@@ -45,6 +48,7 @@ Codex 016 - revue architecture post-015 documentation-only, sans changement de c
 Codex 017 - fixtures PromptPackage metadata-only désactivées pour tests, sans prompt réel/rendu/chargement ni activation OpenAI/prompt.
 Codex 018 - contrôles de synchronisation documentation/tests, sans changement de comportement ni activation OpenAI/prompt/source/RUN.
 Codex 019 - smoke test CLI dry-run fake-only end-to-end, sans prompt réel, OpenAI/réseau réel, data/local_files, journal actif, RUN, XLSX/CSV ni sélection de candidats.
+Codex 020 - tests de garde-fous runtime pour les chemins autorisés fake-only/mock-only, sans intégration interdite ni données projet.
 ```
 
 ## 2. Statut du dry-run CLI manuel
@@ -79,7 +83,7 @@ Garde-fous confirmés pour ce chemin :
 
 ## 3. Chemins actuellement autorisés
 
-Les seuls chemins autorisés après Codex 019 sont :
+Les seuls chemins autorisés après Codex 020 sont :
 
 ```text
 1. fake CLI dry-run ;
@@ -198,7 +202,7 @@ source ou journal.
 - les docs peuvent dériver de l'implémentation ;
 - le chemin mock OpenAI ne doit pas être exposé dans le CLI ;
 - PromptPackage doit rester désactivé jusqu'à un futur protocole d'activation explicite ;
-- la politique sans accès aux données réelles n'est pas encore représentée par une sandbox runtime.
+- la politique sans accès aux données réelles repose maintenant sur des garde-fous de tests runtime qui doivent rester synchronisés.
 ```
 
 ## 8. Conditions obligatoires avant toute intégration OpenAI réelle
@@ -228,7 +232,8 @@ Ces conditions sont cumulatives. L'absence d'une seule condition maintient le st
 1. Codex 017 a ajouté les fixtures PromptPackage metadata-only, désactivées ; ce point est courant et complété.
 2. Codex 018 a ajouté les contrôles de synchronisation documentation/tests ; ce point est courant et complété.
 3. Codex 019 ajoute le smoke test CLI dry-run fake-only end-to-end ; ce point est courant et complété.
-4. Maintenir un contrôle de synchronisation documentation/tests.
+4. Codex 020 ajoute les tests de garde-fous runtime fake-only/mock-only ; ce point est courant et complété.
+5. Maintenir un contrôle de synchronisation documentation/tests.
 ```
 
 Ces étapes restent documentaires ou mock-only. Elles ne doivent pas introduire de prompt
