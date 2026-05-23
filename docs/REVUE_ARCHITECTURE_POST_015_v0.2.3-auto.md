@@ -1,6 +1,6 @@
 # Revue architecture post-015 — dicoimpro v0.2.3-auto
 
-Statut : revue documentaire post-Codex 015.  
+Statut : revue documentaire post-Codex 015, synchronisee apres Codex 017.
 Objet : consolider l'état courant, les garde-fous, les risques et les conditions
 obligatoires avant tout futur travail sur un appel OpenAI réel ou sur des prompts réels.
 
@@ -14,10 +14,11 @@ aucun prompt, ne rend aucun prompt et n'active aucun accès modèle ou réseau.
 Etat attendu au moment de cette revue :
 
 ```text
-Codex 001 à Codex 015 sont fusionnés dans main.
+Codex 001 à Codex 017 sont fusionnés dans main.
 pytest passe.
-Etat courant de main : 232 tests passing.
+Etat courant de main : 243 tests passing.
 Le dry-run CLI manuel post-015 a été validé par l'utilisateur.
+Les fixtures PromptPackage metadata-only sont présentes et désactivées.
 ```
 
 Résumé des couches déjà matérialisées :
@@ -38,6 +39,8 @@ Codex 012 - planification batch mock-only via OpenAIAdapter injecté et wrapper 
 Codex 013 - construction partagée BatchState/BatchReport pour dry-run et planification OpenAI mock-only, sans changement de comportement.
 Codex 014 - contrat strict OpenAIClientResponse pour clients mock injectés, sans appel OpenAI/réseau réel ni champs prompt/modèle/API.
 Codex 015 - contrat strict PromptPackage metadata-only pour futurs packages prompts, désactivé par défaut, sans prompt réel/rendu/chargement ni appel OpenAI/réseau.
+Codex 016 - revue architecture post-015 documentation-only, sans changement de code ni activation OpenAI/prompt/source/RUN.
+Codex 017 - fixtures PromptPackage metadata-only désactivées pour tests, sans prompt réel/rendu/chargement ni activation OpenAI/prompt.
 ```
 
 ## 2. Statut du dry-run CLI manuel
@@ -72,7 +75,7 @@ Garde-fous confirmés pour ce chemin :
 
 ## 3. Chemins actuellement autorisés
 
-Les seuls chemins autorisés après Codex 015 sont :
+Les seuls chemins autorisés après Codex 017 sont :
 
 ```text
 1. fake CLI dry-run ;
@@ -218,8 +221,8 @@ Ces conditions sont cumulatives. L'absence d'une seule condition maintient le st
 ## 9. Prochaines étapes recommandées
 
 ```text
-1. Ajouter des fixtures PromptPackage metadata-only, désactivées.
-2. Ajouter un contrôle de synchronisation documentation/tests.
+1. Codex 017 a ajouté les fixtures PromptPackage metadata-only, désactivées ; ce point est courant et complété.
+2. Maintenir un contrôle de synchronisation documentation/tests.
 3. Ajouter éventuellement un script de smoke test CLI dry-run, fake-only.
 ```
 
