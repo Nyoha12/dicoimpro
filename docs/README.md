@@ -17,6 +17,7 @@ En cas de contradiction, lire dans cet ordre :
 8. CHECKLIST_VALIDATION_AVANT_CODEX_v0.2.3-auto.md
 9. MISSIONS_CODEX_v0.2.3-auto.md
 10. REVUE_ARCHITECTURE_POST_015_v0.2.3-auto.md
+11. PROMPT_ACTIVATION_PROTOCOL_v0.2.3-auto.md
 ```
 
 ## Documents actifs
@@ -63,6 +64,11 @@ Prompts de missions Codex bornées et testables.
 Revue documentaire post-Codex 015 : état courant, garde-fous, risques et conditions
 avant tout futur travail OpenAI réel ou prompt réel.
 
+### `PROMPT_ACTIVATION_PROTOCOL_v0.2.3-auto.md`
+
+Protocole documentaire de controle avant tout futur prompt reel : statuts,
+revue humaine, stockage, versionnement et maintien de la desactivation runtime.
+
 ## Document superseded
 
 ### `ARCHITECTURE_SDK_v0.2.3-auto.md`
@@ -93,6 +99,7 @@ Codex 018 - controles de synchronisation documentation/tests, sans changement de
 Codex 019 - smoke test CLI dry-run fake-only end-to-end, sans prompt reel, OpenAI/reseau reel, data/local_files, journal actif, RUN, XLSX/CSV ni selection de candidats.
 Codex 020 - tests de garde-fous runtime pour les chemins autorises fake-only/mock-only, sans integration interdite ni donnees projet.
 Codex 021 - sanitisation/refactor tests/docs des garde-fous CLI/runtime, sans nouvelle capacite fonctionnelle ni changement de comportement.
+Codex 022 - protocole documentaire de controle pour future activation de prompts reels, sans creation de prompt ni activation OpenAI/runtime.
 ```
 
 ## Règles non négociables

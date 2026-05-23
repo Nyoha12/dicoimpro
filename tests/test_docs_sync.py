@@ -18,11 +18,12 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 DOCS_DIR = REPO_ROOT / "docs"
 README_PATH = DOCS_DIR / "README.md"
 POST_015_REVIEW_PATH = DOCS_DIR / "REVUE_ARCHITECTURE_POST_015_v0.2.3-auto.md"
+PROMPT_ACTIVATION_PROTOCOL_PATH = DOCS_DIR / "PROMPT_ACTIVATION_PROTOCOL_v0.2.3-auto.md"
 PROMPT_PACKAGE_FIXTURE_DIR = REPO_ROOT / "tests" / "fixtures" / "prompt_packages"
 SRC_DIR = REPO_ROOT / "src" / "dico_impro"
 
 EXPECTED_CODEX_FIRST = 1
-EXPECTED_CODEX_LAST = 21
+EXPECTED_CODEX_LAST = 22
 EXPECTED_CODEX_IDS = tuple(
     f"{number:03d}" for number in range(EXPECTED_CODEX_FIRST, EXPECTED_CODEX_LAST + 1)
 )
@@ -117,19 +118,20 @@ def test_post_015_review_has_parseable_expected_codex_status_list():
     )
 
 
-def test_readme_active_docs_include_post_015_review():
+def test_readme_active_docs_include_current_review_and_prompt_protocol():
     readme = read_text(README_PATH)
-    expected_name = POST_015_REVIEW_PATH.name
+    expected_names = (POST_015_REVIEW_PATH.name, PROMPT_ACTIVATION_PROTOCOL_PATH.name)
 
     active_hierarchy = extract_markdown_section(readme, "Hiérarchie active")
     active_documents = extract_markdown_section(readme, "Documents actifs")
 
-    assert expected_name in active_hierarchy, (
-        f"README active hierarchy must include {expected_name!r}"
-    )
-    assert expected_name in active_documents, (
-        f"README active document descriptions must include {expected_name!r}"
-    )
+    for expected_name in expected_names:
+        assert expected_name in active_hierarchy, (
+            f"README active hierarchy must include {expected_name!r}"
+        )
+        assert expected_name in active_documents, (
+            f"README active document descriptions must include {expected_name!r}"
+        )
 
 
 def test_readme_non_negotiable_rules_remain_present():
@@ -204,6 +206,16 @@ def test_post_015_review_next_steps_mark_recent_fake_only_milestones_current():
     assert "sans nouvelle capacite fonctionnelle" in normalized_next_steps, (
         "Post-015 review next steps must keep Codex 021 framed as tests/docs refactor "
         "only, not a functional capability."
+    )
+    assert "codex 022" in normalized_next_steps, (
+        "Post-015 review next steps must mention Codex 022 as the current prompt "
+        "activation protocol milestone."
+    )
+    assert "protocole documentaire" in normalized_next_steps, (
+        "Post-015 review next steps must keep Codex 022 framed as protocol-only."
+    )
+    assert "sans creation de prompt" in normalized_next_steps, (
+        "Post-015 review next steps must state that Codex 022 creates no prompt."
     )
     assert any(
         marker in normalized_next_steps
