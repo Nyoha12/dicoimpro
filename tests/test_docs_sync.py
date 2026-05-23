@@ -21,7 +21,11 @@ POST_015_REVIEW_PATH = DOCS_DIR / "REVUE_ARCHITECTURE_POST_015_v0.2.3-auto.md"
 PROMPT_PACKAGE_FIXTURE_DIR = REPO_ROOT / "tests" / "fixtures" / "prompt_packages"
 SRC_DIR = REPO_ROOT / "src" / "dico_impro"
 
-EXPECTED_CODEX_IDS = tuple(f"{number:03d}" for number in range(1, 18))
+EXPECTED_CODEX_FIRST = 1
+EXPECTED_CODEX_LAST = 19
+EXPECTED_CODEX_IDS = tuple(
+    f"{number:03d}" for number in range(EXPECTED_CODEX_FIRST, EXPECTED_CODEX_LAST + 1)
+)
 CODEX_STATUS_LINE_RE = re.compile(r"^Codex (?P<codex_id>\d{3})\s+-\s+.+$", re.MULTILINE)
 
 
@@ -66,8 +70,9 @@ def codex_ids_from_status_lines(section: str) -> tuple[str, ...]:
 
 def assert_expected_codex_status_lines(section: str, source_name: str) -> None:
     actual_ids = codex_ids_from_status_lines(section)
+    expected_range = f"Codex {EXPECTED_CODEX_IDS[0]} through Codex {EXPECTED_CODEX_IDS[-1]}"
     assert actual_ids == EXPECTED_CODEX_IDS, (
-        f"{source_name} must list Codex 001 through Codex 017 exactly once in "
+        f"{source_name} must list {expected_range} exactly once in "
         f"parseable 'Codex NNN - ...' status lines. Found: {actual_ids!r}"
     )
 
@@ -92,14 +97,14 @@ def assert_contains_all(section: str, required_phrases: tuple[str, ...], source_
     assert not missing, f"{source_name} is missing required text: {missing!r}"
 
 
-def test_readme_current_status_lists_codex_001_through_017_once_each():
+def test_readme_current_status_lists_expected_codex_range_once_each():
     readme = read_text(README_PATH)
     current_status = extract_markdown_section(readme, "Etat courant")
 
     assert_expected_codex_status_lines(current_status, "README Etat courant")
 
 
-def test_post_015_review_has_parseable_codex_001_through_017_status_list():
+def test_post_015_review_has_parseable_expected_codex_status_list():
     review = read_text(POST_015_REVIEW_PATH)
     implementation_status = extract_markdown_section(
         review,
@@ -166,7 +171,7 @@ def test_post_015_review_forbidden_paths_remain_present():
     )
 
 
-def test_post_015_review_next_steps_mark_prompt_fixtures_current_after_codex_017():
+def test_post_015_review_next_steps_mark_recent_fake_only_milestones_current():
     review = read_text(POST_015_REVIEW_PATH)
     next_steps = extract_markdown_section(review, "9. Prochaines étapes recommandées")
     normalized_next_steps = normalize_text(next_steps)
@@ -177,6 +182,13 @@ def test_post_015_review_next_steps_mark_prompt_fixtures_current_after_codex_017
     )
     assert "fixtures promptpackage metadata-only" in normalized_next_steps, (
         "Post-015 review next steps must mention PromptPackage metadata-only fixtures."
+    )
+    assert "codex 019" in normalized_next_steps, (
+        "Post-015 review next steps must mention Codex 019 as the current CLI dry-run "
+        "smoke milestone."
+    )
+    assert "smoke test cli dry-run" in normalized_next_steps, (
+        "Post-015 review next steps must mention the CLI dry-run smoke test."
     )
     assert any(
         marker in normalized_next_steps
