@@ -22,7 +22,7 @@ PROMPT_PACKAGE_FIXTURE_DIR = REPO_ROOT / "tests" / "fixtures" / "prompt_packages
 SRC_DIR = REPO_ROOT / "src" / "dico_impro"
 
 EXPECTED_CODEX_FIRST = 1
-EXPECTED_CODEX_LAST = 20
+EXPECTED_CODEX_LAST = 21
 EXPECTED_CODEX_IDS = tuple(
     f"{number:03d}" for number in range(EXPECTED_CODEX_FIRST, EXPECTED_CODEX_LAST + 1)
 )
@@ -196,6 +196,14 @@ def test_post_015_review_next_steps_mark_recent_fake_only_milestones_current():
     )
     assert "garde-fous runtime" in normalized_next_steps, (
         "Post-015 review next steps must mention runtime boundary guard tests."
+    )
+    assert "codex 021" in normalized_next_steps, (
+        "Post-015 review next steps must mention Codex 021 as the current tests/docs "
+        "sanitization milestone."
+    )
+    assert "sans nouvelle capacite fonctionnelle" in normalized_next_steps, (
+        "Post-015 review next steps must keep Codex 021 framed as tests/docs refactor "
+        "only, not a functional capability."
     )
     assert any(
         marker in normalized_next_steps
