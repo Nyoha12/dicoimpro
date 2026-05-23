@@ -89,6 +89,8 @@ Codex 014 - contrat strict OpenAIClientResponse pour clients mock injectes, sans
 Codex 015 - contrat strict PromptPackage metadata-only pour futurs packages prompts, desactive par defaut, sans prompt reel/rendu/chargement ni appel OpenAI/reseau.
 Codex 016 - revue architecture post-015 documentation-only, sans changement de code ni activation OpenAI/prompt/source/RUN.
 Codex 017 - fixtures PromptPackage metadata-only desactivees pour tests, sans prompt reel/rendu/chargement ni activation OpenAI/prompt.
+Codex 018 - controles de synchronisation documentation/tests, sans changement de comportement ni activation OpenAI/prompt/source/RUN.
+Codex 019 - smoke test CLI dry-run fake-only end-to-end, sans prompt reel, OpenAI/reseau reel, data/local_files, journal actif, RUN, XLSX/CSV ni selection de candidats.
 ```
 
 ## Règles non négociables
