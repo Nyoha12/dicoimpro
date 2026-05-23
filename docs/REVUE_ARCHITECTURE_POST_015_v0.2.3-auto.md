@@ -1,6 +1,6 @@
 # Revue architecture post-015 — dicoimpro v0.2.3-auto
 
-Statut : revue documentaire post-Codex 015, synchronisee apres Codex 021.
+Statut : revue documentaire post-Codex 015, synchronisee apres Codex 022.
 Objet : consolider l'état courant, les garde-fous, les risques et les conditions
 obligatoires avant tout futur travail sur un appel OpenAI réel ou sur des prompts réels.
 
@@ -14,18 +14,20 @@ aucun prompt, ne rend aucun prompt et n'active aucun accès modèle ou réseau.
 Etat attendu au moment de cette revue :
 
 ```text
-Codex 001 à Codex 020 sont fusionnés dans main.
+Codex 001 à Codex 021 sont fusionnés dans main.
 pytest passe.
 Etat courant de main avant Codex 019 : 252 tests passing.
 Etat courant apres Codex 019 : 253 tests passing.
 Etat courant de main avant Codex 020 : 253 tests passing.
 Etat courant apres Codex 020 : 258 tests passing.
 Etat courant apres Codex 021 : 258 tests passing (refactor tests/docs uniquement).
+Etat courant apres Codex 022 : 258 tests passing (protocole documentaire uniquement).
 Le dry-run CLI manuel post-015 a été validé par l'utilisateur.
 Les fixtures PromptPackage metadata-only sont présentes et désactivées.
 Codex 019 ajoute le smoke test CLI dry-run fake-only end-to-end.
 Codex 020 ajoute les tests de garde-fous runtime fake-only/mock-only.
 Codex 021 sanitise/refactore uniquement les tests/docs de garde-fous CLI/runtime.
+Codex 022 ajoute le protocole documentaire de controle pour future activation de prompts reels, sans creation de prompt.
 ```
 
 Résumé des couches déjà matérialisées :
@@ -52,6 +54,7 @@ Codex 018 - contrôles de synchronisation documentation/tests, sans changement d
 Codex 019 - smoke test CLI dry-run fake-only end-to-end, sans prompt réel, OpenAI/réseau réel, data/local_files, journal actif, RUN, XLSX/CSV ni sélection de candidats.
 Codex 020 - tests de garde-fous runtime pour les chemins autorisés fake-only/mock-only, sans intégration interdite ni données projet.
 Codex 021 - sanitisation/refactor tests/docs des garde-fous CLI/runtime, sans nouvelle capacité fonctionnelle ni changement de comportement.
+Codex 022 - protocole documentaire de controle pour future activation de prompts reels, sans creation de prompt ni activation OpenAI/runtime.
 ```
 
 ## 2. Statut du dry-run CLI manuel
@@ -86,7 +89,7 @@ Garde-fous confirmés pour ce chemin :
 
 ## 3. Chemins actuellement autorisés
 
-Les seuls chemins autorisés après Codex 021 restent ceux de Codex 020 :
+Les seuls chemins autorisés après Codex 022 restent ceux de Codex 020 et Codex 021 :
 
 ```text
 1. fake CLI dry-run ;
@@ -185,6 +188,13 @@ Les fixtures PromptPackage de tests restent strictement metadata-only et disable
 Elles ne contiennent aucun prompt reel, aucun champ prompt inline, aucun rendu de prompt
 et aucun chargement de prompt hors lecture JSON de metadata par les tests.
 
+### Prompt activation protocol
+
+`PROMPT_ACTIVATION_PROTOCOL_v0.2.3-auto.md` definit le controle documentaire
+pour de futurs prompts reels. Codex 022 n'ajoute aucun corps de prompt, ne charge
+aucun prompt, ne rend aucun prompt, n'active pas OpenAI et ne change aucun chemin
+runtime autorise.
+
 ## 6. Verdict Go/No-Go
 
 ```text
@@ -204,7 +214,7 @@ source ou journal.
 ```text
 - les docs peuvent dériver de l'implémentation ;
 - le chemin mock OpenAI ne doit pas être exposé dans le CLI ;
-- PromptPackage doit rester désactivé jusqu'à un futur protocole d'activation explicite ;
+- PromptPackage doit rester désactivé jusqu'à une future mission explicite d'activation runtime ;
 - la politique sans accès aux données réelles repose maintenant sur des garde-fous de tests runtime qui doivent rester synchronisés.
 ```
 
@@ -237,7 +247,8 @@ Ces conditions sont cumulatives. L'absence d'une seule condition maintient le st
 3. Codex 019 ajoute le smoke test CLI dry-run fake-only end-to-end ; ce point est courant et complété.
 4. Codex 020 ajoute les tests de garde-fous runtime fake-only/mock-only ; ce point est courant et complété.
 5. Codex 021 sanitise/refactore uniquement les tests/docs des garde-fous CLI/runtime, sans nouvelle capacité fonctionnelle ; ce point est courant et complété.
-6. Maintenir un contrôle de synchronisation documentation/tests.
+6. Codex 022 ajoute le protocole documentaire de controle pour future activation de prompts reels, sans creation de prompt ni activation OpenAI/runtime ; ce point est courant et complété.
+7. Maintenir un contrôle de synchronisation documentation/tests.
 ```
 
 Ces étapes restent documentaires ou mock-only. Elles ne doivent pas introduire de prompt
