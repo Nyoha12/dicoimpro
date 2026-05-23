@@ -14,6 +14,11 @@ code present in this repository. If a rule is known from project doctrine but is
 not evidenced by repository docs or code, it is marked as "not found in
 repository evidence" instead of being invented here.
 
+Codex 024 follow-up: `PRE_PROMPT_BLOCKERS_CLARIFICATION_v0.2.3-auto.md`
+clarifies the pre-prompt blockers identified below. That clarification is
+documentation-only and does not change the implementation coverage statuses in
+this audit.
+
 ## Status taxonomy
 
 ```text
