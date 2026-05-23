@@ -1,17 +1,17 @@
 from __future__ import annotations
 
-import builtins
-import inspect
 import json
 from pathlib import Path
-import socket
 from typing import Any
 
-from dico_impro import cli
-from dico_impro.agents import prompt_contracts
-from dico_impro.agents.adapters.openai import OpenAIAdapter
 from dico_impro.exports.json_exporter import BASE_EXPORT_FILES, MASTER_FILE_NAME
-import dico_impro.orchestration.mock_openai_plan as mock_openai_plan
+from helpers.runtime_guards import (
+    assert_no_forbidden_fragments,
+    guard_cli_runtime_boundaries,
+    invoke_cli,
+    load_json_exports,
+    write_explicit_scope,
+)
 
 
 SCOPE_BATCH_ID = "BATCH_CLI_DRY_RUN_SMOKE"
@@ -29,22 +29,22 @@ SCOPE_ENTRIES = (
 )
 SCOPE_ENTRY_IDS = [entry["id_entree_original"] for entry in SCOPE_ENTRIES]
 EXPECTED_CORE_EXPORT_FILES = {MASTER_FILE_NAME, *BASE_EXPORT_FILES.values()}
-
-
-def write_temporary_scope(path: Path) -> None:
-    path.write_text(
-        json.dumps({"batch_id": SCOPE_BATCH_ID, "entries": list(SCOPE_ENTRIES)}),
-        encoding="utf-8",
-    )
-
-
-def invoke_cli(argv: list[str], capsys: Any) -> tuple[int, str, str]:
-    try:
-        exit_code = cli.main(argv)
-    except SystemExit as exc:
-        exit_code = exc.code if isinstance(exc.code, int) else 1
-    captured = capsys.readouterr()
-    return exit_code, captured.out, captured.err
+FORBIDDEN_PAYLOAD_FRAGMENTS = (
+    "OpenAIAdapter",
+    "PromptPackage",
+    "prompt_body_ref",
+    "system prompt",
+    "user prompt",
+    "prompts.py",
+    "SourceDiscoveryAgent",
+    "JournalPatch",
+    "data/local_files",
+    "data/active_journal",
+    "active_journal",
+    ".xlsx",
+    ".csv",
+    "candidate",
+)
 
 
 def test_cli_dry_run_smoke_is_fake_only_end_to_end(
@@ -54,9 +54,8 @@ def test_cli_dry_run_smoke_is_fake_only_end_to_end(
 ) -> None:
     scope_path = tmp_path / "scope.json"
     output_dir = tmp_path / "exports"
-    write_temporary_scope(scope_path)
-    assert_cli_plan_batch_source_has_no_network_or_openai_integration()
-    guard_cli_dry_run_runtime_boundaries(tmp_path, monkeypatch)
+    write_explicit_scope(scope_path, batch_id=SCOPE_BATCH_ID, entries=SCOPE_ENTRIES)
+    guard_cli_runtime_boundaries(tmp_path, monkeypatch, context="CLI dry-run smoke")
 
     exit_code, stdout, stderr = invoke_cli(
         [
@@ -100,128 +99,15 @@ def test_cli_dry_run_smoke_is_fake_only_end_to_end(
         f"CLI dry-run smoke must not create XLSX or CSV exports. Found: {sorted(actual_files)!r}"
     )
 
-    parsed = {
-        path.name: json.loads(path.read_text(encoding="utf-8"))
-        for path in sorted(output_dir.iterdir())
-    }
+    parsed = load_json_exports(output_dir)
     assert set(parsed) == actual_files, "Every generated output file must be valid JSON."
 
     assert_batch_exports_match_temporary_scope(parsed)
     assert_core_exports_are_fake_only(parsed)
-    assert_no_forbidden_payload_fragments(parsed)
-
-
-def guard_cli_dry_run_runtime_boundaries(tmp_path: Path, monkeypatch: Any) -> None:
-    repo_root = Path(__file__).resolve().parents[1]
-    tmp_root = tmp_path.absolute()
-    forbidden_roots = (
-        repo_root / "data" / "local_files",
-        repo_root / "data" / "active_journal",
-        repo_root / "tests" / "fixtures" / "prompt_packages",
-    )
-    forbidden_files = (repo_root / "src" / "dico_impro" / "agents" / "prompts.py",)
-
-    def is_relative_to(path: Path, root: Path) -> bool:
-        try:
-            path.relative_to(root)
-        except ValueError:
-            return False
-        return True
-
-    def normalize_path(pathish: object) -> Path | None:
-        if not isinstance(pathish, (str, Path)):
-            return None
-        path = Path(pathish)
-        if not path.is_absolute():
-            path = repo_root / path
-        return path.absolute()
-
-    def assert_allowed_path(pathish: object) -> None:
-        path = normalize_path(pathish)
-        if path is None:
-            return
-        for forbidden_root in forbidden_roots:
-            if is_relative_to(path, forbidden_root.absolute()):
-                raise AssertionError(f"CLI dry-run smoke touched forbidden path: {path}")
-        if any(path == forbidden_file.absolute() for forbidden_file in forbidden_files):
-            raise AssertionError(f"CLI dry-run smoke touched forbidden file: {path}")
-        assert is_relative_to(path, tmp_root), (
-            "CLI dry-run smoke must only use pytest tmp_path files at runtime. "
-            f"Touched: {path}"
-        )
-
-    original_builtin_open = builtins.open
-    original_path_open = Path.open
-    original_path_exists = Path.exists
-    original_path_is_dir = Path.is_dir
-    original_path_is_file = Path.is_file
-    original_path_mkdir = Path.mkdir
-    original_path_iterdir = Path.iterdir
-    original_path_glob = Path.glob
-
-    def guarded_builtin_open(file: object, *args: object, **kwargs: object) -> Any:
-        assert_allowed_path(file)
-        return original_builtin_open(file, *args, **kwargs)
-
-    def guarded_path_open(self: Path, *args: object, **kwargs: object) -> Any:
-        assert_allowed_path(self)
-        return original_path_open(self, *args, **kwargs)
-
-    def guarded_path_exists(self: Path) -> bool:
-        assert_allowed_path(self)
-        return original_path_exists(self)
-
-    def guarded_path_is_dir(self: Path) -> bool:
-        assert_allowed_path(self)
-        return original_path_is_dir(self)
-
-    def guarded_path_is_file(self: Path) -> bool:
-        assert_allowed_path(self)
-        return original_path_is_file(self)
-
-    def guarded_path_mkdir(self: Path, *args: object, **kwargs: object) -> None:
-        assert_allowed_path(self)
-        return original_path_mkdir(self, *args, **kwargs)
-
-    def guarded_path_iterdir(self: Path) -> Any:
-        assert_allowed_path(self)
-        return original_path_iterdir(self)
-
-    def guarded_path_glob(self: Path, pattern: str) -> Any:
-        assert_allowed_path(self)
-        return original_path_glob(self, pattern)
-
-    def fail_network_call(*args: object, **kwargs: object) -> None:
-        raise AssertionError("CLI dry-run smoke must not access the network")
-
-    def fail_openai_adapter_use(*args: object, **kwargs: object) -> None:
-        raise AssertionError("CLI dry-run smoke must not use OpenAIAdapter")
-
-    def fail_prompt_package_consumption(cls: object, *args: object, **kwargs: object) -> None:
-        raise AssertionError("CLI dry-run smoke must not consume PromptPackage metadata")
-
-    monkeypatch.setattr(builtins, "open", guarded_builtin_open)
-    monkeypatch.setattr(Path, "open", guarded_path_open)
-    monkeypatch.setattr(Path, "exists", guarded_path_exists)
-    monkeypatch.setattr(Path, "is_dir", guarded_path_is_dir)
-    monkeypatch.setattr(Path, "is_file", guarded_path_is_file)
-    monkeypatch.setattr(Path, "mkdir", guarded_path_mkdir)
-    monkeypatch.setattr(Path, "iterdir", guarded_path_iterdir)
-    monkeypatch.setattr(Path, "glob", guarded_path_glob)
-    monkeypatch.setattr(socket, "socket", fail_network_call)
-    monkeypatch.setattr(socket, "create_connection", fail_network_call)
-    monkeypatch.setattr(OpenAIAdapter, "__init__", fail_openai_adapter_use)
-    monkeypatch.setattr(OpenAIAdapter, "run_task", fail_openai_adapter_use)
-    monkeypatch.setattr(mock_openai_plan, "OpenAIAdapter", OpenAIAdapter)
-    monkeypatch.setattr(
-        prompt_contracts.PromptPackage,
-        "model_validate",
-        classmethod(fail_prompt_package_consumption),
-    )
-    monkeypatch.setattr(
-        prompt_contracts.PromptPackage,
-        "__init__",
-        fail_prompt_package_consumption,
+    assert_no_forbidden_fragments(
+        parsed,
+        FORBIDDEN_PAYLOAD_FRAGMENTS,
+        "Generated dry-run smoke JSON",
     )
 
 
@@ -335,41 +221,3 @@ def assert_core_exports_are_fake_only(parsed: dict[str, Any]) -> None:
             record["trace_metadata"]["raw_trace_ref"].startswith("fake_trace:")
             for record in evaluation_records
         ), "evaluation_records.json must only reference fake traces."
-
-
-def assert_no_forbidden_payload_fragments(parsed: dict[str, Any]) -> None:
-    generated_payload = json.dumps(parsed, ensure_ascii=False, sort_keys=True)
-    normalized_payload = generated_payload.casefold()
-    forbidden_fragments = (
-        "OpenAIAdapter",
-        "PromptPackage",
-        "prompt_body_ref",
-        "system prompt",
-        "user prompt",
-        "prompts.py",
-        "SourceDiscoveryAgent",
-        "JournalPatch",
-        "data/local_files",
-        "data/active_journal",
-        ".xlsx",
-        ".csv",
-        "candidate",
-    )
-    missing = [
-        fragment for fragment in forbidden_fragments if fragment.casefold() in normalized_payload
-    ]
-    assert not missing, (
-        "Generated dry-run smoke JSON must not contain forbidden integration or "
-        f"project-data fragments: {missing!r}"
-    )
-
-
-def assert_cli_plan_batch_source_has_no_network_or_openai_integration() -> None:
-    source = inspect.getsource(cli.cmd_plan_batch)
-    lowered_source = source.lower()
-
-    for forbidden in ("openai", "requests", "httpx", "urllib", "socket"):
-        assert forbidden not in lowered_source, (
-            "cmd_plan_batch must stay free of direct OpenAI or network integration. "
-            f"Forbidden source fragment present: {forbidden!r}"
-        )
