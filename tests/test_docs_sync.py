@@ -19,11 +19,12 @@ DOCS_DIR = REPO_ROOT / "docs"
 README_PATH = DOCS_DIR / "README.md"
 POST_015_REVIEW_PATH = DOCS_DIR / "REVUE_ARCHITECTURE_POST_015_v0.2.3-auto.md"
 PROMPT_ACTIVATION_PROTOCOL_PATH = DOCS_DIR / "PROMPT_ACTIVATION_PROTOCOL_v0.2.3-auto.md"
+RULES_IMPLEMENTATION_AUDIT_PATH = DOCS_DIR / "RULES_IMPLEMENTATION_AUDIT_v0.2.3-auto.md"
 PROMPT_PACKAGE_FIXTURE_DIR = REPO_ROOT / "tests" / "fixtures" / "prompt_packages"
 SRC_DIR = REPO_ROOT / "src" / "dico_impro"
 
 EXPECTED_CODEX_FIRST = 1
-EXPECTED_CODEX_LAST = 22
+EXPECTED_CODEX_LAST = 23
 EXPECTED_CODEX_IDS = tuple(
     f"{number:03d}" for number in range(EXPECTED_CODEX_FIRST, EXPECTED_CODEX_LAST + 1)
 )
@@ -120,7 +121,11 @@ def test_post_015_review_has_parseable_expected_codex_status_list():
 
 def test_readme_active_docs_include_current_review_and_prompt_protocol():
     readme = read_text(README_PATH)
-    expected_names = (POST_015_REVIEW_PATH.name, PROMPT_ACTIVATION_PROTOCOL_PATH.name)
+    expected_names = (
+        POST_015_REVIEW_PATH.name,
+        PROMPT_ACTIVATION_PROTOCOL_PATH.name,
+        RULES_IMPLEMENTATION_AUDIT_PATH.name,
+    )
 
     active_hierarchy = extract_markdown_section(readme, "Hiérarchie active")
     active_documents = extract_markdown_section(readme, "Documents actifs")
@@ -217,10 +222,60 @@ def test_post_015_review_next_steps_mark_recent_fake_only_milestones_current():
     assert "sans creation de prompt" in normalized_next_steps, (
         "Post-015 review next steps must state that Codex 022 creates no prompt."
     )
+    assert "codex 023" in normalized_next_steps, (
+        "Post-015 review next steps must mention Codex 023 as the current rules "
+        "implementation audit milestone."
+    )
+    assert "audit-only" in normalized_next_steps, (
+        "Post-015 review next steps must keep Codex 023 framed as audit-only."
+    )
+    assert "regles existantes vs couverture d'implementation courante" in normalized_next_steps, (
+        "Post-015 review next steps must describe Codex 023 as existing rules vs "
+        "current implementation coverage."
+    )
+    assert "sans nouvelle doctrine" in normalized_next_steps, (
+        "Post-015 review next steps must state that Codex 023 creates no doctrine."
+    )
+    assert "sans redaction de prompt commencee" in normalized_next_steps, (
+        "Post-015 review next steps must state that Codex 023 does not start prompt drafting."
+    )
     assert any(
         marker in normalized_next_steps
         for marker in ("complete", "courant", "termine", "realise", "fait")
     ), "Post-015 review next steps must mark PromptPackage fixtures completed or current."
+
+
+def test_codex_023_is_audit_only_in_readme_and_review():
+    readme = read_text(README_PATH)
+    review = read_text(POST_015_REVIEW_PATH)
+
+    for source_name, document in (
+        ("README", readme),
+        ("post-015 architecture review", review),
+    ):
+        normalized_document = normalize_text(document)
+        assert "codex 023" in normalized_document, (
+            f"{source_name} must list Codex 023."
+        )
+        assert "audit-only" in normalized_document, (
+            f"{source_name} must frame Codex 023 as audit-only."
+        )
+        assert "regles existantes vs couverture d'implementation courante" in normalized_document, (
+            f"{source_name} must describe Codex 023 as existing rules vs current "
+            "implementation coverage."
+        )
+        assert "sans nouvelle doctrine" in normalized_document, (
+            f"{source_name} must state that Codex 023 creates no doctrine."
+        )
+        assert "sans prompt reel" in normalized_document, (
+            f"{source_name} must state that Codex 023 creates no real prompt."
+        )
+        assert "sans redaction de prompt commencee" in normalized_document, (
+            f"{source_name} must state that Codex 023 does not start prompt drafting."
+        )
+        assert "activation openai/runtime" in normalized_document, (
+            f"{source_name} must state that Codex 023 does not activate OpenAI/runtime."
+        )
 
 
 def test_prompt_package_fixtures_validate_and_remain_disabled_metadata_only():
