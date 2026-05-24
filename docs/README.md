@@ -22,6 +22,7 @@ En cas de contradiction, lire dans cet ordre :
 13. PRE_PROMPT_BLOCKERS_CLARIFICATION_v0.2.3-auto.md
 14. AGENT_ARCHITECTURE_RESPONSIBILITY_MAP_v0.2.3-auto.md
 15. ROUTING_AGENT_FUNCTIONAL_SPEC_v0.2.3-auto.md
+16. ROUTING_AGENT_PROMPT_READINESS_CHECKLIST_v0.2.3-auto.md
 ```
 
 ## Documents actifs
@@ -103,6 +104,15 @@ architecture. Ne cree pas de prompt reel, ne demarre pas la redaction de prompt,
 ne cree pas de prompt draft, de prompt body, de contrat JSON final ni d'enum
 runtime et n'active aucun comportement OpenAI/runtime.
 
+### `ROUTING_AGENT_PROMPT_READINESS_CHECKLIST_v0.2.3-auto.md`
+
+Checklist Codex 027 docs/tests-only de prompt-readiness avant un futur prompt
+draft RoutingAgent desactive. Verifie les conditions pre-draft, non-runtime,
+non-prompt, non-contract, pre-implementation avant Codex 028. Ne cree pas de
+prompt reel, ne demarre pas la redaction de prompt, ne cree pas de prompt
+draft, de prompt body, de contenu `docs/prompts/drafts`, de contrat JSON final
+ni d'enum runtime et n'active aucun comportement OpenAI/runtime.
+
 ## Document superseded
 
 ### `ARCHITECTURE_SDK_v0.2.3-auto.md`
@@ -138,6 +148,7 @@ Codex 023 - audit-only des regles existantes vs couverture d'implementation cour
 Codex 024 - clarification-only des blockers pre-prompt issus de Codex 023, sans doctrine nouvelle, sans prompt reel, sans redaction de prompt commencee ni activation OpenAI/runtime.
 Codex 025 - docs/tests-only responsibility mapping des niveaux de regles, agents, architecture SDK et actions externes interdites par defaut, sans prompt reel, sans redaction de prompt commencee, sans contrat JSON final ni enum runtime et sans activation OpenAI/runtime.
 Codex 026 - docs/tests-only RoutingAgent functional spec pre-prompt du routage/aiguillage conservateur, sans prompt reel, sans redaction de prompt commencee, sans prompt draft, sans prompt body, sans contrat JSON final ni enum runtime et sans activation OpenAI/runtime.
+Codex 027 - docs/tests-only RoutingAgent prompt-readiness checklist pre-draft du futur prompt draft desactive, sans prompt reel, sans redaction de prompt commencee, sans prompt draft, sans prompt body, sans contenu docs/prompts/drafts, sans contrat JSON final ni enum runtime et sans activation OpenAI/runtime.
 ```
 
 ## Règles non négociables
