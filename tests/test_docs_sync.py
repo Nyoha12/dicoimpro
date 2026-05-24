@@ -35,11 +35,14 @@ ROUTING_AGENT_PROMPT_READINESS_CHECKLIST_PATH = (
 ROUTING_AGENT_PROMPT_DRAFT_PATH = (
     DOCS_DIR / "prompts" / "drafts" / "ROUTING_AGENT_PROMPT_DRAFT_v0.2.3-auto.md"
 )
+ROUTING_AGENT_PROMPT_DRAFT_REVIEW_GATE_PATH = (
+    DOCS_DIR / "ROUTING_AGENT_PROMPT_DRAFT_REVIEW_GATE_v0.2.3-auto.md"
+)
 PROMPT_PACKAGE_FIXTURE_DIR = REPO_ROOT / "tests" / "fixtures" / "prompt_packages"
 SRC_DIR = REPO_ROOT / "src" / "dico_impro"
 
 EXPECTED_CODEX_FIRST = 1
-EXPECTED_CODEX_LAST = 28
+EXPECTED_CODEX_LAST = 29
 EXPECTED_CODEX_IDS = tuple(
     f"{number:03d}" for number in range(EXPECTED_CODEX_FIRST, EXPECTED_CODEX_LAST + 1)
 )
@@ -145,6 +148,7 @@ def test_readme_active_docs_include_current_review_and_prompt_protocol():
         ROUTING_AGENT_FUNCTIONAL_SPEC_PATH.name,
         ROUTING_AGENT_PROMPT_READINESS_CHECKLIST_PATH.name,
         ROUTING_AGENT_PROMPT_DRAFT_PATH.name,
+        ROUTING_AGENT_PROMPT_DRAFT_REVIEW_GATE_PATH.name,
     )
 
     active_hierarchy = extract_markdown_section(readme, "Hiérarchie active")
@@ -659,6 +663,62 @@ def test_codex_028_is_disabled_documentation_only_prompt_draft_in_readme_and_rev
         )
         assert "activation openai/runtime" in normalized_document, (
             f"{source_name} must state Codex 028 does not activate OpenAI/runtime."
+        )
+
+
+def test_codex_029_is_docs_tests_only_prompt_draft_review_gate_in_readme_and_review():
+    readme = read_text(README_PATH)
+    review = read_text(POST_015_REVIEW_PATH)
+
+    for source_name, document in (
+        ("README", readme),
+        ("post-015 architecture review", review),
+    ):
+        normalized_document = normalize_text(document)
+        assert "codex 029" in normalized_document, (
+            f"{source_name} must list Codex 029."
+        )
+        assert "routingagent prompt draft review gate" in normalized_document, (
+            f"{source_name} must frame Codex 029 as a RoutingAgent prompt draft "
+            "review gate."
+        )
+        assert "docs/tests-only" in normalized_document, (
+            f"{source_name} must keep Codex 029 framed as docs/tests-only."
+        )
+        assert "documentation-only" in normalized_document, (
+            f"{source_name} must state Codex 029 remains documentation-only."
+        )
+        assert "non-runtime" in normalized_document, (
+            f"{source_name} must state Codex 029 remains non-runtime."
+        )
+        assert "non-consuming" in normalized_document, (
+            f"{source_name} must state Codex 029 remains non-consuming."
+        )
+        assert "non-activation" in normalized_document, (
+            f"{source_name} must state Codex 029 is non-activation."
+        )
+        assert "non-approval" in normalized_document, (
+            f"{source_name} must state Codex 029 is non-approval."
+        )
+        assert "pre-mock" in normalized_document, (
+            f"{source_name} must state Codex 029 is pre-mock."
+        )
+        assert "pre-runtime" in normalized_document, (
+            f"{source_name} must state Codex 029 is pre-runtime."
+        )
+        assert "sans activation, approbation, chargement, rendu ou consommation du prompt" in normalized_document, (
+            f"{source_name} must state Codex 029 does not activate, approve, load, "
+            "render or consume the prompt."
+        )
+        assert "sans prompts.py" in normalized_document, (
+            f"{source_name} must state Codex 029 creates no prompts.py."
+        )
+        assert "sans contrat json final ni enum runtime" in normalized_document, (
+            f"{source_name} must state Codex 029 creates no final JSON contract "
+            "or runtime enum."
+        )
+        assert "activation openai/runtime" in normalized_document, (
+            f"{source_name} must state Codex 029 does not activate OpenAI/runtime."
         )
 
 
