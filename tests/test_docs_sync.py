@@ -32,11 +32,14 @@ ROUTING_AGENT_FUNCTIONAL_SPEC_PATH = (
 ROUTING_AGENT_PROMPT_READINESS_CHECKLIST_PATH = (
     DOCS_DIR / "ROUTING_AGENT_PROMPT_READINESS_CHECKLIST_v0.2.3-auto.md"
 )
+ROUTING_AGENT_PROMPT_DRAFT_PATH = (
+    DOCS_DIR / "prompts" / "drafts" / "ROUTING_AGENT_PROMPT_DRAFT_v0.2.3-auto.md"
+)
 PROMPT_PACKAGE_FIXTURE_DIR = REPO_ROOT / "tests" / "fixtures" / "prompt_packages"
 SRC_DIR = REPO_ROOT / "src" / "dico_impro"
 
 EXPECTED_CODEX_FIRST = 1
-EXPECTED_CODEX_LAST = 27
+EXPECTED_CODEX_LAST = 28
 EXPECTED_CODEX_IDS = tuple(
     f"{number:03d}" for number in range(EXPECTED_CODEX_FIRST, EXPECTED_CODEX_LAST + 1)
 )
@@ -141,6 +144,7 @@ def test_readme_active_docs_include_current_review_and_prompt_protocol():
         AGENT_ARCHITECTURE_RESPONSIBILITY_MAP_PATH.name,
         ROUTING_AGENT_FUNCTIONAL_SPEC_PATH.name,
         ROUTING_AGENT_PROMPT_READINESS_CHECKLIST_PATH.name,
+        ROUTING_AGENT_PROMPT_DRAFT_PATH.name,
     )
 
     active_hierarchy = extract_markdown_section(readme, "Hiérarchie active")
@@ -361,6 +365,43 @@ def test_post_015_review_next_steps_mark_recent_fake_only_milestones_current():
         "Post-015 review next steps must state that Codex 027 does not activate "
         "OpenAI/runtime."
     )
+    assert "codex 028" in normalized_next_steps, (
+        "Post-015 review next steps must mention Codex 028 as the current "
+        "disabled prompt draft milestone."
+    )
+    assert "disabled documentation-only routingagent prompt draft" in normalized_next_steps, (
+        "Post-015 review next steps must frame Codex 028 as a disabled "
+        "documentation-only RoutingAgent prompt draft."
+    )
+    assert "draft_documented" in normalized_next_steps, (
+        "Post-015 review next steps must state Codex 028 draft status."
+    )
+    assert "desactive" in normalized_next_steps, (
+        "Post-015 review next steps must state Codex 028 remains disabled."
+    )
+    assert "non-runtime" in normalized_next_steps, (
+        "Post-015 review next steps must state Codex 028 remains non-runtime."
+    )
+    assert "non-consumed" in normalized_next_steps, (
+        "Post-015 review next steps must state Codex 028 remains non-consumed."
+    )
+    assert "sans prompt actif" in normalized_next_steps, (
+        "Post-015 review next steps must state Codex 028 creates no active prompt."
+    )
+    assert "sans runtime loading" in normalized_next_steps, (
+        "Post-015 review next steps must state Codex 028 creates no runtime loading."
+    )
+    assert "sans prompts.py" in normalized_next_steps, (
+        "Post-015 review next steps must state Codex 028 creates no prompts.py."
+    )
+    assert "sans contrat json final ni enum runtime" in normalized_next_steps, (
+        "Post-015 review next steps must state Codex 028 creates no final JSON "
+        "contract or runtime enum."
+    )
+    assert "sans activation openai/runtime" in normalized_next_steps, (
+        "Post-015 review next steps must state Codex 028 does not activate "
+        "OpenAI/runtime."
+    )
     assert any(
         marker in normalized_next_steps
         for marker in ("complete", "courant", "termine", "realise", "fait")
@@ -565,6 +606,59 @@ def test_codex_027_is_docs_tests_only_routing_agent_prompt_readiness_in_readme_a
         )
         assert "activation openai/runtime" in normalized_document, (
             f"{source_name} must state that Codex 027 does not activate OpenAI/runtime."
+        )
+
+
+def test_codex_028_is_disabled_documentation_only_prompt_draft_in_readme_and_review():
+    readme = read_text(README_PATH)
+    review = read_text(POST_015_REVIEW_PATH)
+
+    for source_name, document in (
+        ("README", readme),
+        ("post-015 architecture review", review),
+    ):
+        normalized_document = normalize_text(document)
+        assert "codex 028" in normalized_document, (
+            f"{source_name} must list Codex 028."
+        )
+        assert "disabled documentation-only routingagent prompt draft" in normalized_document, (
+            f"{source_name} must frame Codex 028 as a disabled documentation-only "
+            "RoutingAgent prompt draft."
+        )
+        assert "docs/prompts/drafts" in normalized_document, (
+            f"{source_name} must locate the Codex 028 draft under docs/prompts/drafts."
+        )
+        assert "draft_documented" in normalized_document, (
+            f"{source_name} must state Codex 028 draft status."
+        )
+        assert "disabled" in normalized_document or "desactive" in normalized_document, (
+            f"{source_name} must state Codex 028 remains disabled."
+        )
+        assert "non-runtime" in normalized_document, (
+            f"{source_name} must state Codex 028 remains non-runtime."
+        )
+        assert "non-consumed" in normalized_document, (
+            f"{source_name} must state Codex 028 remains non-consumed."
+        )
+        assert "not approved for mock, runtime, cli or real openai" in normalized_document, (
+            f"{source_name} must state Codex 028 is not approved for mock, runtime, "
+            "CLI or real OpenAI."
+        )
+        assert "sans prompt actif" in normalized_document, (
+            f"{source_name} must state Codex 028 creates no active prompt."
+        )
+        assert "sans runtime loading" in normalized_document, (
+            f"{source_name} must state Codex 028 creates no runtime loading."
+        )
+        assert "sans prompts.py" in normalized_document, (
+            f"{source_name} must state Codex 028 creates no prompts.py."
+        )
+        assert "sans contrat json final ni enum runtime" in normalized_document, (
+            f"{source_name} must state Codex 028 creates no final JSON contract "
+            "or runtime enum."
+        )
+        assert "activation openai/runtime" in normalized_document, (
+            f"{source_name} must state Codex 028 does not activate OpenAI/runtime."
         )
 
 

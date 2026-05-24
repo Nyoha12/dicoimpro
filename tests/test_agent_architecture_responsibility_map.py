@@ -7,6 +7,9 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 MAP_PATH = REPO_ROOT / "docs" / "AGENT_ARCHITECTURE_RESPONSIBILITY_MAP_v0.2.3-auto.md"
 PROMPT_DRAFT_DIR = REPO_ROOT / "docs" / "prompts" / "drafts"
+EXPECTED_DISABLED_DRAFT = (
+    PROMPT_DRAFT_DIR / "ROUTING_AGENT_PROMPT_DRAFT_v0.2.3-auto.md"
+)
 PROMPTS_MODULE = REPO_ROOT / "src" / "dico_impro" / "agents" / "prompts.py"
 
 
@@ -320,8 +323,11 @@ def test_relationship_to_previous_docs_and_codex_history_is_documented() -> None
     )
 
 
-def test_responsibility_map_did_not_add_prompt_artifacts() -> None:
+def test_current_prompt_artifacts_are_limited_to_disabled_codex_028_draft() -> None:
     draft_paths = sorted(PROMPT_DRAFT_DIR.glob("*.md")) if PROMPT_DRAFT_DIR.exists() else []
 
-    assert draft_paths == [], f"Codex 025 must not add prompt drafts: {draft_paths!r}"
+    assert draft_paths == [EXPECTED_DISABLED_DRAFT], (
+        "Current prompt drafts must be limited to the disabled Codex 028 "
+        f"documentation-only draft. Found: {draft_paths!r}"
+    )
     assert not PROMPTS_MODULE.exists(), f"prompts.py must not exist: {PROMPTS_MODULE}"

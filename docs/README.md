@@ -23,6 +23,7 @@ En cas de contradiction, lire dans cet ordre :
 14. AGENT_ARCHITECTURE_RESPONSIBILITY_MAP_v0.2.3-auto.md
 15. ROUTING_AGENT_FUNCTIONAL_SPEC_v0.2.3-auto.md
 16. ROUTING_AGENT_PROMPT_READINESS_CHECKLIST_v0.2.3-auto.md
+17. prompts/drafts/ROUTING_AGENT_PROMPT_DRAFT_v0.2.3-auto.md
 ```
 
 ## Documents actifs
@@ -106,12 +107,21 @@ runtime et n'active aucun comportement OpenAI/runtime.
 
 ### `ROUTING_AGENT_PROMPT_READINESS_CHECKLIST_v0.2.3-auto.md`
 
-Checklist Codex 027 docs/tests-only de prompt-readiness avant un futur prompt
-draft RoutingAgent desactive. Verifie les conditions pre-draft, non-runtime,
-non-prompt, non-contract, pre-implementation avant Codex 028. Ne cree pas de
-prompt reel, ne demarre pas la redaction de prompt, ne cree pas de prompt
-draft, de prompt body, de contenu `docs/prompts/drafts`, de contrat JSON final
-ni d'enum runtime et n'active aucun comportement OpenAI/runtime.
+Checklist Codex 027 docs/tests-only de prompt-readiness avant le prompt draft
+RoutingAgent desactive de Codex 028. Verifie les conditions pre-draft,
+non-runtime, non-prompt, non-contract, pre-implementation. Codex 027 ne cree
+pas de prompt reel, ne demarre pas la redaction de prompt, ne cree pas de
+prompt draft, de prompt body, de contenu `docs/prompts/drafts`, de contrat JSON
+final ni d'enum runtime et n'active aucun comportement OpenAI/runtime.
+
+### `prompts/drafts/ROUTING_AGENT_PROMPT_DRAFT_v0.2.3-auto.md`
+
+Draft Codex 028 disabled documentation-only RoutingAgent prompt draft. Statut
+`draft_documented`, activation_status `disabled`, non-runtime, non-consumed,
+not approved for mock, runtime, CLI or real OpenAI. Ce draft n'est pas charge,
+rendu ou consomme par le runtime, ne cree pas de prompt actif, ne cree pas
+`prompts.py`, ne cree pas de contrat JSON final ni d'enum runtime et n'active
+aucun comportement OpenAI/runtime.
 
 ## Document superseded
 
@@ -149,6 +159,7 @@ Codex 024 - clarification-only des blockers pre-prompt issus de Codex 023, sans 
 Codex 025 - docs/tests-only responsibility mapping des niveaux de regles, agents, architecture SDK et actions externes interdites par defaut, sans prompt reel, sans redaction de prompt commencee, sans contrat JSON final ni enum runtime et sans activation OpenAI/runtime.
 Codex 026 - docs/tests-only RoutingAgent functional spec pre-prompt du routage/aiguillage conservateur, sans prompt reel, sans redaction de prompt commencee, sans prompt draft, sans prompt body, sans contrat JSON final ni enum runtime et sans activation OpenAI/runtime.
 Codex 027 - docs/tests-only RoutingAgent prompt-readiness checklist pre-draft du futur prompt draft desactive, sans prompt reel, sans redaction de prompt commencee, sans prompt draft, sans prompt body, sans contenu docs/prompts/drafts, sans contrat JSON final ni enum runtime et sans activation OpenAI/runtime.
+Codex 028 - disabled documentation-only RoutingAgent prompt draft `draft_documented` et desactive, sous docs/prompts/drafts, non-runtime, non-consumed, sans prompt actif, sans runtime loading, sans prompts.py, sans contrat JSON final ni enum runtime et sans activation OpenAI/runtime.
 ```
 
 ## Règles non négociables

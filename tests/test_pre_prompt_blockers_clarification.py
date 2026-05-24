@@ -9,6 +9,9 @@ CLARIFICATION_PATH = (
     REPO_ROOT / "docs" / "PRE_PROMPT_BLOCKERS_CLARIFICATION_v0.2.3-auto.md"
 )
 PROMPT_DRAFT_DIR = REPO_ROOT / "docs" / "prompts" / "drafts"
+EXPECTED_DISABLED_DRAFT = (
+    PROMPT_DRAFT_DIR / "ROUTING_AGENT_PROMPT_DRAFT_v0.2.3-auto.md"
+)
 PROMPTS_MODULE = REPO_ROOT / "src" / "dico_impro" / "agents" / "prompts.py"
 
 
@@ -136,8 +139,11 @@ def test_pre_prompt_clarification_distinguishes_safe_routing_from_blocked_source
     )
 
 
-def test_pre_prompt_clarification_did_not_add_prompt_artifacts() -> None:
+def test_current_prompt_artifacts_are_limited_to_disabled_codex_028_draft() -> None:
     draft_paths = sorted(PROMPT_DRAFT_DIR.glob("*.md")) if PROMPT_DRAFT_DIR.exists() else []
 
-    assert draft_paths == [], f"Codex 024 must not add prompt drafts: {draft_paths!r}"
+    assert draft_paths == [EXPECTED_DISABLED_DRAFT], (
+        "Current prompt drafts must be limited to the disabled Codex 028 "
+        f"documentation-only draft. Found: {draft_paths!r}"
+    )
     assert not PROMPTS_MODULE.exists(), f"prompts.py must not exist: {PROMPTS_MODULE}"

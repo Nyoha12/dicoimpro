@@ -8,6 +8,9 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 DOCS_DIR = REPO_ROOT / "docs"
 PROTOCOL_PATH = DOCS_DIR / "PROMPT_ACTIVATION_PROTOCOL_v0.2.3-auto.md"
 PROMPT_DRAFT_DIR = DOCS_DIR / "prompts" / "drafts"
+EXPECTED_DISABLED_DRAFT = (
+    PROMPT_DRAFT_DIR / "ROUTING_AGENT_PROMPT_DRAFT_v0.2.3-auto.md"
+)
 PROMPTS_MODULE = REPO_ROOT / "src" / "dico_impro" / "agents" / "prompts.py"
 
 
@@ -101,6 +104,12 @@ def test_prompt_activation_protocol_documents_review_and_storage_requirements() 
             "src/dico_impro/agents/prompts.py is forbidden",
             "inline prompt fields inside PromptPackage JSON fixtures are forbidden",
             "prompt_body_ref is a reference only, not prompt content",
+            "docs/prompts/drafts/ROUTING_AGENT_PROMPT_DRAFT_v0.2.3-auto.md",
+            "lifecycle status `draft_documented`",
+            "activation_status `disabled`",
+            "documentation-only, non-runtime",
+            "not approved for mock, runtime, CLI or real OpenAI",
+            "must not be loaded, rendered or consumed",
         ),
     )
 
@@ -119,8 +128,11 @@ def test_prompt_activation_protocol_names_routing_agent_without_prompt_body() ->
     )
 
 
-def test_prompt_activation_protocol_has_no_current_prompt_artifacts() -> None:
+def test_prompt_activation_protocol_allows_only_disabled_codex_028_draft_artifact() -> None:
     draft_paths = sorted(PROMPT_DRAFT_DIR.glob("*.md")) if PROMPT_DRAFT_DIR.exists() else []
 
-    assert draft_paths == [], f"Codex 022 must not add prompt drafts: {draft_paths!r}"
+    assert draft_paths == [EXPECTED_DISABLED_DRAFT], (
+        "Current prompt drafts must be limited to the disabled Codex 028 "
+        f"documentation-only draft. Found: {draft_paths!r}"
+    )
     assert not PROMPTS_MODULE.exists(), f"prompts.py must not exist: {PROMPTS_MODULE}"
