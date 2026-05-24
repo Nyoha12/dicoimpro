@@ -21,6 +21,7 @@ En cas de contradiction, lire dans cet ordre :
 12. RULES_IMPLEMENTATION_AUDIT_v0.2.3-auto.md
 13. PRE_PROMPT_BLOCKERS_CLARIFICATION_v0.2.3-auto.md
 14. AGENT_ARCHITECTURE_RESPONSIBILITY_MAP_v0.2.3-auto.md
+15. ROUTING_AGENT_FUNCTIONAL_SPEC_v0.2.3-auto.md
 ```
 
 ## Documents actifs
@@ -92,6 +93,16 @@ defaut. Ne cree pas de prompt, ne demarre pas la redaction de prompt, ne cree
 pas de contrat JSON final ni d'enum runtime et n'active aucun comportement
 runtime.
 
+### `ROUTING_AGENT_FUNCTIONAL_SPEC_v0.2.3-auto.md`
+
+Specification Codex 026 docs/tests-only du perimetre fonctionnel pre-prompt du
+futur RoutingAgent. Definit le routage/aiguillage conservateur, les entrees et
+sorties conceptuelles, les sorties interdites, la posture RUN, les
+recommandations relance/audit et la compatibilite avec le feedback
+architecture. Ne cree pas de prompt reel, ne demarre pas la redaction de prompt,
+ne cree pas de prompt draft, de prompt body, de contrat JSON final ni d'enum
+runtime et n'active aucun comportement OpenAI/runtime.
+
 ## Document superseded
 
 ### `ARCHITECTURE_SDK_v0.2.3-auto.md`
@@ -126,6 +137,7 @@ Codex 022 - protocole documentaire de controle pour future activation de prompts
 Codex 023 - audit-only des regles existantes vs couverture d'implementation courante, sans nouvelle doctrine, sans prompt reel, sans redaction de prompt commencee ni activation OpenAI/runtime.
 Codex 024 - clarification-only des blockers pre-prompt issus de Codex 023, sans doctrine nouvelle, sans prompt reel, sans redaction de prompt commencee ni activation OpenAI/runtime.
 Codex 025 - docs/tests-only responsibility mapping des niveaux de regles, agents, architecture SDK et actions externes interdites par defaut, sans prompt reel, sans redaction de prompt commencee, sans contrat JSON final ni enum runtime et sans activation OpenAI/runtime.
+Codex 026 - docs/tests-only RoutingAgent functional spec pre-prompt du routage/aiguillage conservateur, sans prompt reel, sans redaction de prompt commencee, sans prompt draft, sans prompt body, sans contrat JSON final ni enum runtime et sans activation OpenAI/runtime.
 ```
 
 ## Règles non négociables

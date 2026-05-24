@@ -26,11 +26,14 @@ PRE_PROMPT_BLOCKERS_CLARIFICATION_PATH = (
 AGENT_ARCHITECTURE_RESPONSIBILITY_MAP_PATH = (
     DOCS_DIR / "AGENT_ARCHITECTURE_RESPONSIBILITY_MAP_v0.2.3-auto.md"
 )
+ROUTING_AGENT_FUNCTIONAL_SPEC_PATH = (
+    DOCS_DIR / "ROUTING_AGENT_FUNCTIONAL_SPEC_v0.2.3-auto.md"
+)
 PROMPT_PACKAGE_FIXTURE_DIR = REPO_ROOT / "tests" / "fixtures" / "prompt_packages"
 SRC_DIR = REPO_ROOT / "src" / "dico_impro"
 
 EXPECTED_CODEX_FIRST = 1
-EXPECTED_CODEX_LAST = 25
+EXPECTED_CODEX_LAST = 26
 EXPECTED_CODEX_IDS = tuple(
     f"{number:03d}" for number in range(EXPECTED_CODEX_FIRST, EXPECTED_CODEX_LAST + 1)
 )
@@ -133,6 +136,7 @@ def test_readme_active_docs_include_current_review_and_prompt_protocol():
         RULES_IMPLEMENTATION_AUDIT_PATH.name,
         PRE_PROMPT_BLOCKERS_CLARIFICATION_PATH.name,
         AGENT_ARCHITECTURE_RESPONSIBILITY_MAP_PATH.name,
+        ROUTING_AGENT_FUNCTIONAL_SPEC_PATH.name,
     )
 
     active_hierarchy = extract_markdown_section(readme, "Hiérarchie active")
@@ -286,6 +290,37 @@ def test_post_015_review_next_steps_mark_recent_fake_only_milestones_current():
         "Post-015 review next steps must state that Codex 025 does not activate "
         "OpenAI/runtime."
     )
+    assert "codex 026" in normalized_next_steps, (
+        "Post-015 review next steps must mention Codex 026 as the current "
+        "RoutingAgent functional spec milestone."
+    )
+    assert "routingagent functional spec" in normalized_next_steps, (
+        "Post-015 review next steps must frame Codex 026 as a RoutingAgent "
+        "functional spec."
+    )
+    assert "docs/tests-only" in normalized_next_steps, (
+        "Post-015 review next steps must keep Codex 026 framed as docs/tests-only."
+    )
+    assert "pre-prompt" in normalized_next_steps, (
+        "Post-015 review next steps must keep Codex 026 framed as pre-prompt."
+    )
+    assert "routage/aiguillage conservateur" in normalized_next_steps, (
+        "Post-015 review next steps must describe Codex 026 as conservative routing."
+    )
+    assert "sans prompt draft" in normalized_next_steps, (
+        "Post-015 review next steps must state that Codex 026 creates no prompt draft."
+    )
+    assert "sans prompt body" in normalized_next_steps, (
+        "Post-015 review next steps must state that Codex 026 creates no prompt body."
+    )
+    assert "sans contrat json final ni enum runtime" in normalized_next_steps, (
+        "Post-015 review next steps must state that Codex 026 creates no final JSON "
+        "contract or runtime enum."
+    )
+    assert "sans activation openai/runtime" in normalized_next_steps, (
+        "Post-015 review next steps must state that Codex 026 does not activate "
+        "OpenAI/runtime."
+    )
     assert any(
         marker in normalized_next_steps
         for marker in ("complete", "courant", "termine", "realise", "fait")
@@ -395,6 +430,51 @@ def test_codex_025_is_docs_tests_only_responsibility_mapping_in_readme_and_revie
         )
         assert "activation openai/runtime" in normalized_document, (
             f"{source_name} must state that Codex 025 does not activate OpenAI/runtime."
+        )
+
+
+def test_codex_026_is_docs_tests_only_routing_agent_functional_spec_in_readme_and_review():
+    readme = read_text(README_PATH)
+    review = read_text(POST_015_REVIEW_PATH)
+
+    for source_name, document in (
+        ("README", readme),
+        ("post-015 architecture review", review),
+    ):
+        normalized_document = normalize_text(document)
+        assert "codex 026" in normalized_document, (
+            f"{source_name} must list Codex 026."
+        )
+        assert "docs/tests-only" in normalized_document, (
+            f"{source_name} must frame Codex 026 as docs/tests-only."
+        )
+        assert "routingagent functional spec" in normalized_document, (
+            f"{source_name} must describe Codex 026 as a RoutingAgent functional spec."
+        )
+        assert "pre-prompt" in normalized_document, (
+            f"{source_name} must frame Codex 026 as pre-prompt."
+        )
+        assert "routage/aiguillage conservateur" in normalized_document, (
+            f"{source_name} must describe Codex 026 as conservative routing."
+        )
+        assert "sans prompt reel" in normalized_document, (
+            f"{source_name} must state that Codex 026 creates no real prompt."
+        )
+        assert "sans redaction de prompt commencee" in normalized_document, (
+            f"{source_name} must state that Codex 026 does not start prompt drafting."
+        )
+        assert "sans prompt draft" in normalized_document, (
+            f"{source_name} must state that Codex 026 creates no prompt draft."
+        )
+        assert "sans prompt body" in normalized_document, (
+            f"{source_name} must state that Codex 026 creates no prompt body."
+        )
+        assert "sans contrat json final ni enum runtime" in normalized_document, (
+            f"{source_name} must state that Codex 026 creates no final JSON contract "
+            "or runtime enum."
+        )
+        assert "activation openai/runtime" in normalized_document, (
+            f"{source_name} must state that Codex 026 does not activate OpenAI/runtime."
         )
 
 
