@@ -38,11 +38,14 @@ ROUTING_AGENT_PROMPT_DRAFT_PATH = (
 ROUTING_AGENT_PROMPT_DRAFT_REVIEW_GATE_PATH = (
     DOCS_DIR / "ROUTING_AGENT_PROMPT_DRAFT_REVIEW_GATE_v0.2.3-auto.md"
 )
+ROUTING_AGENT_SYNTHETIC_REVIEW_FIXTURES_PATH = (
+    DOCS_DIR / "ROUTING_AGENT_SYNTHETIC_REVIEW_FIXTURES_v0.2.3-auto.md"
+)
 PROMPT_PACKAGE_FIXTURE_DIR = REPO_ROOT / "tests" / "fixtures" / "prompt_packages"
 SRC_DIR = REPO_ROOT / "src" / "dico_impro"
 
 EXPECTED_CODEX_FIRST = 1
-EXPECTED_CODEX_LAST = 29
+EXPECTED_CODEX_LAST = 30
 EXPECTED_CODEX_IDS = tuple(
     f"{number:03d}" for number in range(EXPECTED_CODEX_FIRST, EXPECTED_CODEX_LAST + 1)
 )
@@ -149,6 +152,7 @@ def test_readme_active_docs_include_current_review_and_prompt_protocol():
         ROUTING_AGENT_PROMPT_READINESS_CHECKLIST_PATH.name,
         ROUTING_AGENT_PROMPT_DRAFT_PATH.name,
         ROUTING_AGENT_PROMPT_DRAFT_REVIEW_GATE_PATH.name,
+        ROUTING_AGENT_SYNTHETIC_REVIEW_FIXTURES_PATH.name,
     )
 
     active_hierarchy = extract_markdown_section(readme, "Hiérarchie active")
@@ -719,6 +723,67 @@ def test_codex_029_is_docs_tests_only_prompt_draft_review_gate_in_readme_and_rev
         )
         assert "activation openai/runtime" in normalized_document, (
             f"{source_name} must state Codex 029 does not activate OpenAI/runtime."
+        )
+
+def test_codex_030_is_docs_tests_only_synthetic_review_fixtures_in_readme_and_review():
+    readme = read_text(README_PATH)
+    review = read_text(POST_015_REVIEW_PATH)
+
+    for source_name, document in (
+        ("README", readme),
+        ("post-015 architecture review", review),
+    ):
+        normalized_document = normalize_text(document)
+        assert "codex 030" in normalized_document, (
+            f"{source_name} must list Codex 030."
+        )
+        assert "synthetic review fixtures for the disabled routingagent prompt draft" in normalized_document, (
+            f"{source_name} must frame Codex 030 as synthetic review fixtures for "
+            "the disabled RoutingAgent prompt draft."
+        )
+        assert "docs/tests-only" in normalized_document, (
+            f"{source_name} must keep Codex 030 framed as docs/tests-only."
+        )
+        assert "documentation/test-only" in normalized_document, (
+            f"{source_name} must state Codex 030 remains documentation/test-only."
+        )
+        assert "non-runtime" in normalized_document, (
+            f"{source_name} must state Codex 030 remains non-runtime."
+        )
+        assert "non-consuming" in normalized_document, (
+            f"{source_name} must state Codex 030 remains non-consuming."
+        )
+        assert "non-activation" in normalized_document, (
+            f"{source_name} must state Codex 030 is non-activation."
+        )
+        assert "non-approval" in normalized_document, (
+            f"{source_name} must state Codex 030 is non-approval."
+        )
+        assert "mock-review-only" in normalized_document, (
+            f"{source_name} must keep Codex 030 framed as static mock-review-only."
+        )
+        assert "static synthetic review" in normalized_document, (
+            f"{source_name} must state Codex 030 is static synthetic review."
+        )
+        assert "without prompt activation" in normalized_document, (
+            f"{source_name} must state Codex 030 does not activate the prompt."
+        )
+        assert "mock execution approval" in normalized_document, (
+            f"{source_name} must state Codex 030 does not approve mock execution."
+        )
+        assert "runtime approval" in normalized_document, (
+            f"{source_name} must state Codex 030 does not approve runtime."
+        )
+        assert "loading, rendering, execution or consumption" in normalized_document, (
+            f"{source_name} must state Codex 030 does not load, render, execute "
+            "or consume the prompt."
+        )
+        assert "without prompts.py, final json contracts, runtime enums" in normalized_document, (
+            f"{source_name} must state Codex 030 creates no prompts.py, final JSON "
+            "contracts or runtime enums."
+        )
+        assert "openai/runtime activation" in normalized_document, (
+            f"{source_name} must state Codex 030 does not activate OpenAI/runtime."
         )
 
 

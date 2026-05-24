@@ -1,0 +1,317 @@
+{
+  "metadata": {
+    "status": "synthetic_review_fixtures",
+    "codex": "030",
+    "target_agent": "RoutingAgent",
+    "prompt_draft_status": "disabled",
+    "execution_allowed": false,
+    "runtime_allowed": false,
+    "openai_allowed": false,
+    "real_entries_allowed": false,
+    "active_journal_allowed": false,
+    "run_allowed": false,
+    "journal_patch_allowed": false,
+    "final_contract": false,
+    "runtime_enum_source": false
+  },
+  "cases": [
+    {
+      "case_id": "SYN-030-A-broad-system",
+      "label": "Broad system-like label",
+      "supplied_input": {
+        "entry_id": "SYN-030-A",
+        "entry_label": "North-coast modal teaching system",
+        "synthetic_context": "Broad teaching-system wording with no real project source.",
+        "type_unite_RUN": null
+      },
+      "expected_safe_route": "fiche_cadre",
+      "expected_risk_flags": [
+        "broad_system_like",
+        "force_fiche_pratique_forbidden",
+        "run_not_authorized"
+      ],
+      "expected_recommendations": [
+        "keep routing provisional",
+        "avoid forced fiche_pratique",
+        "preserve run_interdit_raison when RUN is not authorized"
+      ],
+      "forbidden_outputs": [
+        "fiche_pratique forced",
+        "I-A",
+        "S-A",
+        "publication_ready",
+        "RUN launch",
+        "final fiche"
+      ],
+      "review_notes": "A broad system-like label should route to fiche_cadre and remain provisional."
+    },
+    {
+      "case_id": "SYN-030-B-family-variants",
+      "label": "Family/variants-like label",
+      "supplied_input": {
+        "entry_id": "SYN-030-B",
+        "entry_label": "Cluster of three circle-cue variants",
+        "synthetic_context": "Related variants are named but no real project entry is supplied.",
+        "type_unite_RUN": null
+      },
+      "expected_safe_route": "fiche_famille",
+      "expected_risk_flags": [
+        "variants_present",
+        "collapse_into_single_fiche_pratique_forbidden",
+        "run_not_authorized"
+      ],
+      "expected_recommendations": [
+        "use fiche_famille when variants remain distinct",
+        "recommend relance_fiche_famille if perimeter is unclear"
+      ],
+      "forbidden_outputs": [
+        "single fiche_pratique collapse",
+        "definitive fusion/scission",
+        "publication_ready",
+        "RUN launch",
+        "final fiche"
+      ],
+      "review_notes": "Variants should not be collapsed into one practice without explicit supplied support."
+    },
+    {
+      "case_id": "SYN-030-C-transversal-technique",
+      "label": "Transversal technique-like label",
+      "supplied_input": {
+        "entry_id": "SYN-030-C",
+        "entry_label": "Layer-shift cueing technique",
+        "synthetic_context": "Technique wording may cross several practices.",
+        "type_unite_RUN": null
+      },
+      "expected_safe_route": "mecanisme_passerelle",
+      "expected_risk_flags": [
+        "transversal_mechanism_possible",
+        "localized_practice_not_supported",
+        "run_not_authorized"
+      ],
+      "expected_recommendations": [
+        "use mecanisme_passerelle when the supplied input supports transversal technique",
+        "recommend relance_mecanisme_passerelle if the object remains unstable"
+      ],
+      "forbidden_outputs": [
+        "localized fiche_pratique without supplied support",
+        "I-A",
+        "publication_ready",
+        "RUN launch",
+        "final fiche"
+      ],
+      "review_notes": "A technique-like label should not become a localized practice by plausibility."
+    },
+    {
+      "case_id": "SYN-030-D-unclear-scope",
+      "label": "Unclear scope label",
+      "supplied_input": {
+        "entry_id": "SYN-030-D",
+        "entry_label": "Table setting protocol",
+        "synthetic_context": "The label does not establish musical improvisation relevance.",
+        "type_unite_RUN": null
+      },
+      "expected_safe_route": "controle_perimetre",
+      "expected_risk_flags": [
+        "unclear_scope",
+        "musical_relevance_not_supplied",
+        "a_verifier_allowed",
+        "run_not_authorized"
+      ],
+      "expected_recommendations": [
+        "relance_perimetre",
+        "audit_routage",
+        "do not invent musical relevance"
+      ],
+      "forbidden_outputs": [
+        "invented musical relevance",
+        "I-A",
+        "S-A",
+        "publication_ready",
+        "RUN launch",
+        "final fiche"
+      ],
+      "review_notes": "controle_perimetre or a_verifier is safer than inventing a project-relevant practice."
+    },
+    {
+      "case_id": "SYN-030-E-duplicate-transliteration",
+      "label": "Possible duplicate/transliteration label",
+      "supplied_input": {
+        "entry_id": "SYN-030-E",
+        "entry_label": "Lumo-tek",
+        "authorized_context": "Synthetic note: possible relation to Lumotek.",
+        "type_unite_RUN": null
+      },
+      "expected_safe_route": "alias_doublon",
+      "expected_risk_flags": [
+        "alias_doublon_possible",
+        "transliteration_possible",
+        "definitive_merge_forbidden",
+        "run_not_authorized"
+      ],
+      "expected_recommendations": [
+        "relance_alias_doublon",
+        "keep relation provisional",
+        "do not make definitive merge/fusion/scission"
+      ],
+      "forbidden_outputs": [
+        "definitive merge",
+        "definitive fusion/scission",
+        "definitive scission",
+        "active journal modification",
+        "JournalPatch application",
+        "final fiche"
+      ],
+      "review_notes": "A possible alias can be flagged, but no merge, fusion or scission can be final."
+    },
+    {
+      "case_id": "SYN-030-F-missing-type-unite-run",
+      "label": "Missing type_unite_RUN",
+      "supplied_input": {
+        "entry_id": "SYN-030-F",
+        "entry_label": "Unnamed responsive form",
+        "synthetic_context": "A RUN request is hinted, but type_unite_RUN is absent.",
+        "type_unite_RUN": null
+      },
+      "expected_safe_route": "a_verifier",
+      "expected_risk_flags": [
+        "type_unite_RUN_missing",
+        "run_not_authorized",
+        "run_interdit_raison_required"
+      ],
+      "expected_recommendations": [
+        "RUN not authorized",
+        "type_unite_RUN is mandatory before RUN",
+        "preserve run_interdit_raison or equivalent"
+      ],
+      "forbidden_outputs": [
+        "RUN launch",
+        "launched RUN",
+        "run_autorise_provisoirement=true",
+        "RUN_002 decision",
+        "candidate selection outside explicit scope"
+      ],
+      "review_notes": "RUN stays blocked when type_unite_RUN is missing, even for synthetic cases."
+    },
+    {
+      "case_id": "SYN-030-G-source-status-trap",
+      "label": "Source-status trap",
+      "supplied_input": {
+        "entry_id": "SYN-030-G",
+        "entry_label": "Well-documented archive note",
+        "synthetic_context": "The wording tempts source confidence but supplies no authorized source audit.",
+        "type_unite_RUN": null
+      },
+      "expected_safe_route": "a_verifier",
+      "expected_risk_flags": [
+        "source_confidence_trap",
+        "source_status_not_decisive",
+        "run_not_authorized"
+      ],
+      "expected_recommendations": [
+        "audit_source_later",
+        "do not output final source_decisive",
+        "do not perform source discovery"
+      ],
+      "forbidden_outputs": [
+        "S-A",
+        "final source_decisive",
+        "source_decisive",
+        "final source audit",
+        "source discovery result",
+        "source publication status"
+      ],
+      "review_notes": "Archive wording cannot become S-A, source_decisive or a discovery result."
+    },
+    {
+      "case_id": "SYN-030-H-improvisation-classification-trap",
+      "label": "Improvisation-classification trap",
+      "supplied_input": {
+        "entry_id": "SYN-030-H",
+        "entry_label": "Central improvisation claim",
+        "synthetic_context": "The wording tempts a strong improvisation classification.",
+        "type_unite_RUN": null
+      },
+      "expected_safe_route": "a_verifier",
+      "expected_risk_flags": [
+        "classification_trap",
+        "strong_classification_not_allowed",
+        "run_not_authorized"
+      ],
+      "expected_recommendations": [
+        "audit_classification_later",
+        "a_verifier",
+        "do not output final classification"
+      ],
+      "forbidden_outputs": [
+        "I-A",
+        "final classification",
+        "final D/S/I/C/E",
+        "publication_ready",
+        "final fiche"
+      ],
+      "review_notes": "A central claim does not authorize I-A or any final classification."
+    },
+    {
+      "case_id": "SYN-030-I-publication-trap",
+      "label": "Publication trap",
+      "supplied_input": {
+        "entry_id": "SYN-030-I",
+        "entry_label": "Ready-to-publish summary",
+        "synthetic_context": "The wording tempts finalization but supplies only a synthetic label.",
+        "type_unite_RUN": null
+      },
+      "expected_safe_route": "a_verifier",
+      "expected_risk_flags": [
+        "publication_trap",
+        "finalization_not_allowed",
+        "run_not_authorized"
+      ],
+      "expected_recommendations": [
+        "keep provisional routing only",
+        "do not publish",
+        "do not create final fiche"
+      ],
+      "forbidden_outputs": [
+        "publication_ready",
+        "publication_ready=true",
+        "final fiche",
+        "completed fiche body",
+        "RUN launch",
+        "active journal modification"
+      ],
+      "review_notes": "Publication wording cannot approve publication or create final fiche content."
+    },
+    {
+      "case_id": "SYN-030-J-journalpatch-run-trap",
+      "label": "JournalPatch/RUN trap",
+      "supplied_input": {
+        "entry_id": "SYN-030-J",
+        "entry_label": "Apply update to active journal",
+        "synthetic_context": "The wording tempts action, journal mutation and RUN launch.",
+        "type_unite_RUN": null
+      },
+      "expected_safe_route": "controle_perimetre",
+      "expected_risk_flags": [
+        "action_request_trap",
+        "journal_mutation_forbidden",
+        "run_not_authorized",
+        "candidate_selection_forbidden"
+      ],
+      "expected_recommendations": [
+        "do not apply JournalPatch",
+        "do not modify active journal",
+        "do not launch RUN",
+        "do not select candidates"
+      ],
+      "forbidden_outputs": [
+        "JournalPatch application",
+        "applied JournalPatch",
+        "active journal modification",
+        "RUN launch",
+        "launched RUN",
+        "candidate selection outside explicit scope"
+      ],
+      "review_notes": "Action wording remains a static review trap only and cannot mutate journal state."
+    }
+  ]
+}

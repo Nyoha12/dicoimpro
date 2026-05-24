@@ -1,6 +1,6 @@
 # Revue architecture post-015 — dicoimpro v0.2.3-auto
 
-Statut : revue documentaire post-Codex 015, synchronisee apres Codex 029.
+Statut : revue documentaire post-Codex 015, synchronisee apres Codex 030.
 Objet : consolider l'état courant, les garde-fous, les risques et les conditions
 obligatoires avant tout futur travail sur un appel OpenAI reel ou sur des prompts actifs.
 
@@ -14,7 +14,7 @@ ne charge aucun prompt, ne rend aucun prompt et n'active aucun acces modele ou r
 Etat attendu au moment de cette revue :
 
 ```text
-Codex 001 a Codex 028 sont fusionnes dans main.
+Codex 001 a Codex 029 sont fusionnes dans main.
 pytest passe.
 Etat courant de main avant Codex 019 : 252 tests passing.
 Etat courant apres Codex 019 : 253 tests passing.
@@ -36,6 +36,8 @@ Etat courant de main avant Codex 028 : 315 tests passing.
 Etat courant apres Codex 028 : 331 tests passing (docs/tests-only disabled RoutingAgent prompt draft).
 Etat courant de main avant Codex 029 : 331 tests passing.
 Etat courant apres Codex 029 : 349 tests passing (docs/tests-only RoutingAgent prompt draft review gate).
+Etat courant de main avant Codex 030 : 349 tests passing.
+Etat courant apres Codex 030 : 362 tests passing (docs/tests-only synthetic review fixtures for the disabled RoutingAgent prompt draft).
 Le dry-run CLI manuel post-015 a été validé par l'utilisateur.
 Les fixtures PromptPackage metadata-only sont présentes et désactivées.
 Codex 019 ajoute le smoke test CLI dry-run fake-only end-to-end.
@@ -49,6 +51,7 @@ Codex 026 ajoute une functional spec docs/tests-only du futur RoutingAgent, pre-
 Codex 027 ajoute une prompt-readiness checklist docs/tests-only du futur prompt draft RoutingAgent desactive, pre-draft et non-runtime, sans prompt ni contrat runtime.
 Codex 028 ajoute un disabled documentation-only RoutingAgent prompt draft, draft_documented, desactive, non-runtime et non-consumed, sans prompt actif ni contrat runtime.
 Codex 029 ajoute un review gate docs/tests-only du RoutingAgent prompt draft desactive, documentation-only, non-runtime, non-consuming, non-activation, non-approval, pre-mock et pre-runtime, sans activation ni consommation du prompt.
+Codex 030 ajoute des synthetic review fixtures docs/tests-only pour le RoutingAgent prompt draft desactive, documentation/test-only, non-runtime, non-consuming, non-activation, non-approval et mock-review-only au sens de revue statique, sans activation, approbation, chargement, rendu, execution ou consommation du prompt.
 ```
 
 Résumé des couches déjà matérialisées :
@@ -83,6 +86,7 @@ Codex 026 - docs/tests-only RoutingAgent functional spec pre-prompt du routage/a
 Codex 027 - docs/tests-only RoutingAgent prompt-readiness checklist pre-draft du futur prompt draft desactive, sans prompt reel, sans redaction de prompt commencee, sans prompt draft, sans prompt body, sans contenu docs/prompts/drafts, sans contrat JSON final ni enum runtime et sans activation OpenAI/runtime.
 Codex 028 - disabled documentation-only RoutingAgent prompt draft `draft_documented` et desactive, sous docs/prompts/drafts, non-runtime, non-consumed, sans prompt actif, sans runtime loading, sans prompts.py, sans contrat JSON final ni enum runtime et sans activation OpenAI/runtime.
 Codex 029 - docs/tests-only RoutingAgent prompt draft review gate, documentation-only, non-runtime, non-consuming, non-activation, non-approval, pre-mock et pre-runtime, sans activation, approbation, chargement, rendu ou consommation du prompt, sans prompts.py, sans contrat JSON final ni enum runtime et sans activation OpenAI/runtime.
+Codex 030 - docs/tests-only synthetic review fixtures for the disabled RoutingAgent prompt draft, documentation/test-only, non-runtime, non-consuming, non-activation, non-approval and mock-review-only as static synthetic review, without prompt activation, mock execution approval, runtime approval, loading, rendering, execution or consumption, without prompts.py, final JSON contracts, runtime enums or OpenAI/runtime activation.
 ```
 
 ## 2. Statut du dry-run CLI manuel
@@ -117,7 +121,7 @@ Garde-fous confirmés pour ce chemin :
 
 ## 3. Chemins actuellement autorisés
 
-Les seuls chemins autorises apres Codex 029 restent ceux de Codex 020, Codex 021 et Codex 022 :
+Les seuls chemins autorises apres Codex 030 restent ceux de Codex 020, Codex 021 et Codex 022 :
 
 ```text
 1. fake CLI dry-run ;
@@ -291,6 +295,18 @@ charge pas, ne rend pas et ne consomme pas le prompt, ne cree pas `prompts.py`,
 ne cree pas de contrat JSON final ni d'enum runtime, n'active pas OpenAI et ne
 change aucun chemin runtime autorise.
 
+### RoutingAgent synthetic review fixtures
+
+`ROUTING_AGENT_SYNTHETIC_REVIEW_FIXTURES_v0.2.3-auto.md` documente les
+fixtures Codex 030 docs/tests-only de revue synthetique statique pour le
+disabled RoutingAgent prompt draft. Ces fixtures sont documentation/test-only,
+non-runtime, non-consuming, non-activation, non-approval et mock-review-only au
+sens de revue statique sans execution du prompt. Elles n'activent pas le
+prompt, ne l'approuvent pas pour mock, runtime, CLI, OpenAI reel ou RUN, ne
+chargent pas, ne rendent pas, n'executent pas et ne consomment pas le prompt,
+ne creent pas `prompts.py`, ne creent pas de contrat JSON final ni d'enum
+runtime, n'activent pas OpenAI et ne changent aucun chemin runtime autorise.
+
 ## 6. Verdict Go/No-Go
 
 ```text
@@ -351,11 +367,12 @@ Ces conditions sont cumulatives. L'absence d'une seule condition maintient le st
 11. Codex 027 ajoute une RoutingAgent prompt-readiness checklist docs/tests-only et pre-draft du futur prompt draft desactive, sans prompt reel, sans redaction de prompt commencee, sans prompt draft, sans prompt body, sans contenu docs/prompts/drafts, sans contrat JSON final ni enum runtime et sans activation OpenAI/runtime ; ce point est courant et complété.
 12. Codex 028 ajoute un disabled documentation-only RoutingAgent prompt draft `draft_documented` et desactive, sous docs/prompts/drafts, non-runtime, non-consumed, sans prompt actif, sans runtime loading, sans prompts.py, sans contrat JSON final ni enum runtime et sans activation OpenAI/runtime ; ce point est courant et complété.
 13. Codex 029 ajoute un RoutingAgent prompt draft review gate docs/tests-only, documentation-only, non-runtime, non-consuming, non-activation, non-approval, pre-mock et pre-runtime, sans activation, approbation, chargement, rendu ou consommation du prompt, sans prompts.py, sans contrat JSON final ni enum runtime et sans activation OpenAI/runtime ; ce point est courant et complété.
-14. Maintenir un contrôle de synchronisation documentation/tests.
+14. Codex 030 ajoute des synthetic review fixtures docs/tests-only pour le RoutingAgent prompt draft desactive, documentation/test-only, non-runtime, non-consuming, non-activation, non-approval et mock-review-only au sens de revue statique, sans activation, approbation mock, approbation runtime, chargement, rendu, execution ou consommation du prompt, sans prompts.py, contrat JSON final, enum runtime ni activation OpenAI/runtime ; ce point est courant et complété.
+15. Maintenir un contrôle de synchronisation documentation/tests.
 ```
 
 Ces étapes restent documentaires ou mock-only. Elles ne doivent pas introduire de prompt
-actif, de prompt body consomme, de rendu/chargement de prompt, d'appel OpenAI
+actif, de prompt body consomme, de rendu/chargement/execution de prompt, d'appel OpenAI
 réel, d'appel réseau, de lecture de données réelles, de RUN, d'application de
 JournalPatch, de source discovery, de sélection de candidats, de contrat JSON final,
 d'enum runtime ou d'export XLSX/CSV.
