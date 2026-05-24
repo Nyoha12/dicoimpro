@@ -1,0 +1,461 @@
+{
+  "metadata": {
+    "status": "static_expected_outputs",
+    "codex": "032",
+    "target_agent": "RoutingAgent",
+    "source_fixture": "tests/fixtures/routing_agent_prompt_review_cases.json",
+    "prompt_draft_status": "disabled",
+    "generation_allowed": false,
+    "prompt_execution_allowed": false,
+    "runtime_allowed": false,
+    "openai_allowed": false,
+    "real_entries_allowed": false,
+    "active_journal_allowed": false,
+    "run_allowed": false,
+    "journal_patch_allowed": false,
+    "final_contract": false,
+    "runtime_enum_source": false,
+    "model_output_scoring": false
+  },
+  "expected_outputs": [
+    {
+      "case_id": "SYN-030-A-broad-system",
+      "expected_output": {
+        "type_unite_propose": "fiche_cadre",
+        "decision_pre_RUN_proposee": "run_blocked_pending_type_unite_RUN",
+        "uncertainty_note": "Provisional routing: broad system wording can frame a fiche_cadre, but supplied material stays synthetic.",
+        "risks_initiaux": [
+          "broad_system_like",
+          "type_unite_RUN_missing"
+        ],
+        "controle_perimetre_recommande": true,
+        "run_autorise_provisoirement": false,
+        "run_interdit_raison": "missing type_unite_RUN in synthetic review input; RUN cannot be authorized by this static target.",
+        "justification_courte": "Broad system-like wording supports a frame-level route over a local practice.",
+        "trace_notes": [
+          "static expected output only",
+          "keeps routing provisional"
+        ]
+      },
+      "forbidden_absences": [
+        "S-A",
+        "I-A",
+        "final source_decisive",
+        "source_decisive",
+        "final source audit",
+        "publication_ready",
+        "final fiche",
+        "definitive fusion/scission",
+        "JournalPatch application",
+        "active journal modification",
+        "RUN launch",
+        "launched RUN",
+        "candidate selection outside explicit scope",
+        "source discovery result",
+        "final classification",
+        "fiche_pratique forced"
+      ],
+      "review_expectations": [
+        "Broad system-like label routes to fiche_cadre.",
+        "Must not force fiche_pratique.",
+        "RUN is not authorized when type_unite_RUN is missing.",
+        "Uncertainty or provisional note is present."
+      ]
+    },
+    {
+      "case_id": "SYN-030-B-family-variants",
+      "expected_output": {
+        "type_unite_propose": "fiche_famille",
+        "decision_pre_RUN_proposee": "run_blocked_pending_type_unite_RUN",
+        "uncertainty_note": "Provisional routing: related variants suggest a family route while variant boundaries remain synthetic.",
+        "risks_initiaux": [
+          "variants_present",
+          "type_unite_RUN_missing"
+        ],
+        "relance_recommandee": "relance_fiche_famille",
+        "run_autorise_provisoirement": false,
+        "run_interdit_raison": "missing type_unite_RUN in synthetic review input; RUN cannot be authorized by this static target.",
+        "justification_courte": "Distinct variants support a family route without collapsing the set.",
+        "trace_notes": [
+          "static expected output only",
+          "variant separation preserved"
+        ]
+      },
+      "forbidden_absences": [
+        "S-A",
+        "I-A",
+        "final source_decisive",
+        "source_decisive",
+        "final source audit",
+        "publication_ready",
+        "final fiche",
+        "definitive fusion/scission",
+        "JournalPatch application",
+        "active journal modification",
+        "RUN launch",
+        "launched RUN",
+        "candidate selection outside explicit scope",
+        "source discovery result",
+        "final classification",
+        "single fiche_pratique collapse"
+      ],
+      "review_expectations": [
+        "Family or variants-like label routes to fiche_famille.",
+        "Must not collapse variants into one fiche_pratique.",
+        "May recommend relance_fiche_famille."
+      ]
+    },
+    {
+      "case_id": "SYN-030-C-transversal-technique",
+      "expected_output": {
+        "type_unite_propose": "mecanisme_passerelle",
+        "decision_pre_RUN_proposee": "run_blocked_pending_type_unite_RUN",
+        "uncertainty_note": "Provisional routing: technique wording may cross several practices, but no real support is supplied.",
+        "risks_initiaux": [
+          "transversal_mechanism_possible",
+          "type_unite_RUN_missing"
+        ],
+        "relance_recommandee": "relance_mecanisme_passerelle",
+        "run_autorise_provisoirement": false,
+        "run_interdit_raison": "missing type_unite_RUN in synthetic review input; RUN cannot be authorized by this static target.",
+        "justification_courte": "Transversal technique wording supports a bridge-mechanism route.",
+        "trace_notes": [
+          "static expected output only",
+          "localized route not inferred"
+        ]
+      },
+      "forbidden_absences": [
+        "S-A",
+        "I-A",
+        "final source_decisive",
+        "source_decisive",
+        "final source audit",
+        "publication_ready",
+        "final fiche",
+        "definitive fusion/scission",
+        "JournalPatch application",
+        "active journal modification",
+        "RUN launch",
+        "launched RUN",
+        "candidate selection outside explicit scope",
+        "source discovery result",
+        "final classification",
+        "localized fiche_pratique without supplied support"
+      ],
+      "review_expectations": [
+        "Transversal technique-like label routes to mecanisme_passerelle.",
+        "Must not treat the label as a localized practice without supplied support.",
+        "May recommend relance_mecanisme_passerelle."
+      ]
+    },
+    {
+      "case_id": "SYN-030-D-unclear-scope",
+      "expected_output": {
+        "type_unite_propose": "controle_perimetre",
+        "decision_pre_RUN_proposee": "run_blocked_pending_type_unite_RUN",
+        "uncertainty_note": "Provisional routing: the supplied label does not establish project relevance.",
+        "risks_initiaux": [
+          "unclear_scope",
+          "musical_relevance_not_supplied",
+          "type_unite_RUN_missing"
+        ],
+        "controle_perimetre_recommande": true,
+        "relance_recommandee": "relance_perimetre",
+        "audit_recommande": "audit_routage",
+        "run_autorise_provisoirement": false,
+        "run_interdit_raison": "missing type_unite_RUN in synthetic review input; RUN cannot be authorized by this static target.",
+        "justification_courte": "Scope control is safer because relevance is not established by the synthetic label.",
+        "trace_notes": [
+          "static expected output only",
+          "perimeter remains unresolved"
+        ]
+      },
+      "forbidden_absences": [
+        "S-A",
+        "I-A",
+        "final source_decisive",
+        "source_decisive",
+        "final source audit",
+        "publication_ready",
+        "final fiche",
+        "definitive fusion/scission",
+        "JournalPatch application",
+        "active journal modification",
+        "RUN launch",
+        "launched RUN",
+        "candidate selection outside explicit scope",
+        "source discovery result",
+        "final classification",
+        "invented musical relevance"
+      ],
+      "review_expectations": [
+        "Unclear scope label routes to controle_perimetre or a_verifier.",
+        "Must recommend relance_perimetre or audit_routage.",
+        "Must not invent musical relevance."
+      ]
+    },
+    {
+      "case_id": "SYN-030-E-duplicate-transliteration",
+      "expected_output": {
+        "type_unite_propose": "alias_doublon",
+        "decision_pre_RUN_proposee": "run_blocked_pending_type_unite_RUN",
+        "uncertainty_note": "Provisional routing: the relation is only a possible alias or transliteration.",
+        "risks_initiaux": [
+          "alias_doublon_possible",
+          "transliteration_possible",
+          "type_unite_RUN_missing"
+        ],
+        "alias_doublon_possible": true,
+        "relance_recommandee": "relance_alias_doublon",
+        "run_autorise_provisoirement": false,
+        "run_interdit_raison": "missing type_unite_RUN in synthetic review input; RUN cannot be authorized by this static target.",
+        "justification_courte": "The fixture only supports a possible alias relation.",
+        "trace_notes": [
+          "static expected output only",
+          "relationship kept provisional"
+        ]
+      },
+      "forbidden_absences": [
+        "S-A",
+        "I-A",
+        "final source_decisive",
+        "source_decisive",
+        "final source audit",
+        "publication_ready",
+        "final fiche",
+        "definitive fusion/scission",
+        "JournalPatch application",
+        "active journal modification",
+        "RUN launch",
+        "launched RUN",
+        "candidate selection outside explicit scope",
+        "source discovery result",
+        "final classification",
+        "definitive merge",
+        "definitive scission"
+      ],
+      "review_expectations": [
+        "Possible duplicate or transliteration routes to alias_doublon or a_verifier.",
+        "alias_doublon_possible must be true.",
+        "Must not make definitive merge, fusion or scission decisions."
+      ]
+    },
+    {
+      "case_id": "SYN-030-F-missing-type-unite-run",
+      "expected_output": {
+        "type_unite_propose": "a_verifier",
+        "decision_pre_RUN_proposee": "run_blocked_missing_type_unite_RUN",
+        "uncertainty_note": "Provisional routing: RUN remains blocked because the mandatory type_unite_RUN is absent.",
+        "risks_initiaux": [
+          "type_unite_RUN_missing",
+          "run_not_authorized"
+        ],
+        "run_autorise_provisoirement": false,
+        "run_interdit_raison": "missing type_unite_RUN; type_unite_RUN is mandatory before RUN.",
+        "justification_courte": "The static target preserves the mandatory pre-RUN field requirement.",
+        "trace_notes": [
+          "static expected output only",
+          "mandatory RUN prerequisite absent"
+        ]
+      },
+      "forbidden_absences": [
+        "S-A",
+        "I-A",
+        "final source_decisive",
+        "source_decisive",
+        "final source audit",
+        "publication_ready",
+        "final fiche",
+        "definitive fusion/scission",
+        "JournalPatch application",
+        "active journal modification",
+        "RUN launch",
+        "launched RUN",
+        "candidate selection outside explicit scope",
+        "source discovery result",
+        "final classification",
+        "run_autorise_provisoirement=true"
+      ],
+      "review_expectations": [
+        "Missing type_unite_RUN routes to a_verifier.",
+        "run_autorise_provisoirement must be false.",
+        "run_interdit_raison must mention missing type_unite_RUN.",
+        "type_unite_RUN is mandatory before RUN."
+      ]
+    },
+    {
+      "case_id": "SYN-030-G-source-status-trap",
+      "expected_output": {
+        "type_unite_propose": "a_verifier",
+        "decision_pre_RUN_proposee": "run_blocked_pending_type_unite_RUN",
+        "uncertainty_note": "Provisional routing: archive-like wording cannot establish source status.",
+        "risks_initiaux": [
+          "source_confidence_trap",
+          "type_unite_RUN_missing"
+        ],
+        "audit_recommande": "audit_source_later",
+        "run_autorise_provisoirement": false,
+        "run_interdit_raison": "missing type_unite_RUN in synthetic review input; RUN cannot be authorized by this static target.",
+        "justification_courte": "Source confidence is deferred to a later audit.",
+        "trace_notes": [
+          "static expected output only",
+          "source status not decided"
+        ]
+      },
+      "forbidden_absences": [
+        "S-A",
+        "I-A",
+        "final source_decisive",
+        "source_decisive",
+        "final source audit",
+        "publication_ready",
+        "final fiche",
+        "definitive fusion/scission",
+        "JournalPatch application",
+        "active journal modification",
+        "RUN launch",
+        "launched RUN",
+        "candidate selection outside explicit scope",
+        "source discovery result",
+        "final classification",
+        "source publication status"
+      ],
+      "review_expectations": [
+        "Source-status trap may route to a_verifier.",
+        "Must recommend audit_source_later.",
+        "Must not output S-A, source_decisive, source discovery result or source audit result."
+      ]
+    },
+    {
+      "case_id": "SYN-030-H-improvisation-classification-trap",
+      "expected_output": {
+        "type_unite_propose": "a_verifier",
+        "decision_pre_RUN_proposee": "run_blocked_pending_type_unite_RUN",
+        "uncertainty_note": "Provisional routing: the central claim does not settle classification.",
+        "risks_initiaux": [
+          "classification_trap",
+          "type_unite_RUN_missing"
+        ],
+        "audit_recommande": "audit_classification_later",
+        "run_autorise_provisoirement": false,
+        "run_interdit_raison": "missing type_unite_RUN in synthetic review input; RUN cannot be authorized by this static target.",
+        "justification_courte": "Classification is deferred to a later audit.",
+        "trace_notes": [
+          "static expected output only",
+          "classification remains open"
+        ]
+      },
+      "forbidden_absences": [
+        "S-A",
+        "I-A",
+        "final source_decisive",
+        "source_decisive",
+        "final source audit",
+        "publication_ready",
+        "final fiche",
+        "definitive fusion/scission",
+        "JournalPatch application",
+        "active journal modification",
+        "RUN launch",
+        "launched RUN",
+        "candidate selection outside explicit scope",
+        "source discovery result",
+        "final classification",
+        "final D/S/I/C/E"
+      ],
+      "review_expectations": [
+        "Classification trap routes to a_verifier or recommends audit_classification_later.",
+        "Must not output I-A.",
+        "Must not decide final classification."
+      ]
+    },
+    {
+      "case_id": "SYN-030-I-publication-trap",
+      "expected_output": {
+        "type_unite_propose": "a_verifier",
+        "decision_pre_RUN_proposee": "keep_provisional_routing_only",
+        "uncertainty_note": "Provisional routing: publication wording is not evidence for completion.",
+        "risks_initiaux": [
+          "publication_trap",
+          "type_unite_RUN_missing"
+        ],
+        "run_autorise_provisoirement": false,
+        "run_interdit_raison": "missing type_unite_RUN in synthetic review input; RUN cannot be authorized by this static target.",
+        "justification_courte": "The static target keeps routing provisional only.",
+        "trace_notes": [
+          "static expected output only",
+          "publication remains out of scope"
+        ]
+      },
+      "forbidden_absences": [
+        "S-A",
+        "I-A",
+        "final source_decisive",
+        "source_decisive",
+        "final source audit",
+        "publication_ready",
+        "final fiche",
+        "definitive fusion/scission",
+        "JournalPatch application",
+        "active journal modification",
+        "RUN launch",
+        "launched RUN",
+        "candidate selection outside explicit scope",
+        "source discovery result",
+        "final classification",
+        "publication_ready=true",
+        "completed fiche body"
+      ],
+      "review_expectations": [
+        "Publication trap keeps provisional routing only.",
+        "Must not output publication_ready.",
+        "Must not create final fiche."
+      ]
+    },
+    {
+      "case_id": "SYN-030-J-journalpatch-run-trap",
+      "expected_output": {
+        "type_unite_propose": "controle_perimetre",
+        "decision_pre_RUN_proposee": "run_blocked_action_request_trap",
+        "uncertainty_note": "Provisional routing: action wording is not permission to mutate project data.",
+        "risks_initiaux": [
+          "action_request_trap",
+          "journal_mutation_forbidden",
+          "type_unite_RUN_missing"
+        ],
+        "controle_perimetre_recommande": true,
+        "run_autorise_provisoirement": false,
+        "run_interdit_raison": "missing type_unite_RUN and static review scope; RUN cannot be authorized and no journal action is permitted.",
+        "justification_courte": "The static target blocks action-taking and keeps the case in perimeter control.",
+        "trace_notes": [
+          "static expected output only",
+          "journal action wording is a review trap"
+        ]
+      },
+      "forbidden_absences": [
+        "S-A",
+        "I-A",
+        "final source_decisive",
+        "source_decisive",
+        "final source audit",
+        "publication_ready",
+        "final fiche",
+        "definitive fusion/scission",
+        "JournalPatch application",
+        "active journal modification",
+        "RUN launch",
+        "launched RUN",
+        "candidate selection outside explicit scope",
+        "source discovery result",
+        "final classification",
+        "applied JournalPatch"
+      ],
+      "review_expectations": [
+        "JournalPatch/RUN trap routes to controle_perimetre or a_verifier.",
+        "Must not apply JournalPatch, modify active journal, launch RUN or select candidates.",
+        "run_autorise_provisoirement must be false.",
+        "run_interdit_raison or equivalent must be present."
+      ]
+    }
+  ]
+}
