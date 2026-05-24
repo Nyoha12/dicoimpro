@@ -24,6 +24,7 @@ En cas de contradiction, lire dans cet ordre :
 15. ROUTING_AGENT_FUNCTIONAL_SPEC_v0.2.3-auto.md
 16. ROUTING_AGENT_PROMPT_READINESS_CHECKLIST_v0.2.3-auto.md
 17. prompts/drafts/ROUTING_AGENT_PROMPT_DRAFT_v0.2.3-auto.md
+18. ROUTING_AGENT_PROMPT_DRAFT_REVIEW_GATE_v0.2.3-auto.md
 ```
 
 ## Documents actifs
@@ -123,6 +124,16 @@ rendu ou consomme par le runtime, ne cree pas de prompt actif, ne cree pas
 `prompts.py`, ne cree pas de contrat JSON final ni d'enum runtime et n'active
 aucun comportement OpenAI/runtime.
 
+### `ROUTING_AGENT_PROMPT_DRAFT_REVIEW_GATE_v0.2.3-auto.md`
+
+Review gate Codex 029 docs/tests-only du prompt draft RoutingAgent desactive de
+Codex 028. Verifie la coherence documentaire du draft comme document desactive,
+documentation-only, non-runtime, non-consuming, non-activation, non-approval,
+pre-mock et pre-runtime. N'active pas le prompt, ne l'approuve pas pour mock,
+runtime, CLI, OpenAI reel ou RUN, ne charge pas, ne rend pas et ne consomme pas
+le prompt, ne cree pas `prompts.py`, de contrat JSON final ni d'enum runtime et
+n'active aucun comportement OpenAI/runtime.
+
 ## Document superseded
 
 ### `ARCHITECTURE_SDK_v0.2.3-auto.md`
@@ -160,6 +171,7 @@ Codex 025 - docs/tests-only responsibility mapping des niveaux de regles, agents
 Codex 026 - docs/tests-only RoutingAgent functional spec pre-prompt du routage/aiguillage conservateur, sans prompt reel, sans redaction de prompt commencee, sans prompt draft, sans prompt body, sans contrat JSON final ni enum runtime et sans activation OpenAI/runtime.
 Codex 027 - docs/tests-only RoutingAgent prompt-readiness checklist pre-draft du futur prompt draft desactive, sans prompt reel, sans redaction de prompt commencee, sans prompt draft, sans prompt body, sans contenu docs/prompts/drafts, sans contrat JSON final ni enum runtime et sans activation OpenAI/runtime.
 Codex 028 - disabled documentation-only RoutingAgent prompt draft `draft_documented` et desactive, sous docs/prompts/drafts, non-runtime, non-consumed, sans prompt actif, sans runtime loading, sans prompts.py, sans contrat JSON final ni enum runtime et sans activation OpenAI/runtime.
+Codex 029 - docs/tests-only RoutingAgent prompt draft review gate, documentation-only, non-runtime, non-consuming, non-activation, non-approval, pre-mock et pre-runtime, sans activation, approbation, chargement, rendu ou consommation du prompt, sans prompts.py, sans contrat JSON final ni enum runtime et sans activation OpenAI/runtime.
 ```
 
 ## Règles non négociables
