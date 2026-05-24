@@ -20,6 +20,7 @@ En cas de contradiction, lire dans cet ordre :
 11. PROMPT_ACTIVATION_PROTOCOL_v0.2.3-auto.md
 12. RULES_IMPLEMENTATION_AUDIT_v0.2.3-auto.md
 13. PRE_PROMPT_BLOCKERS_CLARIFICATION_v0.2.3-auto.md
+14. AGENT_ARCHITECTURE_RESPONSIBILITY_MAP_v0.2.3-auto.md
 ```
 
 ## Documents actifs
@@ -83,6 +84,14 @@ Clarification Codex 024 clarification-only des blockers pre-prompt issus de
 l'audit Codex 023. Ne cree pas de doctrine nouvelle, ne demarre pas la redaction
 de prompt et n'active aucun comportement runtime.
 
+### `AGENT_ARCHITECTURE_RESPONSIBILITY_MAP_v0.2.3-auto.md`
+
+Carte Codex 025 docs/tests-only des responsabilites entre niveaux de regles,
+raisonnement agentique, architecture SDK et actions externes interdites par
+defaut. Ne cree pas de prompt, ne demarre pas la redaction de prompt, ne cree
+pas de contrat JSON final ni d'enum runtime et n'active aucun comportement
+runtime.
+
 ## Document superseded
 
 ### `ARCHITECTURE_SDK_v0.2.3-auto.md`
@@ -116,6 +125,7 @@ Codex 021 - sanitisation/refactor tests/docs des garde-fous CLI/runtime, sans no
 Codex 022 - protocole documentaire de controle pour future activation de prompts reels, sans creation de prompt ni activation OpenAI/runtime.
 Codex 023 - audit-only des regles existantes vs couverture d'implementation courante, sans nouvelle doctrine, sans prompt reel, sans redaction de prompt commencee ni activation OpenAI/runtime.
 Codex 024 - clarification-only des blockers pre-prompt issus de Codex 023, sans doctrine nouvelle, sans prompt reel, sans redaction de prompt commencee ni activation OpenAI/runtime.
+Codex 025 - docs/tests-only responsibility mapping des niveaux de regles, agents, architecture SDK et actions externes interdites par defaut, sans prompt reel, sans redaction de prompt commencee, sans contrat JSON final ni enum runtime et sans activation OpenAI/runtime.
 ```
 
 ## Règles non négociables
