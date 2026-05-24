@@ -129,6 +129,18 @@ docs/prompts/drafts/RoutingAgent_v0.review.md
 
 That example path is a naming convention only. It is not created by Codex 022.
 
+Codex 028 current disabled draft:
+
+```text
+docs/prompts/drafts/ROUTING_AGENT_PROMPT_DRAFT_v0.2.3-auto.md
+```
+
+This Codex 028 file has lifecycle status `draft_documented` and
+activation_status `disabled`. It is documentation-only, non-runtime,
+non-consumed, not approved for mock, runtime, CLI or real OpenAI, and not a
+runtime activation. It must not be loaded, rendered or consumed until a later
+explicit activation mission.
+
 ## 7. Runtime policy
 
 Real prompts may exist as documents later, but they must not be imported, loaded,
