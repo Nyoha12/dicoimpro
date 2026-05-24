@@ -1,6 +1,6 @@
 # Revue architecture post-015 — dicoimpro v0.2.3-auto
 
-Statut : revue documentaire post-Codex 015, synchronisee apres Codex 025.
+Statut : revue documentaire post-Codex 015, synchronisee apres Codex 026.
 Objet : consolider l'état courant, les garde-fous, les risques et les conditions
 obligatoires avant tout futur travail sur un appel OpenAI réel ou sur des prompts réels.
 
@@ -14,7 +14,7 @@ aucun prompt, ne rend aucun prompt et n'active aucun accès modèle ou réseau.
 Etat attendu au moment de cette revue :
 
 ```text
-Codex 001 a Codex 024 sont fusionnes dans main.
+Codex 001 a Codex 025 sont fusionnes dans main.
 pytest passe.
 Etat courant de main avant Codex 019 : 252 tests passing.
 Etat courant apres Codex 019 : 253 tests passing.
@@ -28,6 +28,8 @@ Etat courant de main avant Codex 024 : 270 tests passing.
 Etat courant apres Codex 024 : 278 tests passing (clarification-only docs/tests uniquement).
 Etat courant de main avant Codex 025 : 278 tests passing.
 Etat courant apres Codex 025 : 289 tests passing (docs/tests-only responsibility mapping).
+Etat courant de main avant Codex 026 : 289 tests passing.
+Etat courant apres Codex 026 : 302 tests passing (docs/tests-only RoutingAgent functional spec).
 Le dry-run CLI manuel post-015 a été validé par l'utilisateur.
 Les fixtures PromptPackage metadata-only sont présentes et désactivées.
 Codex 019 ajoute le smoke test CLI dry-run fake-only end-to-end.
@@ -37,6 +39,7 @@ Codex 022 ajoute le protocole documentaire de controle pour future activation de
 Codex 023 ajoute un audit-only des regles existantes vs couverture d'implementation courante, sans nouvelle doctrine ni activation runtime.
 Codex 024 ajoute une clarification-only des blockers pre-prompt issus de Codex 023, sans doctrine nouvelle ni activation runtime.
 Codex 025 ajoute une responsibility map docs/tests-only des niveaux de regles, agents, architecture SDK et actions externes interdites par defaut, sans prompt ni contrat runtime.
+Codex 026 ajoute une functional spec docs/tests-only du futur RoutingAgent, pre-prompt et non-runtime, sans prompt ni contrat runtime.
 ```
 
 Résumé des couches déjà matérialisées :
@@ -67,6 +70,7 @@ Codex 022 - protocole documentaire de controle pour future activation de prompts
 Codex 023 - audit-only des regles existantes vs couverture d'implementation courante, sans nouvelle doctrine, sans prompt reel, sans redaction de prompt commencee ni activation OpenAI/runtime.
 Codex 024 - clarification-only des blockers pre-prompt issus de Codex 023, sans doctrine nouvelle, sans prompt reel, sans redaction de prompt commencee ni activation OpenAI/runtime.
 Codex 025 - docs/tests-only responsibility mapping des niveaux de regles, agents, architecture SDK et actions externes interdites par defaut, sans prompt reel, sans redaction de prompt commencee, sans contrat JSON final ni enum runtime et sans activation OpenAI/runtime.
+Codex 026 - docs/tests-only RoutingAgent functional spec pre-prompt du routage/aiguillage conservateur, sans prompt reel, sans redaction de prompt commencee, sans prompt draft, sans prompt body, sans contrat JSON final ni enum runtime et sans activation OpenAI/runtime.
 ```
 
 ## 2. Statut du dry-run CLI manuel
@@ -101,7 +105,7 @@ Garde-fous confirmés pour ce chemin :
 
 ## 3. Chemins actuellement autorisés
 
-Les seuls chemins autorisés après Codex 025 restent ceux de Codex 020, Codex 021 et Codex 022 :
+Les seuls chemins autorisés après Codex 026 restent ceux de Codex 020, Codex 021 et Codex 022 :
 
 ```text
 1. fake CLI dry-run ;
@@ -233,6 +237,17 @@ de prompt reel, ne demarre pas la redaction de prompt, ne cree pas de contrat
 JSON final ni d'enum runtime, n'active pas OpenAI et ne change aucun chemin
 runtime autorise.
 
+### RoutingAgent functional spec
+
+`ROUTING_AGENT_FUNCTIONAL_SPEC_v0.2.3-auto.md` definit le perimetre
+fonctionnel pre-prompt du futur RoutingAgent : routage/aiguillage conservateur,
+entrees et sorties conceptuelles, sorties interdites, categories de routage,
+posture RUN, recommandations relance/audit et compatibilite avec les feedbacks
+architecture. Codex 026 est docs/tests-only : il ne cree pas de prompt reel, ne
+demarre pas la redaction de prompt, ne cree pas de prompt draft, de prompt body,
+de contrat JSON final ni d'enum runtime, n'active pas OpenAI et ne change aucun
+chemin runtime autorise.
+
 ## 6. Verdict Go/No-Go
 
 ```text
@@ -289,10 +304,12 @@ Ces conditions sont cumulatives. L'absence d'une seule condition maintient le st
 7. Codex 023 ajoute un audit-only des regles existantes vs couverture d'implementation courante, sans nouvelle doctrine, sans prompt reel, sans redaction de prompt commencee ni activation OpenAI/runtime ; ce point est courant et complété.
 8. Codex 024 ajoute une clarification-only des blockers pre-prompt issus de Codex 023, sans doctrine nouvelle, sans prompt reel, sans redaction de prompt commencee ni activation OpenAI/runtime ; ce point est courant et complété.
 9. Codex 025 ajoute une responsibility map docs/tests-only des niveaux de regles, agents, architecture SDK et actions externes interdites par defaut, sans prompt reel, sans redaction de prompt commencee, sans contrat JSON final ni enum runtime et sans activation OpenAI/runtime ; ce point est courant et complété.
-10. Maintenir un contrôle de synchronisation documentation/tests.
+10. Codex 026 ajoute une RoutingAgent functional spec docs/tests-only et pre-prompt du routage/aiguillage conservateur, sans prompt reel, sans redaction de prompt commencee, sans prompt draft, sans prompt body, sans contrat JSON final ni enum runtime et sans activation OpenAI/runtime ; ce point est courant et complété.
+11. Maintenir un contrôle de synchronisation documentation/tests.
 ```
 
 Ces étapes restent documentaires ou mock-only. Elles ne doivent pas introduire de prompt
-réel, de rendu/chargement de prompt, d'appel OpenAI réel, d'appel réseau, de lecture de
-données réelles, de RUN, d'application de JournalPatch, de source discovery, de sélection
-de candidats, de contrat JSON final, d'enum runtime ou d'export XLSX/CSV.
+réel, de prompt draft, de prompt body, de rendu/chargement de prompt, d'appel OpenAI
+réel, d'appel réseau, de lecture de données réelles, de RUN, d'application de
+JournalPatch, de source discovery, de sélection de candidats, de contrat JSON final,
+d'enum runtime ou d'export XLSX/CSV.
