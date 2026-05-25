@@ -1,0 +1,32 @@
+{
+  "project": "dicoimpro",
+  "protocol_version": "v0.2.3-auto",
+  "last_merged_codex": "034",
+  "main_tests": "466 passed",
+  "current_run_id": "codex_035_example",
+  "current_stage": "pre_cadrage",
+  "stage_status": "ready",
+  "reflection_count_current_stage": 0,
+  "max_reflections": null,
+  "can_advance": null,
+  "last_stage_note": null,
+  "next_prompt_path": null,
+  "repo_context_packet_path": ".dicoimpro/runs/codex_035_example/00_context.md",
+  "guardrails": {
+    "prompt_activation_allowed": false,
+    "prompt_rendering_allowed": false,
+    "prompt_execution_allowed": false,
+    "openai_runtime_allowed": false,
+    "codex_sdk_allowed": false,
+    "run_allowed": false,
+    "journal_write_allowed": false,
+    "journal_patch_allowed": false,
+    "real_data_allowed": false,
+    "publication_allowed": false
+  },
+  "workflow_permissions": {
+    "auto_merge_allowed": false,
+    "auto_pr_allowed": false,
+    "autonomous_loop_allowed": false
+  }
+}

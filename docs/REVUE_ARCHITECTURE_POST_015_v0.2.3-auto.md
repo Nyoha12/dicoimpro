@@ -1,11 +1,12 @@
 # Revue architecture post-015 — dicoimpro v0.2.3-auto
 
-Statut : revue documentaire post-Codex 015, synchronisee apres Codex 034.
+Statut : revue documentaire post-Codex 015, synchronisee apres Codex 035.
 Objet : consolider l'état courant, les garde-fous, les risques et les conditions
 obligatoires avant tout futur travail sur un appel OpenAI reel ou sur des prompts actifs.
 
 Cette revue ne change aucun comportement de production. Elle ne cree aucun prompt actif,
 ne charge aucun prompt, ne rend aucun prompt et n'active aucun acces modele ou reseau.
+Elle n'autorise aucun Codex SDK, aucune boucle autonome et aucune execution de prompt.
 
 ---
 
@@ -14,7 +15,7 @@ ne charge aucun prompt, ne rend aucun prompt et n'active aucun acces modele ou r
 Etat attendu au moment de cette revue :
 
 ```text
-Codex 001 a Codex 033 sont fusionnes dans main avant Codex 034.
+Codex 001 a Codex 034 sont fusionnes dans main avant Codex 035.
 pytest passe.
 Etat courant de main avant Codex 019 : 252 tests passing.
 Etat courant apres Codex 019 : 253 tests passing.
@@ -45,6 +46,8 @@ Etat courant apres Codex 032 : 408 tests passing (docs/tests-only static expecte
 Etat courant de main avant Codex 033 : 408 tests passing.
 Etat courant apres Codex 033 : 445 tests passing (docs/tests-only static candidate-output comparator).
 Etat courant de main avant Codex 034 : 445 tests passing.
+Etat courant apres Codex 034 : 466 tests passing (docs/tests-only disabled prompt draft access boundary).
+Etat courant de main avant Codex 035 : 466 tests passing.
 Le dry-run CLI manuel post-015 a été validé par l'utilisateur.
 Les fixtures PromptPackage metadata-only sont présentes et désactivées.
 Codex 019 ajoute le smoke test CLI dry-run fake-only end-to-end.
@@ -63,6 +66,7 @@ Codex 031 ajoute un static non-LLM fixture checker docs/tests-only pour les fixt
 Codex 032 ajoute un static expected-output evaluator docs/tests-only pour les cas synthetiques RoutingAgent, documentation/test-only, test-only, static, non-LLM, non-runtime, non-consuming, non-activation, non-approval et expected-output-fixture-only, sans activation, approbation mock, approbation runtime, consommation CLI, approbation OpenAI/RUN, chargement, rendu, execution ou consommation du prompt, sans scoring de sortie modele.
 Codex 033 ajoute un static candidate-output comparator docs/tests-only pour les cas synthetiques RoutingAgent, documentation/test-only, test-only, static, non-LLM, deterministic fake candidate provider, non-runtime, non-consuming, non-activation, non-approval et candidate-output-comparator-only, sans activation, approbation mock, approbation runtime, consommation CLI, approbation OpenAI/RUN, chargement, rendu, execution ou consommation du prompt, sans scoring de sortie modele et sans presenter le fake provider comme comportement RoutingAgent.
 Codex 034 ajoute un disabled prompt draft access boundary docs/tests-only pour le RoutingAgent prompt draft desactive, documentation/test-only, test-only, plain markdown inspection only, non-runtime, non-consuming, non-rendering, non-execution, non-activation, non-approval et non-LLM, sans activation, approbation mock, approbation runtime, consommation CLI, approbation OpenAI/RUN, chargement, rendu, execution ou consommation du prompt comme executable, sans scoring de sortie modele.
+Codex 035 ajoute une architecture de sorties docs/tests/scaffold-only pour un futur coach loop local GPT-5.5 Thinking / Codex, avec guidance .dicoimpro, schema de sortie de stage, exemple d'etat workflow et documentation, sans API implementation, sans Codex SDK implementation, sans autonomous loop, sans activation/rendu/execution/consommation de prompt, sans RUN, sans journal/JournalPatch, sans donnees reelles, sans publication ni changement de comportement.
 ```
 
 Résumé des couches déjà matérialisées :
@@ -102,6 +106,7 @@ Codex 031 - docs/tests-only static non-LLM fixture checker for the synthetic rev
 Codex 032 - docs/tests-only static expected-output evaluator for the synthetic RoutingAgent review cases, documentation/test-only, test-only, static, non-LLM, non-runtime, non-consuming, non-activation, non-approval and expected-output-fixture-only, without prompt activation, mock execution approval, runtime approval, CLI consumption, OpenAI approval, RUN approval, prompt loading, rendering, execution or consumption, model output scoring, without prompts.py, production code, final JSON contracts, runtime enums, real agents, OpenAI/network calls, active journal mutation or behavior change.
 Codex 033 - docs/tests-only static candidate-output comparator for the synthetic RoutingAgent review cases, documentation/test-only, test-only, static, non-LLM, deterministic fake candidate provider, non-runtime, non-consuming, non-activation, non-approval and candidate-output-comparator-only, without prompt activation, mock execution approval, runtime approval, CLI consumption, OpenAI approval, RUN approval, prompt loading, rendering, execution or consumption, model output scoring, without presenting the fake provider as RoutingAgent behavior, without prompts.py, production code, final JSON contracts, runtime enums, real agents, OpenAI/network calls, active journal mutation, real candidate selection or behavior change.
 Codex 034 - docs/tests-only disabled prompt draft access boundary for the disabled RoutingAgent prompt draft, documentation/test-only, test-only, plain markdown inspection only, non-runtime, non-consuming, non-rendering, non-execution, non-activation, non-approval and non-LLM, without prompt activation, mock execution approval, runtime approval, CLI consumption, OpenAI approval, RUN approval, prompt loading, rendering, execution or consumption as an executable prompt, model output scoring, without prompts.py, production code, final JSON contracts, runtime enums, real agents, OpenAI/network calls, RUN launch, real candidate selection, real project data processing, active journal read/write, JournalPatch application, XLSX/CSV export, old PDF usage or behavior change.
+Codex 035 - docs/tests/scaffold-only local GPT-5.5 Thinking / Codex coach loop output architecture, with .dicoimpro guidance, stage output schema, workflow state example and workflow documentation, without production code, API call implementation, Codex SDK implementation, autonomous loop, prompt activation/rendering/execution/consumption, OpenAI runtime activation, RUN, journal read/write, JournalPatch application, real data processing, publication, XLSX/CSV export, old PDF usage or behavior change.
 ```
 
 ## 2. Statut du dry-run CLI manuel
@@ -136,7 +141,7 @@ Garde-fous confirmés pour ce chemin :
 
 ## 3. Chemins actuellement autorisés
 
-Les seuls chemins autorises apres Codex 034 restent ceux de Codex 020, Codex 021 et Codex 022 :
+Les seuls chemins autorises apres Codex 035 restent ceux de Codex 020, Codex 021 et Codex 022 :
 
 ```text
 1. fake CLI dry-run ;
@@ -147,6 +152,10 @@ Les seuls chemins autorises apres Codex 034 restent ceux de Codex 020, Codex 021
 Ces chemins restent locaux, deterministes, sans OpenAI reel, sans reseau, sans prompt actif,
 sans source discovery et sans écriture dans le journal actif.
 
+Codex 035 ne modifie aucun chemin runtime autorise. Le scaffold coach loop est
+workflow architecture documentation/tests only et ne donne aucune autorisation
+runtime nouvelle.
+
 ## 4. Chemins actuellement interdits
 
 Sont explicitement interdits dans l'état post-015 :
@@ -154,7 +163,9 @@ Sont explicitement interdits dans l'état post-015 :
 ```text
 - appel OpenAI réel ;
 - appel réseau ;
+- Codex SDK ;
 - rendu ou chargement de prompt ;
+- execution ou consommation de prompt ;
 - prompts.py ;
 - SourceDiscoveryAgent ;
 - RUN ;
@@ -164,10 +175,16 @@ Sont explicitement interdits dans l'état post-015 :
 - usage par défaut de l'ancien PDF ;
 - export XLSX/CSV dans la couche d'automatisation ;
 - application de JournalPatch.
+- publication.
 ```
 
 Ces interdictions s'appliquent aussi aux tests, scripts, fixtures et chemins CLI, sauf
 autorisation explicite dans une mission future dédiée.
+
+Le scaffold coach loop Codex 035 ne les change pas : il n'autorise pas OpenAI
+runtime, prompt execution, Codex SDK, RUN, journal read/write, JournalPatch,
+real data processing, publication, XLSX/CSV export, old PDF usage ou behavior
+change.
 
 ## 5. Couches d'architecture
 
@@ -391,6 +408,25 @@ journal actif, n'applique pas JournalPatch, ne selectionne pas de candidats
 reels, ne cree pas `prompts.py`, de contrat JSON final ni d'enum runtime et ne
 change aucun chemin runtime autorise.
 
+### Coach loop output architecture scaffold
+
+`WORKFLOW_GPT_CODEX_COACH_LOOP_v0.2.3-auto.md` documente Codex 035 :
+architecture docs/tests/scaffold-only des sorties pour un futur coach loop
+local GPT-5.5 Thinking / Codex. Les fichiers `.dicoimpro/COACH_GUIDANCE.md`,
+`.dicoimpro/STAGE_OUTPUT_SCHEMA.md`, `.dicoimpro/WORKFLOW_STATE.example.json`
+et `.dicoimpro/runs/.gitkeep` servent uniquement de guidance, schema, exemple
+d'etat et emplacement reserve.
+
+Ce scaffold definit le role de GPT-5.5 Thinking comme coach/strategist, le role
+de Codex comme executor, le role futur du script Python comme transport layer,
+les stages, reflections ciblees, transition_gate, next_prompt et paquets de
+contexte repo. Il ne cree aucun prompt actif, ne charge pas, ne rend pas,
+n'execute pas et ne consomme pas de prompt, n'appelle pas OpenAI, n'utilise pas
+Codex SDK, ne lance pas RUN, ne lit pas et n'ecrit pas le journal actif,
+n'applique pas JournalPatch, ne traite pas de donnees reelles, ne publie pas,
+n'exporte pas XLSX/CSV, n'utilise pas l'ancien PDF et ne change aucun chemin
+runtime autorise.
+
 ## 6. Verdict Go/No-Go
 
 ```text
@@ -398,6 +434,8 @@ GO    - documentation et fixtures metadata désactivées ;
 GO    - tests supplémentaires mock-only ;
 NO-GO - OpenAI réel ;
 NO-GO - prompt actif/consomme ;
+NO-GO - Codex SDK ;
+NO-GO - boucle autonome ;
 NO-GO - source discovery ;
 NO-GO - RUN.
 ```
@@ -456,11 +494,13 @@ Ces conditions sont cumulatives. L'absence d'une seule condition maintient le st
 16. Codex 032 ajoute un static expected-output evaluator docs/tests-only pour les cas synthetiques RoutingAgent, documentation/test-only, test-only, static, non-LLM, non-runtime, non-consuming, non-activation, non-approval et expected-output-fixture-only, sans activation, approbation mock, approbation runtime, consommation CLI, approbation OpenAI/RUN, chargement, rendu, execution ou consommation du prompt, sans scoring de sortie modele, sans prompts.py, code production, contrat JSON final, enum runtime, agents reels, appel OpenAI/reseau, mutation du journal actif ni changement de comportement ; ce point est courant et complété.
 17. Codex 033 ajoute un static candidate-output comparator docs/tests-only pour les cas synthetiques RoutingAgent, documentation/test-only, test-only, static, non-LLM, deterministic fake candidate provider, non-runtime, non-consuming, non-activation, non-approval et candidate-output-comparator-only, sans activation, approbation mock, approbation runtime, consommation CLI, approbation OpenAI/RUN, chargement, rendu, execution ou consommation du prompt, sans scoring de sortie modele, sans presenter le fake provider comme comportement RoutingAgent, sans prompts.py, code production, contrat JSON final, enum runtime, agents reels, appel OpenAI/reseau, mutation du journal actif, selection de candidats reels ni changement de comportement ; ce point est courant et complété.
 18. Codex 034 ajoute un disabled prompt draft access boundary docs/tests-only pour le RoutingAgent prompt draft desactive, documentation/test-only, test-only, plain markdown inspection only, non-runtime, non-consuming, non-rendering, non-execution, non-activation, non-approval et non-LLM, sans activation, approbation mock, approbation runtime, consommation CLI, approbation OpenAI/RUN, chargement, rendu, execution ou consommation du prompt comme executable, sans scoring de sortie modele, sans prompts.py, code production, contrat JSON final, enum runtime, agents reels, appel OpenAI/reseau, lancement RUN, traitement de donnees projet reelles, lecture/ecriture du journal actif, application JournalPatch, export XLSX/CSV, ancien PDF ni changement de comportement ; ce point est courant et complété.
-19. Maintenir un contrôle de synchronisation documentation/tests.
+19. Codex 035 ajoute une architecture docs/tests/scaffold-only du futur coach loop local GPT-5.5 Thinking / Codex, avec guidance .dicoimpro, schema de sortie de stage, exemple d'etat workflow et documentation, sans API implementation, sans Codex SDK implementation, sans autonomous loop, sans activation/rendu/execution/consommation de prompt, sans OpenAI runtime, sans RUN, sans journal/JournalPatch, sans donnees reelles, sans publication, sans export XLSX/CSV, sans ancien PDF ni changement de comportement ; ce point est courant et complété.
+20. Maintenir un contrôle de synchronisation documentation/tests.
 ```
 
 Ces étapes restent documentaires ou mock-only. Elles ne doivent pas introduire de prompt
 actif, de prompt body consomme, de rendu/chargement/execution de prompt, d'appel OpenAI
-réel, d'appel réseau, de lecture de données réelles, de RUN, d'application de
-JournalPatch, de source discovery, de sélection de candidats, de contrat JSON final,
-d'enum runtime ou d'export XLSX/CSV.
+réel, d'appel réseau, de Codex SDK, de boucle autonome, de lecture de données réelles,
+de publication, de RUN, d'application de JournalPatch, de source discovery, de sélection
+de candidats, de contrat JSON final, d'enum runtime, d'ancien PDF actif ou d'export
+XLSX/CSV.
