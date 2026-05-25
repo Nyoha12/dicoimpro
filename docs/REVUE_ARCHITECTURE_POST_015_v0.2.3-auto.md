@@ -1,6 +1,6 @@
 # Revue architecture post-015 — dicoimpro v0.2.3-auto
 
-Statut : revue documentaire post-Codex 015, synchronisee apres Codex 032.
+Statut : revue documentaire post-Codex 015, synchronisee apres Codex 033.
 Objet : consolider l'état courant, les garde-fous, les risques et les conditions
 obligatoires avant tout futur travail sur un appel OpenAI reel ou sur des prompts actifs.
 
@@ -14,7 +14,7 @@ ne charge aucun prompt, ne rend aucun prompt et n'active aucun acces modele ou r
 Etat attendu au moment de cette revue :
 
 ```text
-Codex 001 a Codex 031 sont fusionnes dans main avant Codex 032.
+Codex 001 a Codex 032 sont fusionnes dans main avant Codex 033.
 pytest passe.
 Etat courant de main avant Codex 019 : 252 tests passing.
 Etat courant apres Codex 019 : 253 tests passing.
@@ -42,6 +42,7 @@ Etat courant de main avant Codex 031 : 362 tests passing.
 Etat courant apres Codex 031 : 383 tests passing (docs/tests-only static non-LLM fixture checker).
 Etat courant de main avant Codex 032 : 383 tests passing.
 Etat courant apres Codex 032 : 408 tests passing (docs/tests-only static expected-output evaluator).
+Etat courant de main avant Codex 033 : 408 tests passing.
 Le dry-run CLI manuel post-015 a été validé par l'utilisateur.
 Les fixtures PromptPackage metadata-only sont présentes et désactivées.
 Codex 019 ajoute le smoke test CLI dry-run fake-only end-to-end.
@@ -58,6 +59,7 @@ Codex 029 ajoute un review gate docs/tests-only du RoutingAgent prompt draft des
 Codex 030 ajoute des synthetic review fixtures docs/tests-only pour le RoutingAgent prompt draft desactive, documentation/test-only, non-runtime, non-consuming, non-activation, non-approval et mock-review-only au sens de revue statique, sans activation, approbation, chargement, rendu, execution ou consommation du prompt.
 Codex 031 ajoute un static non-LLM fixture checker docs/tests-only pour les fixtures synthetiques du prompt draft RoutingAgent desactive, documentation/test-only, test-only, non-runtime, non-consuming, non-activation, non-approval et fixture-shape/guardrail-only, sans activation, approbation mock, approbation runtime, consommation CLI, approbation OpenAI/RUN, chargement, rendu, execution ou consommation du prompt.
 Codex 032 ajoute un static expected-output evaluator docs/tests-only pour les cas synthetiques RoutingAgent, documentation/test-only, test-only, static, non-LLM, non-runtime, non-consuming, non-activation, non-approval et expected-output-fixture-only, sans activation, approbation mock, approbation runtime, consommation CLI, approbation OpenAI/RUN, chargement, rendu, execution ou consommation du prompt, sans scoring de sortie modele.
+Codex 033 ajoute un static candidate-output comparator docs/tests-only pour les cas synthetiques RoutingAgent, documentation/test-only, test-only, static, non-LLM, deterministic fake candidate provider, non-runtime, non-consuming, non-activation, non-approval et candidate-output-comparator-only, sans activation, approbation mock, approbation runtime, consommation CLI, approbation OpenAI/RUN, chargement, rendu, execution ou consommation du prompt, sans scoring de sortie modele et sans presenter le fake provider comme comportement RoutingAgent.
 ```
 
 Résumé des couches déjà matérialisées :
@@ -95,6 +97,7 @@ Codex 029 - docs/tests-only RoutingAgent prompt draft review gate, documentation
 Codex 030 - docs/tests-only synthetic review fixtures for the disabled RoutingAgent prompt draft, documentation/test-only, non-runtime, non-consuming, non-activation, non-approval and mock-review-only as static synthetic review, without prompt activation, mock execution approval, runtime approval, loading, rendering, execution or consumption, without prompts.py, final JSON contracts, runtime enums or OpenAI/runtime activation.
 Codex 031 - docs/tests-only static non-LLM fixture checker for the synthetic review fixtures of the disabled RoutingAgent prompt draft, documentation/test-only, test-only, non-runtime, non-consuming, non-activation, non-approval and fixture-shape/guardrail-only, without prompt activation, mock execution approval, runtime approval, CLI consumption, OpenAI approval, RUN approval, prompt loading, rendering, execution or consumption, without prompts.py, production code, final JSON contracts, runtime enums, real agents, OpenAI/network calls, active journal mutation or behavior change.
 Codex 032 - docs/tests-only static expected-output evaluator for the synthetic RoutingAgent review cases, documentation/test-only, test-only, static, non-LLM, non-runtime, non-consuming, non-activation, non-approval and expected-output-fixture-only, without prompt activation, mock execution approval, runtime approval, CLI consumption, OpenAI approval, RUN approval, prompt loading, rendering, execution or consumption, model output scoring, without prompts.py, production code, final JSON contracts, runtime enums, real agents, OpenAI/network calls, active journal mutation or behavior change.
+Codex 033 - docs/tests-only static candidate-output comparator for the synthetic RoutingAgent review cases, documentation/test-only, test-only, static, non-LLM, deterministic fake candidate provider, non-runtime, non-consuming, non-activation, non-approval and candidate-output-comparator-only, without prompt activation, mock execution approval, runtime approval, CLI consumption, OpenAI approval, RUN approval, prompt loading, rendering, execution or consumption, model output scoring, without presenting the fake provider as RoutingAgent behavior, without prompts.py, production code, final JSON contracts, runtime enums, real agents, OpenAI/network calls, active journal mutation, real candidate selection or behavior change.
 ```
 
 ## 2. Statut du dry-run CLI manuel
@@ -129,7 +132,7 @@ Garde-fous confirmés pour ce chemin :
 
 ## 3. Chemins actuellement autorisés
 
-Les seuls chemins autorises apres Codex 032 restent ceux de Codex 020, Codex 021 et Codex 022 :
+Les seuls chemins autorises apres Codex 033 restent ceux de Codex 020, Codex 021 et Codex 022 :
 
 ```text
 1. fake CLI dry-run ;
@@ -345,6 +348,25 @@ n'appelle pas OpenAI, n'appelle pas le reseau, ne lance pas RUN, ne lit pas et
 n'ecrit pas le journal actif, n'applique pas JournalPatch, ne cree pas de
 contrat JSON final ni d'enum runtime et ne change aucun chemin runtime autorise.
 
+### RoutingAgent static candidate-output comparator
+
+`ROUTING_AGENT_STATIC_CANDIDATE_OUTPUT_COMPARATOR_v0.2.3-auto.md` documente
+le comparator Codex 033 docs/tests-only static candidate-output comparator
+pour les cas synthetiques RoutingAgent. Le helper
+`tests/helpers/routing_agent_static_candidate_output_comparator.py` est
+test-only, static, non-LLM, candidate-output-comparator-only, non-runtime,
+non-consuming, non-activation et non-approval. Il charge uniquement les
+fixtures JSON de tests, verifie les metadata, les flags negatifs, les case IDs,
+les champs conceptuels autorises, les PASS/FAIL synthetiques et les diagnostics
+attendus. Le deterministic fake candidate provider ne doit pas etre presente
+comme comportement RoutingAgent : il retourne seulement des candidate outputs
+synthetiques faits main. Le comparator ne genere pas de sortie modele, ne
+charge pas, ne rend pas, n'execute pas et ne consomme pas le prompt, ne score
+pas de sortie modele, n'appelle pas OpenAI, n'appelle pas le reseau, ne lance
+pas RUN, ne lit pas et n'ecrit pas le journal actif, n'applique pas
+JournalPatch, ne selectionne pas de candidats reels, ne cree pas de contrat
+JSON final ni d'enum runtime et ne change aucun chemin runtime autorise.
+
 ## 6. Verdict Go/No-Go
 
 ```text
@@ -408,7 +430,8 @@ Ces conditions sont cumulatives. L'absence d'une seule condition maintient le st
 14. Codex 030 ajoute des synthetic review fixtures docs/tests-only pour le RoutingAgent prompt draft desactive, documentation/test-only, non-runtime, non-consuming, non-activation, non-approval et mock-review-only au sens de revue statique, sans activation, approbation mock, approbation runtime, chargement, rendu, execution ou consommation du prompt, sans prompts.py, contrat JSON final, enum runtime ni activation OpenAI/runtime ; ce point est courant et complété.
 15. Codex 031 ajoute un static non-LLM fixture checker docs/tests-only pour les fixtures synthetiques du RoutingAgent prompt draft desactive, documentation/test-only, test-only, non-runtime, non-consuming, non-activation, non-approval et fixture-shape/guardrail-only, sans activation, approbation mock, approbation runtime, consommation CLI, approbation OpenAI/RUN, chargement, rendu, execution ou consommation du prompt, sans prompts.py, code production, contrat JSON final, enum runtime, agents reels, appel OpenAI/reseau, mutation du journal actif ni changement de comportement ; ce point est courant et complété.
 16. Codex 032 ajoute un static expected-output evaluator docs/tests-only pour les cas synthetiques RoutingAgent, documentation/test-only, test-only, static, non-LLM, non-runtime, non-consuming, non-activation, non-approval et expected-output-fixture-only, sans activation, approbation mock, approbation runtime, consommation CLI, approbation OpenAI/RUN, chargement, rendu, execution ou consommation du prompt, sans scoring de sortie modele, sans prompts.py, code production, contrat JSON final, enum runtime, agents reels, appel OpenAI/reseau, mutation du journal actif ni changement de comportement ; ce point est courant et complété.
-17. Maintenir un contrôle de synchronisation documentation/tests.
+17. Codex 033 ajoute un static candidate-output comparator docs/tests-only pour les cas synthetiques RoutingAgent, documentation/test-only, test-only, static, non-LLM, deterministic fake candidate provider, non-runtime, non-consuming, non-activation, non-approval et candidate-output-comparator-only, sans activation, approbation mock, approbation runtime, consommation CLI, approbation OpenAI/RUN, chargement, rendu, execution ou consommation du prompt, sans scoring de sortie modele, sans presenter le fake provider comme comportement RoutingAgent, sans prompts.py, code production, contrat JSON final, enum runtime, agents reels, appel OpenAI/reseau, mutation du journal actif, selection de candidats reels ni changement de comportement ; ce point est courant et complété.
+18. Maintenir un contrôle de synchronisation documentation/tests.
 ```
 
 Ces étapes restent documentaires ou mock-only. Elles ne doivent pas introduire de prompt

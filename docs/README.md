@@ -28,6 +28,7 @@ En cas de contradiction, lire dans cet ordre :
 19. ROUTING_AGENT_SYNTHETIC_REVIEW_FIXTURES_v0.2.3-auto.md
 20. ROUTING_AGENT_STATIC_FIXTURE_CHECKER_v0.2.3-auto.md
 21. ROUTING_AGENT_STATIC_EXPECTED_OUTPUT_EVALUATOR_v0.2.3-auto.md
+22. ROUTING_AGENT_STATIC_CANDIDATE_OUTPUT_COMPARATOR_v0.2.3-auto.md
 ```
 
 ## Documents actifs
@@ -172,6 +173,21 @@ modele, ne cree pas `prompts.py`, de code production, de contrat JSON final,
 d'enum runtime ni d'agents reels, n'appelle pas OpenAI/reseau, ne modifie pas
 le journal actif et ne change aucun comportement.
 
+### `ROUTING_AGENT_STATIC_CANDIDATE_OUTPUT_COMPARATOR_v0.2.3-auto.md`
+
+Comparator Codex 033 docs/tests-only static candidate-output comparator pour
+les cas synthetiques RoutingAgent. Ajoute des candidate outputs synthetiques
+faits main, un deterministic fake candidate provider test-only et un helper
+test-only sous `tests/helpers`, documentation/test-only, static, non-LLM,
+non-runtime, non-consuming, non-activation et non-approval. Le fake provider
+ne doit pas etre presente comme comportement RoutingAgent. N'active pas le
+prompt, ne l'approuve pas pour mock, runtime, CLI, OpenAI reel ou RUN, ne
+charge pas, ne rend pas, n'execute pas et ne consomme pas le prompt, ne score
+pas de sortie modele, ne cree pas `prompts.py`, de code production, de contrat
+JSON final, d'enum runtime ni d'agents reels, n'appelle pas OpenAI/reseau, ne
+modifie pas le journal actif, ne selectionne pas de candidats reels et ne
+change aucun comportement.
+
 ## Document superseded
 
 ### `ARCHITECTURE_SDK_v0.2.3-auto.md`
@@ -213,6 +229,7 @@ Codex 029 - docs/tests-only RoutingAgent prompt draft review gate, documentation
 Codex 030 - docs/tests-only synthetic review fixtures for the disabled RoutingAgent prompt draft, documentation/test-only, non-runtime, non-consuming, non-activation, non-approval and mock-review-only as static synthetic review, without prompt activation, mock execution approval, runtime approval, loading, rendering, execution or consumption, without prompts.py, final JSON contracts, runtime enums or OpenAI/runtime activation.
 Codex 031 - docs/tests-only static non-LLM fixture checker for the synthetic review fixtures of the disabled RoutingAgent prompt draft, documentation/test-only, test-only, non-runtime, non-consuming, non-activation, non-approval and fixture-shape/guardrail-only, without prompt activation, mock execution approval, runtime approval, CLI consumption, OpenAI approval, RUN approval, prompt loading, rendering, execution or consumption, without prompts.py, production code, final JSON contracts, runtime enums, real agents, OpenAI/network calls, active journal mutation or behavior change.
 Codex 032 - docs/tests-only static expected-output evaluator for the synthetic RoutingAgent review cases, documentation/test-only, test-only, static, non-LLM, non-runtime, non-consuming, non-activation, non-approval and expected-output-fixture-only, without prompt activation, mock execution approval, runtime approval, CLI consumption, OpenAI approval, RUN approval, prompt loading, rendering, execution or consumption, model output scoring, without prompts.py, production code, final JSON contracts, runtime enums, real agents, OpenAI/network calls, active journal mutation or behavior change.
+Codex 033 - docs/tests-only static candidate-output comparator for the synthetic RoutingAgent review cases, documentation/test-only, test-only, static, non-LLM, deterministic fake candidate provider, non-runtime, non-consuming, non-activation, non-approval and candidate-output-comparator-only, without prompt activation, mock execution approval, runtime approval, CLI consumption, OpenAI approval, RUN approval, prompt loading, rendering, execution or consumption, model output scoring, without presenting the fake provider as RoutingAgent behavior, without prompts.py, production code, final JSON contracts, runtime enums, real agents, OpenAI/network calls, active journal mutation, real candidate selection or behavior change.
 ```
 
 ## Règles non négociables

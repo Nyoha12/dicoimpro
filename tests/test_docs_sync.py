@@ -47,11 +47,14 @@ ROUTING_AGENT_STATIC_FIXTURE_CHECKER_PATH = (
 ROUTING_AGENT_STATIC_EXPECTED_OUTPUT_EVALUATOR_PATH = (
     DOCS_DIR / "ROUTING_AGENT_STATIC_EXPECTED_OUTPUT_EVALUATOR_v0.2.3-auto.md"
 )
+ROUTING_AGENT_STATIC_CANDIDATE_OUTPUT_COMPARATOR_PATH = (
+    DOCS_DIR / "ROUTING_AGENT_STATIC_CANDIDATE_OUTPUT_COMPARATOR_v0.2.3-auto.md"
+)
 PROMPT_PACKAGE_FIXTURE_DIR = REPO_ROOT / "tests" / "fixtures" / "prompt_packages"
 SRC_DIR = REPO_ROOT / "src" / "dico_impro"
 
 EXPECTED_CODEX_FIRST = 1
-EXPECTED_CODEX_LAST = 32
+EXPECTED_CODEX_LAST = 33
 EXPECTED_CODEX_IDS = tuple(
     f"{number:03d}" for number in range(EXPECTED_CODEX_FIRST, EXPECTED_CODEX_LAST + 1)
 )
@@ -161,6 +164,7 @@ def test_readme_active_docs_include_current_review_and_prompt_protocol():
         ROUTING_AGENT_SYNTHETIC_REVIEW_FIXTURES_PATH.name,
         ROUTING_AGENT_STATIC_FIXTURE_CHECKER_PATH.name,
         ROUTING_AGENT_STATIC_EXPECTED_OUTPUT_EVALUATOR_PATH.name,
+        ROUTING_AGENT_STATIC_CANDIDATE_OUTPUT_COMPARATOR_PATH.name,
     )
 
     active_hierarchy = extract_markdown_section(readme, "Hiérarchie active")
@@ -417,6 +421,24 @@ def test_post_015_review_next_steps_mark_recent_fake_only_milestones_current():
     assert "sans activation openai/runtime" in normalized_next_steps, (
         "Post-015 review next steps must state Codex 028 does not activate "
         "OpenAI/runtime."
+    )
+    assert "codex 033" in normalized_next_steps, (
+        "Post-015 review next steps must mention Codex 033 as the current "
+        "static candidate-output comparator milestone."
+    )
+    assert "static candidate-output comparator" in normalized_next_steps, (
+        "Post-015 review next steps must frame Codex 033 as a static "
+        "candidate-output comparator."
+    )
+    assert "deterministic fake candidate provider" in normalized_next_steps, (
+        "Post-015 review next steps must mention the deterministic fake candidate provider."
+    )
+    assert "sans presenter le fake provider comme comportement routingagent" in normalized_next_steps, (
+        "Post-015 review next steps must state that the fake provider is not "
+        "RoutingAgent behavior."
+    )
+    assert "sans scoring de sortie modele" in normalized_next_steps, (
+        "Post-015 review next steps must state that Codex 033 does not score model output."
     )
     assert any(
         marker in normalized_next_steps
@@ -978,6 +1000,115 @@ def test_codex_032_is_docs_tests_only_static_expected_output_evaluator_in_readme
         )
         assert "behavior change" in normalized_document or "changement de comportement" in normalized_document, (
             f"{source_name} must state Codex 032 changes no behavior."
+        )
+
+
+def test_codex_033_is_docs_tests_only_static_candidate_output_comparator_in_readme_and_review():
+    readme = read_text(README_PATH)
+    review = read_text(POST_015_REVIEW_PATH)
+
+    for source_name, document in (
+        ("README", readme),
+        ("post-015 architecture review", review),
+    ):
+        normalized_document = normalize_text(document)
+        assert "codex 033" in normalized_document, (
+            f"{source_name} must list Codex 033."
+        )
+        assert "static candidate-output comparator" in normalized_document, (
+            f"{source_name} must frame Codex 033 as a static candidate-output comparator."
+        )
+        assert "synthetic routingagent review cases" in normalized_document or "cas synthetiques routingagent" in normalized_document, (
+            f"{source_name} must tie Codex 033 to the synthetic RoutingAgent review cases."
+        )
+        assert "docs/tests-only" in normalized_document, (
+            f"{source_name} must keep Codex 033 framed as docs/tests-only."
+        )
+        assert "documentation/test-only" in normalized_document, (
+            f"{source_name} must state Codex 033 remains documentation/test-only."
+        )
+        assert "test-only" in normalized_document, (
+            f"{source_name} must state Codex 033 helper scope is test-only."
+        )
+        assert "static" in normalized_document, (
+            f"{source_name} must state Codex 033 remains static."
+        )
+        assert "non-llm" in normalized_document, (
+            f"{source_name} must state Codex 033 remains non-LLM."
+        )
+        assert "deterministic fake candidate provider" in normalized_document, (
+            f"{source_name} must mention the deterministic fake candidate provider."
+        )
+        assert "non-runtime" in normalized_document, (
+            f"{source_name} must state Codex 033 remains non-runtime."
+        )
+        assert "non-consuming" in normalized_document, (
+            f"{source_name} must state Codex 033 remains non-consuming."
+        )
+        assert "non-activation" in normalized_document, (
+            f"{source_name} must state Codex 033 is non-activation."
+        )
+        assert "non-approval" in normalized_document, (
+            f"{source_name} must state Codex 033 is non-approval."
+        )
+        assert "candidate-output-comparator-only" in normalized_document, (
+            f"{source_name} must state Codex 033 is candidate-output comparator only."
+        )
+        assert "without prompt activation" in normalized_document or "sans activation" in normalized_document, (
+            f"{source_name} must state Codex 033 does not activate the prompt."
+        )
+        assert "mock execution approval" in normalized_document or "approbation mock" in normalized_document, (
+            f"{source_name} must state Codex 033 does not approve mock execution."
+        )
+        assert "runtime approval" in normalized_document or "approbation runtime" in normalized_document, (
+            f"{source_name} must state Codex 033 does not approve runtime."
+        )
+        assert "cli consumption" in normalized_document or "consommation cli" in normalized_document, (
+            f"{source_name} must state Codex 033 does not approve CLI consumption."
+        )
+        assert "openai approval" in normalized_document or "approbation openai" in normalized_document, (
+            f"{source_name} must state Codex 033 does not approve OpenAI."
+        )
+        assert "run approval" in normalized_document or "approbation openai/run" in normalized_document, (
+            f"{source_name} must state Codex 033 does not approve RUN."
+        )
+        assert (
+            "prompt loading, rendering, execution or consumption" in normalized_document
+            or "chargement, rendu, execution ou consommation du prompt" in normalized_document
+        ), f"{source_name} must state Codex 033 does not load, render, execute or consume the prompt."
+        assert "model output scoring" in normalized_document or "scoring de sortie modele" in normalized_document, (
+            f"{source_name} must state Codex 033 does not score model output."
+        )
+        assert (
+            "without presenting the fake provider as routingagent behavior" in normalized_document
+            or "sans presenter le fake provider comme comportement routingagent" in normalized_document
+        ), f"{source_name} must state fake provider is not RoutingAgent behavior."
+        assert "without prompts.py" in normalized_document or "sans prompts.py" in normalized_document, (
+            f"{source_name} must state Codex 033 creates no prompts.py."
+        )
+        assert "production code" in normalized_document or "code production" in normalized_document, (
+            f"{source_name} must state Codex 033 changes no production code."
+        )
+        assert "final json contracts" in normalized_document or "contrat json final" in normalized_document, (
+            f"{source_name} must state Codex 033 creates no final JSON contract."
+        )
+        assert "runtime enums" in normalized_document or "enum runtime" in normalized_document, (
+            f"{source_name} must state Codex 033 creates no runtime enum."
+        )
+        assert "real agents" in normalized_document or "agents reels" in normalized_document, (
+            f"{source_name} must state Codex 033 creates no real agents."
+        )
+        assert "openai/network calls" in normalized_document or "appel openai/reseau" in normalized_document, (
+            f"{source_name} must state Codex 033 makes no OpenAI/network calls."
+        )
+        assert "active journal mutation" in normalized_document or "mutation du journal actif" in normalized_document, (
+            f"{source_name} must state Codex 033 mutates no active journal."
+        )
+        assert "real candidate selection" in normalized_document or "selection de candidats reels" in normalized_document, (
+            f"{source_name} must state Codex 033 does not select real candidates."
+        )
+        assert "behavior change" in normalized_document or "changement de comportement" in normalized_document, (
+            f"{source_name} must state Codex 033 changes no behavior."
         )
 
 
