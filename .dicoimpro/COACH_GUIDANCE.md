@@ -106,6 +106,27 @@ Optional reflection stages:
 - Archived reflection notes must be shareable reasoning summaries, not private
   chain-of-thought dumps.
 
+## Local GPT coach API boundary
+
+Local GPT API use may be authorized only by an explicit workflow command such
+as `python scripts/coach_step.py run --execute-api`. This path is outside the
+dicoimpro application runtime and is limited to local workflow-coach tooling
+under `scripts/`.
+
+Any local GPT coach API request must use the context packets, workflow state,
+COACH_GUIDANCE, and STAGE_OUTPUT_SCHEMA as its controlling inputs. It must not
+activate prompts in `src/`, must not render or execute prompts through the
+dicoimpro runtime, and must not authorize OpenAI runtime inside dicoimpro
+application code.
+
+This boundary must not authorize RUN, journal read/write, JournalPatch
+application, real data processing, candidate selection, publication, XLSX/CSV
+export, old PDF usage, Codex SDK, Codex CLI, automatic PR creation, automatic
+merge, or an autonomous loop.
+
+Outputs from the local GPT coach API path are shareable stage notes and prompts
+for future review. They must not be private chain-of-thought dumps.
+
 ## Non-activation rule
 
 The files under `.dicoimpro/` are workflow architecture documents and examples.

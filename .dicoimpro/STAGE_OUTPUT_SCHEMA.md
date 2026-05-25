@@ -46,6 +46,10 @@ The required front matter field names are:
 - `blocking_question`
 - `guardrail_risk_level`
 
+The front matter must remain parseable by local standard-library scripts. Use
+simple `key: value` lines for these required fields. This scaffold does not
+require PyYAML and does not authorize adding PyYAML to parse stage notes.
+
 ## Required body sections
 
 Every stage note must include these sections in this order:
@@ -95,6 +99,11 @@ Field rules:
   the next stage can proceed.
 - `allowed_to_execute_automatically` remains false in this scaffold.
 
+The transition_gate block must remain parseable enough for
+`scripts/coach_step.py`: keep the `transition_gate:` line followed by indented
+simple `key: value` fields. The local state machine follows this block and does
+not invent maturity decisions from prose.
+
 ## Next prompt block
 
 The `next_prompt` block is mandatory in every stage note.
@@ -104,6 +113,9 @@ the next stage prompt. If `can_advance` is false, `next_prompt` contains a
 targeted reflection prompt using `next_prompt_type: reflection_prompt` and the
 blocking question. If the workflow is complete, `next_prompt_type` is `none` and
 `next_prompt` explains why no further prompt is required.
+
+The next_prompt block must include a literal `next_prompt:` marker so local
+workflow scripts can extract it without prompt rendering or prompt execution.
 
 Example:
 
