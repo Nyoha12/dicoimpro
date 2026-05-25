@@ -53,11 +53,14 @@ ROUTING_AGENT_STATIC_CANDIDATE_OUTPUT_COMPARATOR_PATH = (
 ROUTING_AGENT_DISABLED_PROMPT_DRAFT_ACCESS_BOUNDARY_PATH = (
     DOCS_DIR / "ROUTING_AGENT_DISABLED_PROMPT_DRAFT_ACCESS_BOUNDARY_v0.2.3-auto.md"
 )
+WORKFLOW_GPT_CODEX_COACH_LOOP_PATH = (
+    DOCS_DIR / "WORKFLOW_GPT_CODEX_COACH_LOOP_v0.2.3-auto.md"
+)
 PROMPT_PACKAGE_FIXTURE_DIR = REPO_ROOT / "tests" / "fixtures" / "prompt_packages"
 SRC_DIR = REPO_ROOT / "src" / "dico_impro"
 
 EXPECTED_CODEX_FIRST = 1
-EXPECTED_CODEX_LAST = 34
+EXPECTED_CODEX_LAST = 35
 EXPECTED_CODEX_IDS = tuple(
     f"{number:03d}" for number in range(EXPECTED_CODEX_FIRST, EXPECTED_CODEX_LAST + 1)
 )
@@ -169,6 +172,7 @@ def test_readme_active_docs_include_current_review_and_prompt_protocol():
         ROUTING_AGENT_STATIC_EXPECTED_OUTPUT_EVALUATOR_PATH.name,
         ROUTING_AGENT_STATIC_CANDIDATE_OUTPUT_COMPARATOR_PATH.name,
         ROUTING_AGENT_DISABLED_PROMPT_DRAFT_ACCESS_BOUNDARY_PATH.name,
+        WORKFLOW_GPT_CODEX_COACH_LOOP_PATH.name,
     )
 
     active_hierarchy = extract_markdown_section(readme, "Hiérarchie active")
@@ -1259,6 +1263,51 @@ def test_codex_034_is_docs_tests_only_disabled_prompt_draft_access_boundary_in_r
         )
         assert "behavior change" in normalized_document or "changement de comportement" in normalized_document, (
             f"{source_name} must state Codex 034 changes no behavior."
+        )
+
+
+def test_codex_035_is_docs_tests_scaffold_only_coach_loop_in_readme_and_review():
+    readme = read_text(README_PATH)
+    review = read_text(POST_015_REVIEW_PATH)
+
+    for source_name, document in (
+        ("README", readme),
+        ("post-015 architecture review", review),
+    ):
+        normalized_document = normalize_text(document)
+        assert "codex 035" in normalized_document, (
+            f"{source_name} must list Codex 035."
+        )
+        assert "coach loop" in normalized_document, (
+            f"{source_name} must frame Codex 035 as coach loop architecture."
+        )
+        assert "docs/tests/scaffold-only" in normalized_document, (
+            f"{source_name} must keep Codex 035 framed as docs/tests/scaffold-only."
+        )
+        assert "gpt-5.5 thinking" in normalized_document, (
+            f"{source_name} must mention GPT-5.5 Thinking."
+        )
+        assert "codex sdk implementation" in normalized_document, (
+            f"{source_name} must state Codex 035 adds no Codex SDK implementation."
+        )
+        assert "autonomous loop" in normalized_document, (
+            f"{source_name} must state Codex 035 adds no autonomous loop."
+        )
+        assert (
+            "prompt activation/rendering/execution/consumption" in normalized_document
+            or "activation/rendu/execution/consommation de prompt" in normalized_document
+        ), f"{source_name} must state Codex 035 does not activate/render/execute/consume prompts."
+        assert "journalpatch" in normalized_document, (
+            f"{source_name} must state Codex 035 does not apply JournalPatch."
+        )
+        assert "xlsx/csv" in normalized_document, (
+            f"{source_name} must state Codex 035 does not export XLSX/CSV."
+        )
+        assert "old pdf" in normalized_document or "ancien pdf" in normalized_document, (
+            f"{source_name} must state Codex 035 does not use the old PDF."
+        )
+        assert "behavior change" in normalized_document or "changement de comportement" in normalized_document, (
+            f"{source_name} must state Codex 035 changes no behavior."
         )
 
 

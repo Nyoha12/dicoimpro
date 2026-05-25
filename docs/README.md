@@ -30,6 +30,7 @@ En cas de contradiction, lire dans cet ordre :
 21. ROUTING_AGENT_STATIC_EXPECTED_OUTPUT_EVALUATOR_v0.2.3-auto.md
 22. ROUTING_AGENT_STATIC_CANDIDATE_OUTPUT_COMPARATOR_v0.2.3-auto.md
 23. ROUTING_AGENT_DISABLED_PROMPT_DRAFT_ACCESS_BOUNDARY_v0.2.3-auto.md
+24. WORKFLOW_GPT_CODEX_COACH_LOOP_v0.2.3-auto.md
 ```
 
 ## Documents actifs
@@ -204,6 +205,17 @@ traite pas de donnees projet reelles, ne lit pas et n'ecrit pas le journal
 actif, n'applique pas JournalPatch, n'exporte pas XLSX/CSV, n'utilise pas
 l'ancien PDF et ne change aucun comportement.
 
+### `WORKFLOW_GPT_CODEX_COACH_LOOP_v0.2.3-auto.md`
+
+Architecture Codex 035 docs/tests/scaffold-only du futur coach loop local
+GPT-5.5 Thinking / Codex. Definit les sorties de stages, transition_gate,
+next_prompt, reflections ciblees et paquets de contexte repo sous
+`.dicoimpro`, sans API implementation, sans Codex SDK implementation, sans
+autonomous loop, sans prompt activation/rendu/execution/consommation, sans
+OpenAI runtime activation, sans RUN, sans journal/JournalPatch, sans donnees
+reelles, sans export XLSX/CSV, sans ancien PDF et sans changement de
+comportement. No API/Codex SDK/autonomous loop implemented.
+
 ## Document superseded
 
 ### `ARCHITECTURE_SDK_v0.2.3-auto.md`
@@ -247,6 +259,7 @@ Codex 031 - docs/tests-only static non-LLM fixture checker for the synthetic rev
 Codex 032 - docs/tests-only static expected-output evaluator for the synthetic RoutingAgent review cases, documentation/test-only, test-only, static, non-LLM, non-runtime, non-consuming, non-activation, non-approval and expected-output-fixture-only, without prompt activation, mock execution approval, runtime approval, CLI consumption, OpenAI approval, RUN approval, prompt loading, rendering, execution or consumption, model output scoring, without prompts.py, production code, final JSON contracts, runtime enums, real agents, OpenAI/network calls, active journal mutation or behavior change.
 Codex 033 - docs/tests-only static candidate-output comparator for the synthetic RoutingAgent review cases, documentation/test-only, test-only, static, non-LLM, deterministic fake candidate provider, non-runtime, non-consuming, non-activation, non-approval and candidate-output-comparator-only, without prompt activation, mock execution approval, runtime approval, CLI consumption, OpenAI approval, RUN approval, prompt loading, rendering, execution or consumption, model output scoring, without presenting the fake provider as RoutingAgent behavior, without prompts.py, production code, final JSON contracts, runtime enums, real agents, OpenAI/network calls, active journal mutation, real candidate selection or behavior change.
 Codex 034 - docs/tests-only disabled prompt draft access boundary for the disabled RoutingAgent prompt draft, documentation/test-only, test-only, plain markdown inspection only, non-runtime, non-consuming, non-rendering, non-execution, non-activation, non-approval and non-LLM, without prompt activation, mock execution approval, runtime approval, CLI consumption, OpenAI approval, RUN approval, prompt loading, rendering, execution or consumption as an executable prompt, model output scoring, without prompts.py, production code, final JSON contracts, runtime enums, real agents, OpenAI/network calls, RUN launch, real candidate selection, real project data processing, active journal read/write, JournalPatch application, XLSX/CSV export, old PDF usage or behavior change.
+Codex 035 - docs/tests/scaffold-only local GPT-5.5 Thinking / Codex coach loop output architecture, with .dicoimpro guidance, stage output schema, workflow state example and workflow documentation, without production code, API call implementation, Codex SDK implementation, autonomous loop, prompt activation/rendering/execution/consumption, OpenAI runtime activation, RUN, journal read/write, JournalPatch application, real data processing, XLSX/CSV export, old PDF usage or behavior change.
 ```
 
 ## Règles non négociables

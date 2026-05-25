@@ -1,0 +1,114 @@
+# Coach Guidance - GPT-5.5 Thinking / Codex Loop
+
+Status: scaffold documentation only. This file defines output guidance for a
+future local coach loop. It does not activate prompts, models, Codex SDK calls,
+or dicoimpro runtime behavior.
+
+## Roles
+
+### GPT-5.5 Thinking
+
+GPT-5.5 Thinking is the local coach and strategist. It frames the next bounded
+work item, evaluates maturity for the next stage, writes shareable stage notes,
+and produces the next prompt or targeted reflection prompt. It is not the
+executor and must not run repository commands, apply patches, create PRs, merge,
+or process project data.
+
+### Codex
+
+Codex is the executor. Codex receives a bounded task prompt, edits only the
+authorized files, runs the authorized commands, and returns a concise execution
+summary with files changed, commands run, tests, and guardrail status. Codex does
+not decide the whole workflow alone and does not override the coach-stage
+transition gate.
+
+### Python orchestration script
+
+A future Python script is only an orchestrator and transport layer. It may later
+move stage notes, context packets, and prompts between local files, GPT-5.5
+Thinking, Codex, git, tests, and PR review after explicit authorization. It must
+read the stage transition_gate and follow it. The script must not decide maturity
+arbitrarily, must not invent a next prompt, and must not execute blocked stages.
+
+### AGENTS.md / Codex instructions
+
+If `AGENTS.md` or Codex-side instructions are present, they define Codex-side
+execution rules: repository constraints, coding standards, command boundaries,
+review expectations, and safety limits. They do not replace the coach-stage
+transition gate and do not authorize dicoimpro runtime activation.
+
+## Dicoimpro guardrails
+
+These guardrails are false by default and remain false until a later explicit
+authorization changes them:
+
+- no prompt activation unless explicitly authorized later;
+- no prompt rendering, execution, or consumption unless explicitly authorized
+  later;
+- no OpenAI runtime activation inside dicoimpro application code;
+- no RUN without explicit later authorization;
+- no journal read/write;
+- no JournalPatch application;
+- no real data processing unless explicitly authorized later;
+- no publication;
+- no old PDF as an active or decisive source.
+
+This scaffold also authorizes no automatic PR creation, no automatic merge, no
+candidate selection, no XLSX/CSV export, and no production behavior change.
+
+## Required stage sequence
+
+The required stage sequence is:
+
+1. context
+2. pre_cadrage
+3. cadrage
+4. decision
+5. codex_prompt
+6. codex_return
+7. post_codex_review
+8. pr_review
+9. post_merge_review
+
+## Optional reflection stages
+
+Reflection is optional, targeted, and unlimited by user request until the
+specific blocking question is resolved. Reflection stages are not systematic.
+They are triggered only if the next stage is not ready or the user requests
+deeper reasoning.
+
+Optional reflection stages:
+
+- reflection_before_cadrage
+- reflection_before_decision
+- reflection_before_codex_prompt
+- reflection_before_post_codex_review
+- reflection_before_pr_review
+- reflection_before_post_merge_review
+
+## Transition rules
+
+- Each GPT stage output includes the current stage note, a transition_gate, and
+  either a next_prompt or a reflection_prompt.
+- The maturity assessment and next prompt generation happen inside the current
+  GPT stage output.
+- There is no separate mandatory GPT call only to decide maturity.
+- There is no separate mandatory GPT call only to generate the next prompt.
+- A stage must never advance if `transition_gate.can_advance` is false.
+- A stage must never advance if `transition_gate.next_prompt_ready` is false.
+- If `transition_gate.can_advance` is true and
+  `transition_gate.next_prompt_ready` is true, the next_prompt must target the
+  next stage.
+- If `transition_gate.can_advance` is false, the next_prompt field must contain
+  a targeted reflection prompt with the blocking question.
+- Even reflection outputs include their own transition_gate and either a prompt
+  for the target stage if resolved, or another reflection_prompt if not resolved.
+- Archived reflection notes must be shareable reasoning summaries, not private
+  chain-of-thought dumps.
+
+## Non-activation rule
+
+The files under `.dicoimpro/` are workflow architecture documents and examples.
+They are not prompts consumed by the dicoimpro application, not runtime
+configuration, not a RUN plan, and not authorization to call OpenAI, Codex SDK,
+or any external service.
