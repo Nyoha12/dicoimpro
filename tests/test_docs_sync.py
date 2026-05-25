@@ -59,11 +59,14 @@ WORKFLOW_GPT_CODEX_COACH_LOOP_PATH = (
 WORKFLOW_COACH_CONTEXT_STATE_MACHINE_PATH = (
     DOCS_DIR / "WORKFLOW_COACH_CONTEXT_STATE_MACHINE_v0.2.3-auto.md"
 )
+WORKFLOW_COACH_GPT_STAGE_RUNNER_PATH = (
+    DOCS_DIR / "WORKFLOW_COACH_GPT_STAGE_RUNNER_v0.2.3-auto.md"
+)
 PROMPT_PACKAGE_FIXTURE_DIR = REPO_ROOT / "tests" / "fixtures" / "prompt_packages"
 SRC_DIR = REPO_ROOT / "src" / "dico_impro"
 
 EXPECTED_CODEX_FIRST = 1
-EXPECTED_CODEX_LAST = 36
+EXPECTED_CODEX_LAST = 37
 EXPECTED_CODEX_IDS = tuple(
     f"{number:03d}" for number in range(EXPECTED_CODEX_FIRST, EXPECTED_CODEX_LAST + 1)
 )
@@ -177,6 +180,7 @@ def test_readme_active_docs_include_current_review_and_prompt_protocol():
         ROUTING_AGENT_DISABLED_PROMPT_DRAFT_ACCESS_BOUNDARY_PATH.name,
         WORKFLOW_GPT_CODEX_COACH_LOOP_PATH.name,
         WORKFLOW_COACH_CONTEXT_STATE_MACHINE_PATH.name,
+        WORKFLOW_COACH_GPT_STAGE_RUNNER_PATH.name,
     )
 
     active_hierarchy = extract_markdown_section(readme, "Hiérarchie active")
@@ -1363,6 +1367,44 @@ def test_codex_036_is_docs_tests_scripts_scaffold_only_context_state_machine():
         )
         assert "behavior change" in normalized_document or "changement de comportement" in normalized_document, (
             f"{source_name} must state Codex 036 changes no behavior."
+        )
+
+
+def test_codex_037_is_docs_tests_scripts_local_gpt_stage_runner():
+    readme = read_text(README_PATH)
+    review = read_text(POST_015_REVIEW_PATH)
+
+    for source_name, document in (
+        ("README", readme),
+        ("post-015 architecture review", review),
+    ):
+        normalized_document = normalize_text(document)
+        assert "codex 037" in normalized_document, (
+            f"{source_name} must list Codex 037."
+        )
+        assert "gpt-5.5 thinking stage runner" in normalized_document or (
+            "runner local gpt-5.5 thinking" in normalized_document
+        ), f"{source_name} must frame Codex 037 as a GPT-5.5 Thinking stage runner."
+        assert "coach loop" in normalized_document, (
+            f"{source_name} must tie Codex 037 to the coach loop."
+        )
+        assert "docs/tests/scripts" in normalized_document, (
+            f"{source_name} must keep Codex 037 framed as docs/tests/scripts."
+        )
+        assert "explicit api" in normalized_document, (
+            f"{source_name} must state Codex 037 API use is explicit."
+        )
+        assert "no api calls by default" in normalized_document or (
+            "sans appel api par defaut" in normalized_document
+        ), f"{source_name} must state Codex 037 makes no API calls by default."
+        assert "codex sdk/cli" in normalized_document or "codex sdk" in normalized_document, (
+            f"{source_name} must state Codex 037 adds no Codex SDK/CLI."
+        )
+        assert "autonomous loop" in normalized_document, (
+            f"{source_name} must state Codex 037 adds no autonomous loop."
+        )
+        assert "src runtime behavior change" in normalized_document, (
+            f"{source_name} must state Codex 037 changes no src runtime behavior."
         )
 
 
