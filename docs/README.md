@@ -29,6 +29,7 @@ En cas de contradiction, lire dans cet ordre :
 20. ROUTING_AGENT_STATIC_FIXTURE_CHECKER_v0.2.3-auto.md
 21. ROUTING_AGENT_STATIC_EXPECTED_OUTPUT_EVALUATOR_v0.2.3-auto.md
 22. ROUTING_AGENT_STATIC_CANDIDATE_OUTPUT_COMPARATOR_v0.2.3-auto.md
+23. ROUTING_AGENT_DISABLED_PROMPT_DRAFT_ACCESS_BOUNDARY_v0.2.3-auto.md
 ```
 
 ## Documents actifs
@@ -188,6 +189,21 @@ JSON final, d'enum runtime ni d'agents reels, n'appelle pas OpenAI/reseau, ne
 modifie pas le journal actif, ne selectionne pas de candidats reels et ne
 change aucun comportement.
 
+### `ROUTING_AGENT_DISABLED_PROMPT_DRAFT_ACCESS_BOUNDARY_v0.2.3-auto.md`
+
+Boundary Codex 034 docs/tests-only disabled prompt draft access boundary pour
+le RoutingAgent prompt draft desactive. Autorise uniquement l'inspection plain
+markdown en tests comme documentation, documentation/test-only, test-only,
+non-runtime, non-consuming, non-rendering, non-execution, non-activation,
+non-approval et non-LLM. N'active pas le prompt, ne l'approuve pas pour mock,
+runtime, CLI, OpenAI reel ou RUN, ne charge pas, ne rend pas, n'execute pas et
+ne consomme pas le prompt comme executable, ne score pas de sortie modele, ne
+cree pas `prompts.py`, de code production, de contrat JSON final, d'enum
+runtime ni d'agents reels, n'appelle pas OpenAI/reseau, ne lance pas RUN, ne
+traite pas de donnees projet reelles, ne lit pas et n'ecrit pas le journal
+actif, n'applique pas JournalPatch, n'exporte pas XLSX/CSV, n'utilise pas
+l'ancien PDF et ne change aucun comportement.
+
 ## Document superseded
 
 ### `ARCHITECTURE_SDK_v0.2.3-auto.md`
@@ -230,6 +246,7 @@ Codex 030 - docs/tests-only synthetic review fixtures for the disabled RoutingAg
 Codex 031 - docs/tests-only static non-LLM fixture checker for the synthetic review fixtures of the disabled RoutingAgent prompt draft, documentation/test-only, test-only, non-runtime, non-consuming, non-activation, non-approval and fixture-shape/guardrail-only, without prompt activation, mock execution approval, runtime approval, CLI consumption, OpenAI approval, RUN approval, prompt loading, rendering, execution or consumption, without prompts.py, production code, final JSON contracts, runtime enums, real agents, OpenAI/network calls, active journal mutation or behavior change.
 Codex 032 - docs/tests-only static expected-output evaluator for the synthetic RoutingAgent review cases, documentation/test-only, test-only, static, non-LLM, non-runtime, non-consuming, non-activation, non-approval and expected-output-fixture-only, without prompt activation, mock execution approval, runtime approval, CLI consumption, OpenAI approval, RUN approval, prompt loading, rendering, execution or consumption, model output scoring, without prompts.py, production code, final JSON contracts, runtime enums, real agents, OpenAI/network calls, active journal mutation or behavior change.
 Codex 033 - docs/tests-only static candidate-output comparator for the synthetic RoutingAgent review cases, documentation/test-only, test-only, static, non-LLM, deterministic fake candidate provider, non-runtime, non-consuming, non-activation, non-approval and candidate-output-comparator-only, without prompt activation, mock execution approval, runtime approval, CLI consumption, OpenAI approval, RUN approval, prompt loading, rendering, execution or consumption, model output scoring, without presenting the fake provider as RoutingAgent behavior, without prompts.py, production code, final JSON contracts, runtime enums, real agents, OpenAI/network calls, active journal mutation, real candidate selection or behavior change.
+Codex 034 - docs/tests-only disabled prompt draft access boundary for the disabled RoutingAgent prompt draft, documentation/test-only, test-only, plain markdown inspection only, non-runtime, non-consuming, non-rendering, non-execution, non-activation, non-approval and non-LLM, without prompt activation, mock execution approval, runtime approval, CLI consumption, OpenAI approval, RUN approval, prompt loading, rendering, execution or consumption as an executable prompt, model output scoring, without prompts.py, production code, final JSON contracts, runtime enums, real agents, OpenAI/network calls, RUN launch, real candidate selection, real project data processing, active journal read/write, JournalPatch application, XLSX/CSV export, old PDF usage or behavior change.
 ```
 
 ## Règles non négociables
