@@ -50,11 +50,14 @@ ROUTING_AGENT_STATIC_EXPECTED_OUTPUT_EVALUATOR_PATH = (
 ROUTING_AGENT_STATIC_CANDIDATE_OUTPUT_COMPARATOR_PATH = (
     DOCS_DIR / "ROUTING_AGENT_STATIC_CANDIDATE_OUTPUT_COMPARATOR_v0.2.3-auto.md"
 )
+ROUTING_AGENT_DISABLED_PROMPT_DRAFT_ACCESS_BOUNDARY_PATH = (
+    DOCS_DIR / "ROUTING_AGENT_DISABLED_PROMPT_DRAFT_ACCESS_BOUNDARY_v0.2.3-auto.md"
+)
 PROMPT_PACKAGE_FIXTURE_DIR = REPO_ROOT / "tests" / "fixtures" / "prompt_packages"
 SRC_DIR = REPO_ROOT / "src" / "dico_impro"
 
 EXPECTED_CODEX_FIRST = 1
-EXPECTED_CODEX_LAST = 33
+EXPECTED_CODEX_LAST = 34
 EXPECTED_CODEX_IDS = tuple(
     f"{number:03d}" for number in range(EXPECTED_CODEX_FIRST, EXPECTED_CODEX_LAST + 1)
 )
@@ -165,6 +168,7 @@ def test_readme_active_docs_include_current_review_and_prompt_protocol():
         ROUTING_AGENT_STATIC_FIXTURE_CHECKER_PATH.name,
         ROUTING_AGENT_STATIC_EXPECTED_OUTPUT_EVALUATOR_PATH.name,
         ROUTING_AGENT_STATIC_CANDIDATE_OUTPUT_COMPARATOR_PATH.name,
+        ROUTING_AGENT_DISABLED_PROMPT_DRAFT_ACCESS_BOUNDARY_PATH.name,
     )
 
     active_hierarchy = extract_markdown_section(readme, "Hiérarchie active")
@@ -439,6 +443,36 @@ def test_post_015_review_next_steps_mark_recent_fake_only_milestones_current():
     )
     assert "sans scoring de sortie modele" in normalized_next_steps, (
         "Post-015 review next steps must state that Codex 033 does not score model output."
+    )
+    assert "codex 034" in normalized_next_steps, (
+        "Post-015 review next steps must mention Codex 034 as the current "
+        "disabled prompt draft access boundary milestone."
+    )
+    assert "disabled prompt draft access boundary" in normalized_next_steps, (
+        "Post-015 review next steps must frame Codex 034 as a disabled prompt "
+        "draft access boundary."
+    )
+    assert "plain markdown inspection only" in normalized_next_steps, (
+        "Post-015 review next steps must state Codex 034 only permits plain "
+        "markdown inspection."
+    )
+    assert "consommation cli" in normalized_next_steps, (
+        "Post-015 review next steps must state Codex 034 does not approve CLI "
+        "consumption."
+    )
+    assert "chargement, rendu, execution ou consommation du prompt comme executable" in normalized_next_steps, (
+        "Post-015 review next steps must state Codex 034 does not load, render, "
+        "execute or consume the prompt as executable."
+    )
+    assert "sans prompts.py" in normalized_next_steps, (
+        "Post-015 review next steps must state Codex 034 creates no prompts.py."
+    )
+    assert "lecture/ecriture du journal actif" in normalized_next_steps, (
+        "Post-015 review next steps must state Codex 034 does not read/write "
+        "the active journal."
+    )
+    assert "ancien pdf" in normalized_next_steps, (
+        "Post-015 review next steps must state Codex 034 does not use the old PDF."
     )
     assert any(
         marker in normalized_next_steps
@@ -1109,6 +1143,122 @@ def test_codex_033_is_docs_tests_only_static_candidate_output_comparator_in_read
         )
         assert "behavior change" in normalized_document or "changement de comportement" in normalized_document, (
             f"{source_name} must state Codex 033 changes no behavior."
+        )
+
+
+def test_codex_034_is_docs_tests_only_disabled_prompt_draft_access_boundary_in_readme_and_review():
+    readme = read_text(README_PATH)
+    review = read_text(POST_015_REVIEW_PATH)
+
+    for source_name, document in (
+        ("README", readme),
+        ("post-015 architecture review", review),
+    ):
+        normalized_document = normalize_text(document)
+        assert "codex 034" in normalized_document, (
+            f"{source_name} must list Codex 034."
+        )
+        assert "disabled prompt draft access boundary" in normalized_document, (
+            f"{source_name} must frame Codex 034 as a disabled prompt draft access boundary."
+        )
+        assert "disabled routingagent prompt draft" in normalized_document or "routingagent prompt draft desactive" in normalized_document, (
+            f"{source_name} must tie Codex 034 to the disabled RoutingAgent prompt draft."
+        )
+        assert "docs/tests-only" in normalized_document, (
+            f"{source_name} must keep Codex 034 framed as docs/tests-only."
+        )
+        assert "documentation/test-only" in normalized_document, (
+            f"{source_name} must state Codex 034 remains documentation/test-only."
+        )
+        assert "test-only" in normalized_document, (
+            f"{source_name} must state Codex 034 helper scope is test-only."
+        )
+        assert "plain markdown inspection only" in normalized_document, (
+            f"{source_name} must state Codex 034 permits only plain markdown inspection."
+        )
+        assert "non-runtime" in normalized_document, (
+            f"{source_name} must state Codex 034 remains non-runtime."
+        )
+        assert "non-consuming" in normalized_document, (
+            f"{source_name} must state Codex 034 remains non-consuming."
+        )
+        assert "non-rendering" in normalized_document, (
+            f"{source_name} must state Codex 034 remains non-rendering."
+        )
+        assert "non-execution" in normalized_document, (
+            f"{source_name} must state Codex 034 remains non-execution."
+        )
+        assert "non-activation" in normalized_document, (
+            f"{source_name} must state Codex 034 is non-activation."
+        )
+        assert "non-approval" in normalized_document, (
+            f"{source_name} must state Codex 034 is non-approval."
+        )
+        assert "non-llm" in normalized_document, (
+            f"{source_name} must state Codex 034 is non-LLM."
+        )
+        assert "mock execution approval" in normalized_document or "approbation mock" in normalized_document, (
+            f"{source_name} must state Codex 034 does not approve mock execution."
+        )
+        assert "runtime approval" in normalized_document or "approbation runtime" in normalized_document, (
+            f"{source_name} must state Codex 034 does not approve runtime."
+        )
+        assert "cli consumption" in normalized_document or "consommation cli" in normalized_document, (
+            f"{source_name} must state Codex 034 does not approve CLI consumption."
+        )
+        assert "openai approval" in normalized_document or "approbation openai/run" in normalized_document, (
+            f"{source_name} must state Codex 034 does not approve OpenAI."
+        )
+        assert "run approval" in normalized_document or "approbation openai/run" in normalized_document, (
+            f"{source_name} must state Codex 034 does not approve RUN."
+        )
+        assert (
+            "prompt loading, rendering, execution or consumption as an executable prompt"
+            in normalized_document
+            or "chargement, rendu, execution ou consommation du prompt comme executable"
+            in normalized_document
+        ), f"{source_name} must state Codex 034 does not load/render/execute/consume the prompt."
+        assert "model output scoring" in normalized_document or "scoring de sortie modele" in normalized_document, (
+            f"{source_name} must state Codex 034 does not score model output."
+        )
+        assert "without prompts.py" in normalized_document or "sans prompts.py" in normalized_document, (
+            f"{source_name} must state Codex 034 creates no prompts.py."
+        )
+        assert "production code" in normalized_document or "code production" in normalized_document, (
+            f"{source_name} must state Codex 034 changes no production code."
+        )
+        assert "final json contracts" in normalized_document or "contrat json final" in normalized_document, (
+            f"{source_name} must state Codex 034 creates no final JSON contract."
+        )
+        assert "runtime enums" in normalized_document or "enum runtime" in normalized_document, (
+            f"{source_name} must state Codex 034 creates no runtime enum."
+        )
+        assert "real agents" in normalized_document or "agents reels" in normalized_document, (
+            f"{source_name} must state Codex 034 creates no real agents."
+        )
+        assert "openai/network calls" in normalized_document or "appel openai/reseau" in normalized_document, (
+            f"{source_name} must state Codex 034 makes no OpenAI/network calls."
+        )
+        assert "real candidate selection" in normalized_document or "selection de candidats reels" in normalized_document, (
+            f"{source_name} must state Codex 034 does not select real candidates."
+        )
+        assert "real project data processing" in normalized_document or "donnees projet reelles" in normalized_document, (
+            f"{source_name} must state Codex 034 does not process real project data."
+        )
+        assert "active journal read/write" in normalized_document or "lecture/ecriture du journal actif" in normalized_document, (
+            f"{source_name} must state Codex 034 does not read/write the active journal."
+        )
+        assert "journalpatch application" in normalized_document or "application journalpatch" in normalized_document, (
+            f"{source_name} must state Codex 034 does not apply JournalPatch."
+        )
+        assert "xlsx/csv" in normalized_document, (
+            f"{source_name} must state Codex 034 does not export XLSX/CSV."
+        )
+        assert "old pdf" in normalized_document or "ancien pdf" in normalized_document, (
+            f"{source_name} must state Codex 034 does not use the old PDF."
+        )
+        assert "behavior change" in normalized_document or "changement de comportement" in normalized_document, (
+            f"{source_name} must state Codex 034 changes no behavior."
         )
 
 
