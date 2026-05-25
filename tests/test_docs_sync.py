@@ -56,11 +56,14 @@ ROUTING_AGENT_DISABLED_PROMPT_DRAFT_ACCESS_BOUNDARY_PATH = (
 WORKFLOW_GPT_CODEX_COACH_LOOP_PATH = (
     DOCS_DIR / "WORKFLOW_GPT_CODEX_COACH_LOOP_v0.2.3-auto.md"
 )
+WORKFLOW_COACH_CONTEXT_STATE_MACHINE_PATH = (
+    DOCS_DIR / "WORKFLOW_COACH_CONTEXT_STATE_MACHINE_v0.2.3-auto.md"
+)
 PROMPT_PACKAGE_FIXTURE_DIR = REPO_ROOT / "tests" / "fixtures" / "prompt_packages"
 SRC_DIR = REPO_ROOT / "src" / "dico_impro"
 
 EXPECTED_CODEX_FIRST = 1
-EXPECTED_CODEX_LAST = 35
+EXPECTED_CODEX_LAST = 36
 EXPECTED_CODEX_IDS = tuple(
     f"{number:03d}" for number in range(EXPECTED_CODEX_FIRST, EXPECTED_CODEX_LAST + 1)
 )
@@ -173,6 +176,7 @@ def test_readme_active_docs_include_current_review_and_prompt_protocol():
         ROUTING_AGENT_STATIC_CANDIDATE_OUTPUT_COMPARATOR_PATH.name,
         ROUTING_AGENT_DISABLED_PROMPT_DRAFT_ACCESS_BOUNDARY_PATH.name,
         WORKFLOW_GPT_CODEX_COACH_LOOP_PATH.name,
+        WORKFLOW_COACH_CONTEXT_STATE_MACHINE_PATH.name,
     )
 
     active_hierarchy = extract_markdown_section(readme, "Hiérarchie active")
@@ -1308,6 +1312,57 @@ def test_codex_035_is_docs_tests_scaffold_only_coach_loop_in_readme_and_review()
         )
         assert "behavior change" in normalized_document or "changement de comportement" in normalized_document, (
             f"{source_name} must state Codex 035 changes no behavior."
+        )
+
+
+def test_codex_036_is_docs_tests_scripts_scaffold_only_context_state_machine():
+    readme = read_text(README_PATH)
+    review = read_text(POST_015_REVIEW_PATH)
+
+    for source_name, document in (
+        ("README", readme),
+        ("post-015 architecture review", review),
+    ):
+        normalized_document = normalize_text(document)
+        assert "codex 036" in normalized_document, (
+            f"{source_name} must list Codex 036."
+        )
+        assert "coach context collector" in normalized_document, (
+            f"{source_name} must frame Codex 036 as a coach context collector."
+        )
+        assert "state machine" in normalized_document, (
+            f"{source_name} must frame Codex 036 as a state machine."
+        )
+        assert "docs/tests/scripts scaffold-only" in normalized_document or (
+            "docs/tests/scripts-only" in normalized_document
+        ), f"{source_name} must keep Codex 036 framed as docs/tests/scripts scaffold-only."
+        assert "without api calls" in normalized_document or "sans api calls" in normalized_document, (
+            f"{source_name} must state Codex 036 adds no API calls."
+        )
+        assert "codex sdk" in normalized_document, (
+            f"{source_name} must state Codex 036 adds no Codex SDK."
+        )
+        assert "autonomous loop" in normalized_document, (
+            f"{source_name} must state Codex 036 adds no autonomous loop."
+        )
+        assert "prompt execution" in normalized_document, (
+            f"{source_name} must state Codex 036 adds no prompt execution."
+        )
+        assert "run" in normalized_document, f"{source_name} must state Codex 036 adds no RUN."
+        assert "journal" in normalized_document, (
+            f"{source_name} must state Codex 036 adds no journal access."
+        )
+        assert "journalpatch" in normalized_document, (
+            f"{source_name} must state Codex 036 adds no JournalPatch."
+        )
+        assert "real data" in normalized_document, (
+            f"{source_name} must state Codex 036 adds no real data processing."
+        )
+        assert "production code" in normalized_document, (
+            f"{source_name} must state Codex 036 changes no production code."
+        )
+        assert "behavior change" in normalized_document or "changement de comportement" in normalized_document, (
+            f"{source_name} must state Codex 036 changes no behavior."
         )
 
 

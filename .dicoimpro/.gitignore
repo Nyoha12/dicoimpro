@@ -1,0 +1,3 @@
+WORKFLOW_STATE.local.json
+runs/*
+!runs/.gitkeep
