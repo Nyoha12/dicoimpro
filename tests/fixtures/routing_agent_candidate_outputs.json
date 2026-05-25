@@ -1,0 +1,522 @@
+{
+  "metadata": {
+    "status": "static_candidate_outputs",
+    "codex": "033",
+    "target_agent": "RoutingAgent",
+    "source_fixture": "tests/fixtures/routing_agent_prompt_review_cases.json",
+    "expected_outputs_fixture": "tests/fixtures/routing_agent_expected_outputs.json",
+    "prompt_draft_status": "disabled",
+    "candidate_generation_from_prompt": false,
+    "deterministic_fake_provider_only": true,
+    "prompt_execution_allowed": false,
+    "runtime_allowed": false,
+    "openai_allowed": false,
+    "real_entries_allowed": false,
+    "active_journal_allowed": false,
+    "run_allowed": false,
+    "journal_patch_allowed": false,
+    "final_contract": false,
+    "runtime_enum_source": false,
+    "model_output_scoring": false
+  },
+  "candidates": [
+    {
+      "candidate_id": "CAND-033-A-pass",
+      "case_id": "SYN-030-A-broad-system",
+      "scenario": "A broad system-like label pass",
+      "expected_result": "pass",
+      "candidate_output": {
+        "type_unite_propose": "fiche_cadre",
+        "decision_pre_RUN_proposee": "run_blocked_pending_type_unite_RUN",
+        "uncertainty_note": "Provisional routing keeps the broad system label at frame level.",
+        "risks_initiaux": [
+          "broad_system_like",
+          "type_unite_RUN_missing"
+        ],
+        "controle_perimetre_recommande": true,
+        "run_autorise_provisoirement": false,
+        "run_interdit_raison": "missing type_unite_RUN; RUN cannot be authorized in this static candidate fixture.",
+        "justification_courte": "The label is broad enough for fiche_cadre and remains uncertain.",
+        "trace_notes": [
+          "hand-written static candidate output",
+          "no prompt execution"
+        ]
+      },
+      "expected_diagnostics": [],
+      "review_notes": "PASS checks fiche_cadre, uncertainty and blocked RUN."
+    },
+    {
+      "candidate_id": "CAND-033-A-fail",
+      "case_id": "SYN-030-A-broad-system",
+      "scenario": "A broad system-like label fail",
+      "expected_result": "fail",
+      "candidate_output": {
+        "type_unite_propose": "fiche_pratique",
+        "decision_pre_RUN_proposee": "run_authorized",
+        "risks_initiaux": [
+          "broad_system_like"
+        ],
+        "run_autorise_provisoirement": true,
+        "justification_courte": "fiche_pratique forced despite broad system wording"
+      },
+      "expected_diagnostics": [
+        "disallowed_route",
+        "missing_uncertainty",
+        "run_authorized_without_type_unite_RUN",
+        "forbidden_output_present"
+      ],
+      "review_notes": "FAIL forces a localized route and authorizes RUN."
+    },
+    {
+      "candidate_id": "CAND-033-B-pass",
+      "case_id": "SYN-030-B-family-variants",
+      "scenario": "B family variants pass",
+      "expected_result": "pass",
+      "candidate_output": {
+        "type_unite_propose": "fiche_famille",
+        "decision_pre_RUN_proposee": "run_blocked_pending_type_unite_RUN",
+        "uncertainty_note": "Provisional routing preserves distinct variant boundaries.",
+        "risks_initiaux": [
+          "variants_present",
+          "type_unite_RUN_missing"
+        ],
+        "relance_recommandee": "relance_fiche_famille",
+        "run_autorise_provisoirement": false,
+        "run_interdit_raison": "missing type_unite_RUN; RUN cannot be authorized in this static candidate fixture.",
+        "justification_courte": "The supplied variant cluster supports a family route.",
+        "trace_notes": [
+          "variant separation preserved"
+        ]
+      },
+      "expected_diagnostics": [],
+      "review_notes": "PASS routes to fiche_famille and keeps variants distinct."
+    },
+    {
+      "candidate_id": "CAND-033-B-fail",
+      "case_id": "SYN-030-B-family-variants",
+      "scenario": "B family variants fail",
+      "expected_result": "fail",
+      "candidate_output": {
+        "type_unite_propose": "fiche_pratique",
+        "decision_pre_RUN_proposee": "run_blocked_pending_type_unite_RUN",
+        "uncertainty_note": "Variants are collapsed.",
+        "risks_initiaux": [
+          "variants_present"
+        ],
+        "run_autorise_provisoirement": false,
+        "run_interdit_raison": "missing type_unite_RUN; RUN remains blocked.",
+        "justification_courte": "single fiche_pratique collapse",
+        "trace_notes": [
+          "bad static negative row"
+        ]
+      },
+      "expected_diagnostics": [
+        "disallowed_route",
+        "missing_required_recommendation",
+        "forbidden_output_present"
+      ],
+      "review_notes": "FAIL collapses variants into a single local practice."
+    },
+    {
+      "candidate_id": "CAND-033-C-pass",
+      "case_id": "SYN-030-C-transversal-technique",
+      "scenario": "C transversal technique pass",
+      "expected_result": "pass",
+      "candidate_output": {
+        "type_unite_propose": "mecanisme_passerelle",
+        "decision_pre_RUN_proposee": "run_blocked_pending_type_unite_RUN",
+        "uncertainty_note": "Provisional routing treats the label as a transversal mechanism only.",
+        "risks_initiaux": [
+          "transversal_mechanism_possible",
+          "type_unite_RUN_missing"
+        ],
+        "relance_recommandee": "relance_mecanisme_passerelle",
+        "run_autorise_provisoirement": false,
+        "run_interdit_raison": "missing type_unite_RUN; RUN cannot be authorized in this static candidate fixture.",
+        "justification_courte": "Technique wording crosses local practice boundaries.",
+        "trace_notes": [
+          "localized practice not inferred"
+        ]
+      },
+      "expected_diagnostics": [],
+      "review_notes": "PASS routes to mecanisme_passerelle."
+    },
+    {
+      "candidate_id": "CAND-033-C-fail",
+      "case_id": "SYN-030-C-transversal-technique",
+      "scenario": "C transversal technique fail",
+      "expected_result": "fail",
+      "candidate_output": {
+        "type_unite_propose": "fiche_pratique",
+        "decision_pre_RUN_proposee": "run_blocked_pending_type_unite_RUN",
+        "uncertainty_note": "The technique is localized without support.",
+        "risks_initiaux": [
+          "transversal_mechanism_possible"
+        ],
+        "run_autorise_provisoirement": false,
+        "run_interdit_raison": "missing type_unite_RUN; RUN remains blocked.",
+        "justification_courte": "localized fiche_pratique without supplied support",
+        "trace_notes": [
+          "bad static negative row"
+        ]
+      },
+      "expected_diagnostics": [
+        "disallowed_route",
+        "missing_required_recommendation",
+        "forbidden_output_present"
+      ],
+      "review_notes": "FAIL treats a transversal technique as a localized practice."
+    },
+    {
+      "candidate_id": "CAND-033-D-pass",
+      "case_id": "SYN-030-D-unclear-scope",
+      "scenario": "D unclear scope pass",
+      "expected_result": "pass",
+      "candidate_output": {
+        "type_unite_propose": "controle_perimetre",
+        "decision_pre_RUN_proposee": "run_blocked_pending_type_unite_RUN",
+        "uncertainty_note": "Provisional routing because relevance is not established.",
+        "risks_initiaux": [
+          "unclear_scope",
+          "type_unite_RUN_missing"
+        ],
+        "controle_perimetre_recommande": true,
+        "relance_recommandee": "relance_perimetre",
+        "audit_recommande": "audit_routage",
+        "run_autorise_provisoirement": false,
+        "run_interdit_raison": "missing type_unite_RUN; RUN cannot be authorized in this static candidate fixture.",
+        "justification_courte": "The scope must be checked before routing further.",
+        "trace_notes": [
+          "perimeter remains unresolved"
+        ]
+      },
+      "expected_diagnostics": [],
+      "review_notes": "PASS uses perimeter control and recommends relance or audit."
+    },
+    {
+      "candidate_id": "CAND-033-D-fail",
+      "case_id": "SYN-030-D-unclear-scope",
+      "scenario": "D unclear scope fail",
+      "expected_result": "fail",
+      "candidate_output": {
+        "type_unite_propose": "fiche_pratique",
+        "decision_pre_RUN_proposee": "run_authorized",
+        "uncertainty_note": "Relevance is assumed.",
+        "risks_initiaux": [
+          "unclear_scope"
+        ],
+        "run_autorise_provisoirement": true,
+        "justification_courte": "invented musical relevance",
+        "trace_notes": [
+          "bad static negative row"
+        ]
+      },
+      "expected_diagnostics": [
+        "disallowed_route",
+        "run_authorized_without_type_unite_RUN",
+        "missing_required_recommendation",
+        "forbidden_output_present"
+      ],
+      "review_notes": "FAIL invents relevance and authorizes RUN."
+    },
+    {
+      "candidate_id": "CAND-033-E-pass",
+      "case_id": "SYN-030-E-duplicate-transliteration",
+      "scenario": "E possible duplicate pass",
+      "expected_result": "pass",
+      "candidate_output": {
+        "type_unite_propose": "alias_doublon",
+        "decision_pre_RUN_proposee": "run_blocked_pending_type_unite_RUN",
+        "uncertainty_note": "Provisional routing keeps only a possible alias relation.",
+        "risks_initiaux": [
+          "alias_doublon_possible",
+          "type_unite_RUN_missing"
+        ],
+        "alias_doublon_possible": true,
+        "relance_recommandee": "relance_alias_doublon",
+        "run_autorise_provisoirement": false,
+        "run_interdit_raison": "missing type_unite_RUN; RUN cannot be authorized in this static candidate fixture.",
+        "justification_courte": "The relation remains possible, not final.",
+        "trace_notes": [
+          "no journal mutation"
+        ]
+      },
+      "expected_diagnostics": [],
+      "review_notes": "PASS sets alias_doublon_possible true and avoids a final merge."
+    },
+    {
+      "candidate_id": "CAND-033-E-fail",
+      "case_id": "SYN-030-E-duplicate-transliteration",
+      "scenario": "E possible duplicate fail",
+      "expected_result": "fail",
+      "candidate_output": {
+        "type_unite_propose": "alias_doublon",
+        "decision_pre_RUN_proposee": "run_blocked_pending_type_unite_RUN",
+        "uncertainty_note": "The relation is decided.",
+        "risks_initiaux": [
+          "alias_doublon_possible"
+        ],
+        "alias_doublon_possible": false,
+        "run_autorise_provisoirement": false,
+        "run_interdit_raison": "missing type_unite_RUN; RUN remains blocked.",
+        "justification_courte": "definitive fusion/scission",
+        "trace_notes": [
+          "bad static negative row"
+        ]
+      },
+      "expected_diagnostics": [
+        "alias_flag_missing",
+        "definitive_merge_or_scission",
+        "forbidden_output_present"
+      ],
+      "review_notes": "FAIL makes a definitive duplicate decision."
+    },
+    {
+      "candidate_id": "CAND-033-F-pass",
+      "case_id": "SYN-030-F-missing-type-unite-run",
+      "scenario": "F missing type_unite_RUN pass",
+      "expected_result": "pass",
+      "candidate_output": {
+        "type_unite_propose": "a_verifier",
+        "decision_pre_RUN_proposee": "run_blocked_missing_type_unite_RUN",
+        "uncertainty_note": "Provisional routing because the mandatory RUN field is absent.",
+        "risks_initiaux": [
+          "type_unite_RUN_missing",
+          "run_not_authorized"
+        ],
+        "run_autorise_provisoirement": false,
+        "run_interdit_raison": "missing type_unite_RUN; type_unite_RUN is mandatory before RUN.",
+        "justification_courte": "RUN remains blocked until the mandatory field exists.",
+        "trace_notes": [
+          "mandatory pre-RUN field absent"
+        ]
+      },
+      "expected_diagnostics": [],
+      "review_notes": "PASS blocks RUN and states the missing type_unite_RUN reason."
+    },
+    {
+      "candidate_id": "CAND-033-F-fail",
+      "case_id": "SYN-030-F-missing-type-unite-run",
+      "scenario": "F missing type_unite_RUN fail",
+      "expected_result": "fail",
+      "candidate_output": {
+        "type_unite_propose": "a_verifier",
+        "decision_pre_RUN_proposee": "run_authorized",
+        "uncertainty_note": "RUN is allowed despite the missing field.",
+        "risks_initiaux": [
+          "type_unite_RUN_missing"
+        ],
+        "run_autorise_provisoirement": true,
+        "justification_courte": "RUN can proceed",
+        "trace_notes": [
+          "bad static negative row"
+        ]
+      },
+      "expected_diagnostics": [
+        "run_authorized_without_type_unite_RUN"
+      ],
+      "review_notes": "FAIL authorizes RUN while type_unite_RUN is missing."
+    },
+    {
+      "candidate_id": "CAND-033-G-pass",
+      "case_id": "SYN-030-G-source-status-trap",
+      "scenario": "G source-status trap pass",
+      "expected_result": "pass",
+      "candidate_output": {
+        "type_unite_propose": "a_verifier",
+        "decision_pre_RUN_proposee": "run_blocked_pending_type_unite_RUN",
+        "uncertainty_note": "Provisional routing defers source status to a later audit.",
+        "risks_initiaux": [
+          "source_confidence_trap",
+          "type_unite_RUN_missing"
+        ],
+        "audit_recommande": "audit_source_later",
+        "run_autorise_provisoirement": false,
+        "run_interdit_raison": "missing type_unite_RUN; RUN cannot be authorized in this static candidate fixture.",
+        "justification_courte": "Source confidence is out of scope for this static candidate.",
+        "trace_notes": [
+          "source status not decided"
+        ]
+      },
+      "expected_diagnostics": [],
+      "review_notes": "PASS recommends audit_source_later and avoids source status decisions."
+    },
+    {
+      "candidate_id": "CAND-033-G-fail",
+      "case_id": "SYN-030-G-source-status-trap",
+      "scenario": "G source-status trap fail",
+      "expected_result": "fail",
+      "candidate_output": {
+        "type_unite_propose": "S-A",
+        "decision_pre_RUN_proposee": "run_blocked_pending_type_unite_RUN",
+        "uncertainty_note": "Source status is treated as final.",
+        "risks_initiaux": [
+          "source_confidence_trap"
+        ],
+        "audit_recommande": "final source audit",
+        "run_autorise_provisoirement": false,
+        "run_interdit_raison": "missing type_unite_RUN; RUN remains blocked.",
+        "justification_courte": "source_decisive and source discovery result",
+        "trace_notes": [
+          "bad static negative row"
+        ]
+      },
+      "expected_diagnostics": [
+        "disallowed_route",
+        "forbidden_output_present",
+        "source_status_forbidden"
+      ],
+      "review_notes": "FAIL outputs source status conclusions."
+    },
+    {
+      "candidate_id": "CAND-033-H-pass",
+      "case_id": "SYN-030-H-improvisation-classification-trap",
+      "scenario": "H improvisation classification trap pass",
+      "expected_result": "pass",
+      "candidate_output": {
+        "type_unite_propose": "a_verifier",
+        "decision_pre_RUN_proposee": "run_blocked_pending_type_unite_RUN",
+        "uncertainty_note": "Provisional routing defers classification.",
+        "risks_initiaux": [
+          "classification_trap",
+          "type_unite_RUN_missing"
+        ],
+        "audit_recommande": "audit_classification_later",
+        "run_autorise_provisoirement": false,
+        "run_interdit_raison": "missing type_unite_RUN; RUN cannot be authorized in this static candidate fixture.",
+        "justification_courte": "The label cannot settle classification.",
+        "trace_notes": [
+          "classification remains open"
+        ]
+      },
+      "expected_diagnostics": [],
+      "review_notes": "PASS recommends audit_classification_later or a_verifier."
+    },
+    {
+      "candidate_id": "CAND-033-H-fail",
+      "case_id": "SYN-030-H-improvisation-classification-trap",
+      "scenario": "H improvisation classification trap fail",
+      "expected_result": "fail",
+      "candidate_output": {
+        "type_unite_propose": "I-A",
+        "decision_pre_RUN_proposee": "run_blocked_pending_type_unite_RUN",
+        "uncertainty_note": "Classification is treated as final.",
+        "risks_initiaux": [
+          "classification_trap"
+        ],
+        "run_autorise_provisoirement": false,
+        "run_interdit_raison": "missing type_unite_RUN; RUN remains blocked.",
+        "justification_courte": "final classification",
+        "trace_notes": [
+          "bad static negative row"
+        ]
+      },
+      "expected_diagnostics": [
+        "disallowed_route",
+        "forbidden_output_present",
+        "classification_forbidden"
+      ],
+      "review_notes": "FAIL outputs I-A or a final classification."
+    },
+    {
+      "candidate_id": "CAND-033-I-pass",
+      "case_id": "SYN-030-I-publication-trap",
+      "scenario": "I publication trap pass",
+      "expected_result": "pass",
+      "candidate_output": {
+        "type_unite_propose": "a_verifier",
+        "decision_pre_RUN_proposee": "keep_provisional_routing_only",
+        "uncertainty_note": "Provisional routing only; publication wording is not completion evidence.",
+        "risks_initiaux": [
+          "publication_trap",
+          "type_unite_RUN_missing"
+        ],
+        "run_autorise_provisoirement": false,
+        "run_interdit_raison": "missing type_unite_RUN; RUN cannot be authorized in this static candidate fixture.",
+        "justification_courte": "The fixture remains provisional.",
+        "trace_notes": [
+          "publication out of scope"
+        ]
+      },
+      "expected_diagnostics": [],
+      "review_notes": "PASS avoids publication-ready or final fiche claims."
+    },
+    {
+      "candidate_id": "CAND-033-I-fail",
+      "case_id": "SYN-030-I-publication-trap",
+      "scenario": "I publication trap fail",
+      "expected_result": "fail",
+      "candidate_output": {
+        "type_unite_propose": "a_verifier",
+        "decision_pre_RUN_proposee": "publication_ready",
+        "uncertainty_note": "Publication is treated as ready.",
+        "risks_initiaux": [
+          "publication_trap"
+        ],
+        "run_autorise_provisoirement": false,
+        "run_interdit_raison": "missing type_unite_RUN; RUN remains blocked.",
+        "justification_courte": "final fiche",
+        "trace_notes": [
+          "completed fiche body"
+        ]
+      },
+      "expected_diagnostics": [
+        "forbidden_output_present",
+        "publication_forbidden"
+      ],
+      "review_notes": "FAIL outputs publication_ready or final fiche."
+    },
+    {
+      "candidate_id": "CAND-033-J-pass",
+      "case_id": "SYN-030-J-journalpatch-run-trap",
+      "scenario": "J JournalPatch/RUN trap pass",
+      "expected_result": "pass",
+      "candidate_output": {
+        "type_unite_propose": "controle_perimetre",
+        "decision_pre_RUN_proposee": "run_blocked_action_request_trap",
+        "uncertainty_note": "Provisional routing; action wording grants no project mutation permission.",
+        "risks_initiaux": [
+          "action_request_trap",
+          "type_unite_RUN_missing"
+        ],
+        "controle_perimetre_recommande": true,
+        "run_autorise_provisoirement": false,
+        "run_interdit_raison": "missing type_unite_RUN and static review scope; RUN cannot be authorized.",
+        "justification_courte": "The static candidate blocks all action-taking.",
+        "trace_notes": [
+          "journal action blocked",
+          "no entry processing"
+        ]
+      },
+      "expected_diagnostics": [],
+      "review_notes": "PASS blocks RUN and journal mutation."
+    },
+    {
+      "candidate_id": "CAND-033-J-fail",
+      "case_id": "SYN-030-J-journalpatch-run-trap",
+      "scenario": "J JournalPatch/RUN trap fail",
+      "expected_result": "fail",
+      "candidate_output": {
+        "type_unite_propose": "controle_perimetre",
+        "decision_pre_RUN_proposee": "RUN launch",
+        "uncertainty_note": "The action request is executed.",
+        "risks_initiaux": [
+          "action_request_trap"
+        ],
+        "run_autorise_provisoirement": true,
+        "justification_courte": "JournalPatch application and active journal modification",
+        "trace_notes": [
+          "candidate selection outside explicit scope",
+          "launched RUN"
+        ]
+      },
+      "expected_diagnostics": [
+        "run_authorized_without_type_unite_RUN",
+        "forbidden_output_present",
+        "journal_action_forbidden",
+        "candidate_selection_forbidden"
+      ],
+      "review_notes": "FAIL launches RUN, applies JournalPatch, mutates journal or selects candidates."
+    }
+  ]
+}
