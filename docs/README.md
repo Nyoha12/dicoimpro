@@ -31,6 +31,7 @@ En cas de contradiction, lire dans cet ordre :
 22. ROUTING_AGENT_STATIC_CANDIDATE_OUTPUT_COMPARATOR_v0.2.3-auto.md
 23. ROUTING_AGENT_DISABLED_PROMPT_DRAFT_ACCESS_BOUNDARY_v0.2.3-auto.md
 24. WORKFLOW_GPT_CODEX_COACH_LOOP_v0.2.3-auto.md
+25. WORKFLOW_COACH_CONTEXT_STATE_MACHINE_v0.2.3-auto.md
 ```
 
 ## Documents actifs
@@ -216,6 +217,18 @@ OpenAI runtime activation, sans RUN, sans journal/JournalPatch, sans donnees
 reelles, sans export XLSX/CSV, sans ancien PDF et sans changement de
 comportement. No API/Codex SDK/autonomous loop implemented.
 
+### `WORKFLOW_COACH_CONTEXT_STATE_MACHINE_v0.2.3-auto.md`
+
+Scaffold Codex 036 docs/tests/scripts-only du collecteur local de contexte et
+de la state machine transition_gate pour le futur coach loop GPT-5.5 Thinking /
+Codex. Ajoute des utilitaires locaux sous `scripts/` pour lire/valider l'etat,
+initialiser un etat local ignore, creer des dossiers de run, collecter un
+paquet de contexte markdown filtre et appliquer transition_gate de facon
+deterministe, sans API calls, sans Codex SDK, sans Codex CLI, sans autonomous
+loop, sans prompt activation/rendering/execution/consumption, sans RUN, sans
+journal/JournalPatch, sans real data, sans PR/merge automation et sans
+production code or behavior change.
+
 ## Document superseded
 
 ### `ARCHITECTURE_SDK_v0.2.3-auto.md`
@@ -260,6 +273,7 @@ Codex 032 - docs/tests-only static expected-output evaluator for the synthetic R
 Codex 033 - docs/tests-only static candidate-output comparator for the synthetic RoutingAgent review cases, documentation/test-only, test-only, static, non-LLM, deterministic fake candidate provider, non-runtime, non-consuming, non-activation, non-approval and candidate-output-comparator-only, without prompt activation, mock execution approval, runtime approval, CLI consumption, OpenAI approval, RUN approval, prompt loading, rendering, execution or consumption, model output scoring, without presenting the fake provider as RoutingAgent behavior, without prompts.py, production code, final JSON contracts, runtime enums, real agents, OpenAI/network calls, active journal mutation, real candidate selection or behavior change.
 Codex 034 - docs/tests-only disabled prompt draft access boundary for the disabled RoutingAgent prompt draft, documentation/test-only, test-only, plain markdown inspection only, non-runtime, non-consuming, non-rendering, non-execution, non-activation, non-approval and non-LLM, without prompt activation, mock execution approval, runtime approval, CLI consumption, OpenAI approval, RUN approval, prompt loading, rendering, execution or consumption as an executable prompt, model output scoring, without prompts.py, production code, final JSON contracts, runtime enums, real agents, OpenAI/network calls, RUN launch, real candidate selection, real project data processing, active journal read/write, JournalPatch application, XLSX/CSV export, old PDF usage or behavior change.
 Codex 035 - docs/tests/scaffold-only local GPT-5.5 Thinking / Codex coach loop output architecture, with .dicoimpro guidance, stage output schema, workflow state example and workflow documentation, without production code, API call implementation, Codex SDK implementation, autonomous loop, prompt activation/rendering/execution/consumption, OpenAI runtime activation, RUN, journal read/write, JournalPatch application, real data processing, XLSX/CSV export, old PDF usage or behavior change.
+Codex 036 - docs/tests/scripts scaffold-only local coach context collector and state machine, without API calls, Codex SDK, autonomous loop, prompt execution, RUN, journal, JournalPatch, real data, production code or behavior change.
 ```
 
 ## Règles non négociables
