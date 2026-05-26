@@ -226,6 +226,23 @@ prompt execution inside `src/`, candidate selection, publication, XLSX/CSV
 export, old PDF usage, Codex SDK/CLI, automatic Codex execution, or unbounded
 autonomous loop behavior.
 
+## Runner hardening and operational diagnostics
+
+Runner diagnostics are local-only. `doctor`, `validate-run`, and `explain-next`
+may inspect repository files, local run state, ignored artifact settings, and
+local workflow module loadability, but they must not call external services.
+
+These diagnostics do not call GPT, OpenAI, Codex, gh, git, pytest, network, or
+merge. They must not bypass `stop_human`, must not weaken the API, Codex, PR
+verification, or merge boundaries, and must not create a new autonomy level.
+Diagnostics must not bypass stop_human.
+
+Diagnostics do not authorize RUN/journal/JournalPatch/real data/src runtime
+behavior change. They also do not authorize prompt activation, prompt rendering,
+prompt execution inside `src/`, candidate selection, publication, XLSX/CSV
+export, old PDF usage, Codex SDK/CLI, automatic Codex execution, or unbounded
+autonomous loop behavior.
+
 ## Non-activation rule
 
 The files under `.dicoimpro/` are workflow architecture documents and examples.

@@ -74,11 +74,14 @@ WORKFLOW_COACH_PR_VERIFY_MERGE_RUNNER_PATH = (
 WORKFLOW_COACH_LOOP_RUNNER_PATH = (
     DOCS_DIR / "WORKFLOW_COACH_LOOP_RUNNER_v0.2.3-auto.md"
 )
+RUNBOOK_COACH_LOOP_USAGE_PATH = (
+    DOCS_DIR / "RUNBOOK_COACH_LOOP_USAGE_v0.2.3-auto.md"
+)
 PROMPT_PACKAGE_FIXTURE_DIR = REPO_ROOT / "tests" / "fixtures" / "prompt_packages"
 SRC_DIR = REPO_ROOT / "src" / "dico_impro"
 
 EXPECTED_CODEX_FIRST = 1
-EXPECTED_CODEX_LAST = 41
+EXPECTED_CODEX_LAST = 42
 EXPECTED_CODEX_IDS = tuple(
     f"{number:03d}" for number in range(EXPECTED_CODEX_FIRST, EXPECTED_CODEX_LAST + 1)
 )
@@ -197,6 +200,7 @@ def test_readme_active_docs_include_current_review_and_prompt_protocol():
         WORKFLOW_COACH_AUTONOMY_VERIFY_GATE_PATH.name,
         WORKFLOW_COACH_PR_VERIFY_MERGE_RUNNER_PATH.name,
         WORKFLOW_COACH_LOOP_RUNNER_PATH.name,
+        RUNBOOK_COACH_LOOP_USAGE_PATH.name,
     )
 
     active_hierarchy = extract_markdown_section(readme, "Hiérarchie active")
@@ -1624,6 +1628,60 @@ def test_codex_041_is_docs_tests_scripts_semi_automatic_coach_loop_runner():
         assert "src runtime behavior change" in normalized_document or (
             "`src/` runtime behavior change" in normalized_document
         ), f"{source_name} must state Codex 041 changes no src runtime behavior."
+
+
+def test_codex_042_is_docs_tests_scripts_runner_hardening_runbook():
+    readme = read_text(README_PATH)
+    review = read_text(POST_015_REVIEW_PATH)
+    workflow = read_text(WORKFLOW_COACH_LOOP_RUNNER_PATH)
+    runbook = read_text(RUNBOOK_COACH_LOOP_USAGE_PATH)
+
+    for source_name, document in (
+        ("README", readme),
+        ("post-015 architecture review", review),
+        ("Codex 041 workflow doc", workflow),
+        ("Codex 042 runbook", runbook),
+    ):
+        normalized_document = normalize_text(document)
+        assert "codex 042" in normalized_document, (
+            f"{source_name} must list Codex 042."
+        )
+        assert "hardening" in normalized_document, (
+            f"{source_name} must frame Codex 042 as hardening."
+        )
+        assert "operational" in normalized_document, (
+            f"{source_name} must frame Codex 042 as operational."
+        )
+        assert "doctor" in normalized_document, (
+            f"{source_name} must mention doctor diagnostics."
+        )
+        assert "validate-run" in normalized_document, (
+            f"{source_name} must mention validate-run diagnostics."
+        )
+        assert "explain-next" in normalized_document, (
+            f"{source_name} must mention explain-next diagnostics."
+        )
+        assert "local-only" in normalized_document, (
+            f"{source_name} must state diagnostics are local-only."
+        )
+        assert "without new autonomy" in normalized_document or "no new autonomy" in normalized_document, (
+            f"{source_name} must state Codex 042 adds no new autonomy."
+        )
+        assert "gh/git/pytest execution from diagnostics" in normalized_document or (
+            "gh, git, pytest" in normalized_document
+        ), f"{source_name} must state diagnostics do not execute gh/git/pytest."
+        assert "codex sdk/cli" in normalized_document or (
+            "codex sdk" in normalized_document and "codex cli" in normalized_document
+        ), f"{source_name} must state Codex 042 adds no Codex SDK/CLI."
+        assert "automatic codex execution" in normalized_document, (
+            f"{source_name} must state Codex 042 adds no automatic Codex execution."
+        )
+        assert "unbounded autonomous loop" in normalized_document, (
+            f"{source_name} must state Codex 042 adds no unbounded autonomous loop."
+        )
+        assert "src runtime behavior change" in normalized_document or (
+            "`src/` runtime behavior change" in normalized_document
+        ), f"{source_name} must state Codex 042 changes no src runtime behavior."
 
 
 def test_prompt_package_fixtures_validate_and_remain_disabled_metadata_only():
