@@ -36,6 +36,7 @@ En cas de contradiction, lire dans cet ordre :
 27. WORKFLOW_COACH_CODEX_HANDOFF_BRIDGE_v0.2.3-auto.md
 28. WORKFLOW_COACH_AUTONOMY_VERIFY_GATE_v0.2.3-auto.md
 29. WORKFLOW_COACH_PR_VERIFY_MERGE_RUNNER_v0.2.3-auto.md
+30. WORKFLOW_COACH_LOOP_RUNNER_v0.2.3-auto.md
 ```
 
 ## Documents actifs
@@ -274,6 +275,15 @@ head SHA. Without OpenAI/GPT/Codex SDK/CLI, autonomous full loop, RUN, journal,
 JournalPatch, real data or src runtime behavior change.
 Requires stable head SHA before any explicit merge.
 
+### `WORKFLOW_COACH_LOOP_RUNNER_v0.2.3-auto.md`
+
+Runner Codex 041 docs/tests/scripts semi-automatic coach-loop runner. Orchestrates
+context collection, GPT stage execution through explicit coach_step boundary,
+transition_gate validation, bounded auto-reflection, Codex handoff, Codex return
+resume, PR verification and guarded merge delegation. Without Codex SDK/CLI,
+automatic Codex execution, unbounded autonomous loop, RUN, journal, JournalPatch,
+real data or src runtime behavior change.
+
 ## Document superseded
 
 ### `ARCHITECTURE_SDK_v0.2.3-auto.md`
@@ -323,6 +333,7 @@ Codex 037 - docs/tests/scripts local GPT-5.5 Thinking stage runner for coach loo
 Codex 038 - docs/tests/scripts manual Codex handoff bridge for coach loop, packaging next_prompt/codex_prompt into handoff packets and archiving Codex returns, without Codex SDK/CLI, autonomous loop, repository-script PR/merge automation, RUN, journal, JournalPatch, real data, src runtime behavior change.
 Codex 039 - docs/tests/scripts autonomy policy and pre-merge verify gate for the coach-loop program, with stop_human, auto_local, auto_external_with_budget and auto_merge_after_verify decision modeling, without real merge, GitHub API, git/gh execution, Codex SDK/CLI, autonomous full loop, RUN, journal, JournalPatch, real data or src runtime behavior change.
 Codex 040 - docs/tests/scripts guarded PR verification and optional auto-merge runner for the coach-loop program, building pre_merge_report from PR evidence, deciding through autonomy policy and executing merge only with --execute-merge plus auto_after_verify, without OpenAI/GPT/Codex SDK/CLI, autonomous full loop, RUN, journal, JournalPatch, real data or src runtime behavior change.
+Codex 041 - docs/tests/scripts semi-automatic coach-loop runner orchestrating context collection, GPT stage execution, transition_gate validation, bounded auto-reflection, Codex handoff, Codex return resume, PR verification and guarded merge delegation, without Codex SDK/CLI, automatic Codex execution, unbounded autonomous loop, RUN, journal, JournalPatch, real data or src runtime behavior change.
 ```
 
 ## Règles non négociables

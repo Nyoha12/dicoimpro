@@ -199,6 +199,33 @@ prompt execution, candidate selection, publication, XLSX/CSV export, old PDF
 usage, OpenAI runtime in `src/`, Codex SDK/CLI, automatic Codex execution, or
 autonomous full loop behavior.
 
+## Semi-automatic coach loop runner boundary
+
+The semi-automatic runner may orchestrate context collection, GPT stage
+preparation or execution, stage note validation, transition_gate evaluation,
+manual Codex handoff, Codex return archive, PR verification and guarded merge
+delegation.
+
+GPT is allowed only through explicit --execute-api and only through the
+`scripts/coach_step.py` boundary. Codex remains manual handoff: repository
+scripts must not execute Codex SDK, Codex CLI, or automatic Codex execution.
+
+Merge is allowed only through the PR verify boundary with `--execute-merge`,
+`merge_mode: auto_after_verify`, a successful verify gate and stable head SHA.
+Merge is never default, and the runner must not implement a separate merge
+pathway.
+
+The runner must `stop_human` for unresolved risk, failed validation,
+human-required transition gates, budget excess, invalid Codex returns, missing
+PR URLs, red PR verification, manual merge mode, absent explicit merge
+authorization, post-merge validation failure, or unknown risk.
+
+This boundary authorizes no RUN/journal/JournalPatch/real data/src runtime
+behavior change. It also authorizes no prompt activation, prompt rendering,
+prompt execution inside `src/`, candidate selection, publication, XLSX/CSV
+export, old PDF usage, Codex SDK/CLI, automatic Codex execution, or unbounded
+autonomous loop behavior.
+
 ## Non-activation rule
 
 The files under `.dicoimpro/` are workflow architecture documents and examples.

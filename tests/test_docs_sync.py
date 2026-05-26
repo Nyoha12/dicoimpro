@@ -71,11 +71,14 @@ WORKFLOW_COACH_AUTONOMY_VERIFY_GATE_PATH = (
 WORKFLOW_COACH_PR_VERIFY_MERGE_RUNNER_PATH = (
     DOCS_DIR / "WORKFLOW_COACH_PR_VERIFY_MERGE_RUNNER_v0.2.3-auto.md"
 )
+WORKFLOW_COACH_LOOP_RUNNER_PATH = (
+    DOCS_DIR / "WORKFLOW_COACH_LOOP_RUNNER_v0.2.3-auto.md"
+)
 PROMPT_PACKAGE_FIXTURE_DIR = REPO_ROOT / "tests" / "fixtures" / "prompt_packages"
 SRC_DIR = REPO_ROOT / "src" / "dico_impro"
 
 EXPECTED_CODEX_FIRST = 1
-EXPECTED_CODEX_LAST = 40
+EXPECTED_CODEX_LAST = 41
 EXPECTED_CODEX_IDS = tuple(
     f"{number:03d}" for number in range(EXPECTED_CODEX_FIRST, EXPECTED_CODEX_LAST + 1)
 )
@@ -193,6 +196,7 @@ def test_readme_active_docs_include_current_review_and_prompt_protocol():
         WORKFLOW_COACH_CODEX_HANDOFF_BRIDGE_PATH.name,
         WORKFLOW_COACH_AUTONOMY_VERIFY_GATE_PATH.name,
         WORKFLOW_COACH_PR_VERIFY_MERGE_RUNNER_PATH.name,
+        WORKFLOW_COACH_LOOP_RUNNER_PATH.name,
     )
 
     active_hierarchy = extract_markdown_section(readme, "Hiérarchie active")
@@ -1568,6 +1572,58 @@ def test_codex_040_is_docs_tests_scripts_guarded_pr_verify_merge_runner():
         assert "src runtime behavior change" in normalized_document or (
             "`src/` runtime behavior change" in normalized_document
         ), f"{source_name} must state Codex 040 changes no src runtime behavior."
+
+
+def test_codex_041_is_docs_tests_scripts_semi_automatic_coach_loop_runner():
+    readme = read_text(README_PATH)
+    review = read_text(POST_015_REVIEW_PATH)
+    workflow = read_text(WORKFLOW_COACH_LOOP_RUNNER_PATH)
+
+    for source_name, document in (
+        ("README", readme),
+        ("post-015 architecture review", review),
+        ("Codex 041 workflow doc", workflow),
+    ):
+        normalized_document = normalize_text(document)
+        assert "codex 041" in normalized_document, (
+            f"{source_name} must list Codex 041."
+        )
+        assert "semi-automatic coach-loop runner" in normalized_document, (
+            f"{source_name} must frame Codex 041 as the semi-automatic runner."
+        )
+        assert "docs/tests/scripts" in normalized_document, (
+            f"{source_name} must keep Codex 041 framed as docs/tests/scripts."
+        )
+        assert "context collection" in normalized_document, (
+            f"{source_name} must mention context collection."
+        )
+        assert "transition_gate validation" in normalized_document, (
+            f"{source_name} must mention transition_gate validation."
+        )
+        assert "bounded auto-reflection" in normalized_document, (
+            f"{source_name} must mention bounded auto-reflection."
+        )
+        assert "codex handoff" in normalized_document, (
+            f"{source_name} must mention Codex handoff."
+        )
+        assert "codex return resume" in normalized_document, (
+            f"{source_name} must mention Codex return resume."
+        )
+        assert "guarded merge delegation" in normalized_document, (
+            f"{source_name} must mention guarded merge delegation."
+        )
+        assert "codex sdk/cli" in normalized_document or (
+            "codex sdk" in normalized_document and "codex cli" in normalized_document
+        ), f"{source_name} must state Codex 041 adds no Codex SDK/CLI."
+        assert "automatic codex execution" in normalized_document, (
+            f"{source_name} must state Codex 041 adds no automatic Codex execution."
+        )
+        assert "unbounded autonomous loop" in normalized_document, (
+            f"{source_name} must state Codex 041 adds no unbounded autonomous loop."
+        )
+        assert "src runtime behavior change" in normalized_document or (
+            "`src/` runtime behavior change" in normalized_document
+        ), f"{source_name} must state Codex 041 changes no src runtime behavior."
 
 
 def test_prompt_package_fixtures_validate_and_remain_disabled_metadata_only():
