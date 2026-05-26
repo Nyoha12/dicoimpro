@@ -14,6 +14,38 @@ LOOP_SUMMARY_FILENAME = "loop_summary.md"
 SCHEMA_VERSION = "coach_loop_state.v1"
 DEFAULT_AUTHORIZED_PATHS = ("docs/", "tests/", ".dicoimpro/", "scripts/")
 DEFAULT_FORBIDDEN_PATHS = ("src/", ".github/workflows/")
+REQUIRED_WORKFLOW_RELATIVE_PATHS = (
+    Path(".dicoimpro") / "COACH_GUIDANCE.md",
+    Path(".dicoimpro") / "STAGE_OUTPUT_SCHEMA.md",
+    Path(".dicoimpro") / "WORKFLOW_STATE.example.json",
+    POLICY_RELATIVE_PATH,
+    Path(".dicoimpro") / ".gitignore",
+    Path("scripts") / "coach_state.py",
+    Path("scripts") / "coach_collect_context.py",
+    Path("scripts") / "coach_step.py",
+    Path("scripts") / "coach_codex_handoff.py",
+    Path("scripts") / "coach_autonomy.py",
+    Path("scripts") / "coach_pr_verify.py",
+    Path("scripts") / "coach_loop.py",
+    Path("docs") / "WORKFLOW_GPT_CODEX_COACH_LOOP_v0.2.3-auto.md",
+    Path("docs") / "WORKFLOW_COACH_CONTEXT_STATE_MACHINE_v0.2.3-auto.md",
+    Path("docs") / "WORKFLOW_COACH_GPT_STAGE_RUNNER_v0.2.3-auto.md",
+    Path("docs") / "WORKFLOW_COACH_CODEX_HANDOFF_BRIDGE_v0.2.3-auto.md",
+    Path("docs") / "WORKFLOW_COACH_AUTONOMY_VERIFY_GATE_v0.2.3-auto.md",
+    Path("docs") / "WORKFLOW_COACH_PR_VERIFY_MERGE_RUNNER_v0.2.3-auto.md",
+    Path("docs") / "WORKFLOW_COACH_LOOP_RUNNER_v0.2.3-auto.md",
+    Path("docs") / "RUNBOOK_COACH_LOOP_USAGE_v0.2.3-auto.md",
+)
+
+RUN_STATE_PATH_FIELDS = (
+    "context_path",
+    "model_prompt_path",
+    "stage_note_path",
+    "handoff_path",
+    "codex_return_path",
+    "pre_merge_report_path",
+    "post_merge_report_path",
+)
 
 REQUIRED_LOOP_STATE_KEYS = (
     "schema_version",
@@ -142,6 +174,102 @@ def load_pr_verify_module():
     return _load_script_module("coach_pr_verify_for_loop", "coach_pr_verify.py")
 
 
+def required_workflow_paths(repo_root: Path) -> list[Path]:
+    return [repo_root / relative_path for relative_path in REQUIRED_WORKFLOW_RELATIVE_PATHS]
+
+
+def check_generated_artifacts_ignored(repo_root: Path) -> dict:
+    checked = [".dicoimpro/.gitignore"]
+    gitignore_path = repo_root / ".dicoimpro" / ".gitignore"
+    blockers: list[str] = []
+    warnings: list[str] = []
+    if not gitignore_path.exists():
+        blockers.append(".dicoimpro/.gitignore is missing")
+        return {
+            "ok": False,
+            "checked": checked,
+            "blockers": blockers,
+            "warnings": warnings,
+        }
+
+    text = read_text(gitignore_path)
+    normalized_lines = {line.strip() for line in text.splitlines()}
+    ignores_runs = bool({"runs/*", "/runs/*", ".dicoimpro/runs/*"} & normalized_lines)
+    keeps_gitkeep = bool({"!runs/.gitkeep", "!/runs/.gitkeep"} & normalized_lines)
+    if not ignores_runs:
+        blockers.append(".dicoimpro/.gitignore must ignore generated runs/* artifacts")
+    if not keeps_gitkeep:
+        warnings.append(".dicoimpro/.gitignore does not explicitly keep runs/.gitkeep")
+
+    return {
+        "ok": not blockers,
+        "checked": checked,
+        "blockers": blockers,
+        "warnings": warnings,
+    }
+
+
+def doctor_report(repo_root: Path) -> dict:
+    checked: list[str] = []
+    blockers: list[str] = []
+    warnings: list[str] = []
+
+    for path in required_workflow_paths(repo_root):
+        try:
+            checked.append(path.relative_to(repo_root).as_posix())
+        except ValueError:
+            checked.append(str(path))
+        if not path.exists():
+            blockers.append(f"required workflow path is missing: {checked[-1]}")
+
+    try:
+        policy = load_policy(repo_root)
+        checked.append(POLICY_RELATIVE_PATH.as_posix())
+        if not isinstance(policy, dict):
+            blockers.append("autonomy policy did not load as a JSON object")
+    except ValueError as exc:
+        blockers.append(str(exc))
+
+    try:
+        runs_path = repo_root / RUNS_RELATIVE_PATH
+        runs_path.mkdir(parents=True, exist_ok=True)
+        checked.append(RUNS_RELATIVE_PATH.as_posix())
+    except OSError as exc:
+        blockers.append(f"could not create or access {RUNS_RELATIVE_PATH.as_posix()}: {exc}")
+
+    ignore_report = check_generated_artifacts_ignored(repo_root)
+    checked.extend(ignore_report.get("checked", []))
+    blockers.extend(ignore_report.get("blockers", []))
+    warnings.extend(ignore_report.get("warnings", []))
+
+    module_loaders = (
+        ("scripts/coach_state.py", load_coach_state_module),
+        ("scripts/coach_collect_context.py", load_context_module),
+        ("scripts/coach_step.py", load_step_module),
+        ("scripts/coach_codex_handoff.py", load_handoff_module),
+        ("scripts/coach_autonomy.py", load_autonomy_module),
+        ("scripts/coach_pr_verify.py", load_pr_verify_module),
+    )
+    for label, loader in module_loaders:
+        checked.append(f"dynamic import: {label}")
+        try:
+            loader()
+        except Exception as exc:  # pragma: no cover - report exact local failure.
+            blockers.append(f"could not dynamically load {label}: {exc}")
+
+    if blockers:
+        next_action = "Stop for human review of local runner diagnostics."
+    else:
+        next_action = "Local diagnostics passed; use start, status, validate-run, or explain-next."
+    return {
+        "ok": not blockers,
+        "checked": checked,
+        "blockers": blockers,
+        "warnings": warnings,
+        "next_required_action": next_action,
+    }
+
+
 def run_folder(repo_root: Path, run_id: str) -> Path:
     _validate_path_segment(run_id, "run_id")
     folder = repo_root / RUNS_RELATIVE_PATH / run_id
@@ -218,6 +346,129 @@ def validate_loop_state_shape(state: dict) -> list[str]:
         if key in state and not isinstance(state[key], dict):
             errors.append(f"loop state {key} must be an object")
     return errors
+
+
+def _state_referenced_paths(state: dict) -> list[tuple[str, Path]]:
+    referenced_paths: list[tuple[str, Path]] = []
+    for field in RUN_STATE_PATH_FIELDS:
+        value = state.get(field)
+        if isinstance(value, str) and value.strip():
+            referenced_paths.append((field, Path(value)))
+    return referenced_paths
+
+
+def validate_run_report(repo_root: Path, run_id: str) -> dict:
+    try:
+        _validate_path_segment(run_id, "run_id")
+    except ValueError as exc:
+        return {
+            "ok": False,
+            "run_id": run_id,
+            "status": None,
+            "missing_paths": [],
+            "blockers": [str(exc)],
+            "warnings": [],
+            "next_required_action": "Stop for human review of invalid run id.",
+        }
+
+    state_path = loop_state_path(repo_root, run_id)
+    if not state_path.exists():
+        return {
+            "ok": False,
+            "run_id": run_id,
+            "status": None,
+            "missing_paths": [],
+            "blockers": [f"loop_state.json is missing for run_id {run_id}"],
+            "warnings": [],
+            "next_required_action": "Start the run or restore its local loop_state.json.",
+        }
+
+    try:
+        state = read_json(state_path)
+    except ValueError as exc:
+        return {
+            "ok": False,
+            "run_id": run_id,
+            "status": None,
+            "missing_paths": [],
+            "blockers": [str(exc)],
+            "warnings": [],
+            "next_required_action": "Stop for human review of malformed loop state.",
+        }
+
+    blockers = validate_loop_state_shape(state)
+    warnings: list[str] = []
+    missing_paths: list[str] = []
+    for field, path in _state_referenced_paths(state):
+        absolute_path = path if path.is_absolute() else repo_root / path
+        if not absolute_path.exists():
+            missing_paths.append(f"{field}: {path.as_posix()}")
+
+    if missing_paths:
+        blockers.append("referenced local paths are missing")
+    status = state.get("status")
+    if blockers:
+        next_action = "Stop for human review of run state validation blockers."
+    else:
+        next_action = explain_next_action(state)
+
+    return {
+        "ok": not blockers,
+        "run_id": run_id,
+        "status": status,
+        "missing_paths": missing_paths,
+        "blockers": blockers,
+        "warnings": warnings,
+        "next_required_action": next_action,
+    }
+
+
+def explain_next_action(state: dict) -> str:
+    status = state.get("status")
+    blockers = state.get("blockers") if isinstance(state.get("blockers"), list) else []
+    if status == "prompt_prepared":
+        return (
+            "Prompt prepared. Review the local prompt, then rerun start with --execute-api "
+            "only if GPT API use is explicitly authorized."
+        )
+    if status == "gpt_note_ready":
+        return (
+            "GPT stage note ready. Review the transition_gate and either continue with the "
+            "next explicit stage or stop for human review if the gate is unresolved."
+        )
+    if status == "handoff_ready":
+        return (
+            "Codex handoff ready. Codex remains manual: paste the handoff packet into "
+            "Codex yourself, then resume-codex with the returned summary."
+        )
+    if status == "codex_return_archived":
+        return (
+            "Codex return archived. Validate the PR URL and run verify-pr in manual mode "
+            "before any merge discussion."
+        )
+    if status == "pr_detected":
+        return (
+            "PR detected. Run verify-pr with the archived Codex return. Merge is never "
+            "default and requires --execute-merge plus auto_after_verify."
+        )
+    if status == "pre_merge_verified":
+        return (
+            "Pre-merge verification is recorded. Merge is never default and requires "
+            "--execute-merge plus auto_after_verify through the PR verification boundary."
+        )
+    if status == "merged":
+        return (
+            "Merge is recorded. Inspect or run post-merge validation through the existing "
+            "PR verification boundary; post-merge failure must stop human."
+        )
+    if status == "post_merge_validated":
+        return "Post-merge validation is recorded. Review the summary and close the run."
+    if status == "stop_human":
+        if blockers:
+            blocker_text = "; ".join(str(blocker) for blocker in blockers)
+            return f"Stop for human review. Blockers: {blocker_text}."
+        return "Stop for human review. No blocker details were recorded."
+    return f"Unknown loop status {status!r}. Stop for human review before continuing."
 
 
 def load_loop_state(repo_root: Path, run_id: str, stage: str | None = None) -> dict:
@@ -784,6 +1035,20 @@ def main(argv: list[str] | None = None) -> int:
     summarize_parser = subparsers.add_parser("summarize", help="Write loop summary.")
     summarize_parser.add_argument("--run-id", required=True)
 
+    subparsers.add_parser("doctor", help="Run local-only coach loop diagnostics.")
+
+    validate_parser = subparsers.add_parser(
+        "validate-run",
+        help="Validate local loop state and referenced artifacts.",
+    )
+    validate_parser.add_argument("--run-id", required=True)
+
+    explain_parser = subparsers.add_parser(
+        "explain-next",
+        help="Explain the next local action for a run.",
+    )
+    explain_parser.add_argument("--run-id", required=True)
+
     args = parser.parse_args(argv)
 
     try:
@@ -835,6 +1100,25 @@ def main(argv: list[str] | None = None) -> int:
             state = load_loop_state(repo_root, args.run_id)
             output_path = write_loop_summary(repo_root, state)
             print(output_path)
+            return 0
+
+        if args.command == "doctor":
+            report = doctor_report(repo_root)
+            print(json.dumps(report, indent=2, sort_keys=True))
+            return 0 if report.get("ok") else 1
+
+        if args.command == "validate-run":
+            report = validate_run_report(repo_root, args.run_id)
+            print(json.dumps(report, indent=2, sort_keys=True))
+            return 0 if report.get("ok") else 1
+
+        if args.command == "explain-next":
+            report = validate_run_report(repo_root, args.run_id)
+            if not report.get("ok"):
+                print(report.get("next_required_action"))
+                return 1
+            state = read_json(loop_state_path(repo_root, args.run_id))
+            print(explain_next_action(state))
             return 0
     except ValueError as exc:
         print(f"ERROR: {exc}", file=sys.stderr)

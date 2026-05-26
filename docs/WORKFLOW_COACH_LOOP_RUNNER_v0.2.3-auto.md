@@ -1,6 +1,7 @@
 # Workflow Coach Loop Runner - v0.2.3-auto
 
-Status: Codex 041 docs/tests/scripts semi-automatic coach-loop runner workflow tooling.
+Status: Codex 041 docs/tests/scripts semi-automatic coach-loop runner workflow
+tooling, hardened by Codex 042 with local-only diagnostics and runbook.
 
 ## 1. Purpose
 
@@ -24,6 +25,10 @@ verification and optional merge runner.
 
 Codex 041 orchestrates those scripts rather than duplicating their logic.
 
+Codex 042 hardening does not add a new architecture layer or autonomy level.
+It hardens Codex 041 for practical use with `doctor`, `validate-run`, and
+`explain-next`, plus a concise operational runbook.
+
 ## 3. What Codex 041 Implements
 
 - `scripts/coach_loop.py`.
@@ -38,6 +43,8 @@ Codex 041 orchestrates those scripts rather than duplicating their logic.
 - Manual Codex handoff creation through `scripts/coach_codex_handoff.py`.
 - Codex return archive/resume through `scripts/coach_codex_handoff.py`.
 - PR verification and guarded merge delegation through `scripts/coach_pr_verify.py`.
+- Codex 042 local-only diagnostics: `doctor`, `validate-run`, and
+  `explain-next`.
 
 ## 4. What Codex 041 Does Not Implement
 
@@ -63,7 +70,14 @@ python scripts/coach_loop.py verify-pr --run-id codex_041_example --pr-url https
 python scripts/coach_loop.py verify-pr --run-id codex_041_example --pr-url https://github.com/Nyoha12/dicoimpro/pull/99 --codex-return-path .dicoimpro/runs/codex_041_example/05_codex_return.md --merge-mode auto_after_verify --execute-merge
 python scripts/coach_loop.py status --run-id codex_041_example
 python scripts/coach_loop.py summarize --run-id codex_041_example
+python scripts/coach_loop.py doctor
+python scripts/coach_loop.py validate-run --run-id codex_041_example
+python scripts/coach_loop.py explain-next --run-id codex_041_example
 ```
+
+`doctor`, `validate-run`, and `explain-next` are local-only and
+non-destructive. They do not call GPT, OpenAI, Codex, gh, git, pytest, network,
+or merge.
 
 ## 6. Loop State Model
 
@@ -147,6 +161,10 @@ execution, does not implement an unbounded autonomous loop, and does not
 authorize RUN, journal, JournalPatch, real data, publication, XLSX/CSV export,
 old PDF usage or src runtime behavior change.
 No automatic Codex execution.
+
+Codex 042 diagnostics add no new autonomy. `doctor`, `validate-run`, and
+`explain-next` do not call GPT, OpenAI, Codex, gh, git, pytest, network, or
+merge, and they must not bypass `stop_human`.
 
 ## 15. Future Implementation Phases
 
