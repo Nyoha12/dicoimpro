@@ -33,6 +33,7 @@ En cas de contradiction, lire dans cet ordre :
 24. WORKFLOW_GPT_CODEX_COACH_LOOP_v0.2.3-auto.md
 25. WORKFLOW_COACH_CONTEXT_STATE_MACHINE_v0.2.3-auto.md
 26. WORKFLOW_COACH_GPT_STAGE_RUNNER_v0.2.3-auto.md
+27. WORKFLOW_COACH_CODEX_HANDOFF_BRIDGE_v0.2.3-auto.md
 ```
 
 ## Documents actifs
@@ -240,6 +241,17 @@ valide les stage notes, extrait transition_gate et next_prompt, et met a jour
 l'etat local uniquement via transition_gate. No API calls by default, no Codex
 SDK/CLI, no autonomous loop, no src runtime behavior change.
 
+### `WORKFLOW_COACH_CODEX_HANDOFF_BRIDGE_v0.2.3-auto.md`
+
+Bridge Codex 038 docs/tests/scripts manual Codex handoff bridge pour le coach
+loop. Package `next_prompt`/`codex_prompt` depuis les coach stage notes en
+handoff packets autonomes, archive les retours Codex fournis manuellement,
+valide les champs PR/tests/guardrails et extrait les PR URL. No Codex SDK/CLI,
+no Codex execution, no autonomous loop, no repository-script PR/merge
+automation, no OpenAI calls, no RUN, no journal, no JournalPatch, no real data,
+no `src/` runtime behavior change. Repository scripts do not create PRs or
+merge, and merge remains human-controlled after GPT review.
+
 ## Document superseded
 
 ### `ARCHITECTURE_SDK_v0.2.3-auto.md`
@@ -286,6 +298,7 @@ Codex 034 - docs/tests-only disabled prompt draft access boundary for the disabl
 Codex 035 - docs/tests/scaffold-only local GPT-5.5 Thinking / Codex coach loop output architecture, with .dicoimpro guidance, stage output schema, workflow state example and workflow documentation, without production code, API call implementation, Codex SDK implementation, autonomous loop, prompt activation/rendering/execution/consumption, OpenAI runtime activation, RUN, journal read/write, JournalPatch application, real data processing, XLSX/CSV export, old PDF usage or behavior change.
 Codex 036 - docs/tests/scripts scaffold-only local coach context collector and state machine, without API calls, Codex SDK, autonomous loop, prompt execution, RUN, journal, JournalPatch, real data, production code or behavior change.
 Codex 037 - docs/tests/scripts local GPT-5.5 Thinking stage runner for coach loop, explicit API only, no API calls by default, no Codex SDK/CLI, no autonomous loop, no src runtime behavior change.
+Codex 038 - docs/tests/scripts manual Codex handoff bridge for coach loop, packaging next_prompt/codex_prompt into handoff packets and archiving Codex returns, without Codex SDK/CLI, autonomous loop, repository-script PR/merge automation, RUN, journal, JournalPatch, real data, src runtime behavior change.
 ```
 
 ## Règles non négociables

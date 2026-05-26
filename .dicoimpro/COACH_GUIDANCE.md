@@ -127,6 +127,25 @@ merge, or an autonomous loop.
 Outputs from the local GPT coach API path are shareable stage notes and prompts
 for future review. They must not be private chain-of-thought dumps.
 
+## Manual Codex handoff boundary
+
+GPT coach may produce a codex_prompt for Codex. Repository scripts may package
+this prompt for manual handoff, archive a manually supplied Codex return, and
+validate the archived return for review.
+
+Repository scripts must not execute Codex SDK/CLI. Repository scripts must not
+create/merge PRs, push branches, push to main, call GitHub API, merge PRs, or
+run an autonomous loop.
+
+External Codex execution may create PRs only when explicitly authorized by the
+user workflow and only after checks pass. Merge remains human-controlled after
+review.
+
+This boundary authorizes no RUN/journal/JournalPatch/real data/src runtime
+behavior change. It also authorizes no prompt activation, prompt rendering,
+prompt execution, OpenAI runtime in `src/`, candidate selection, publication,
+XLSX/CSV export, old PDF usage, or production behavior change.
+
 ## Non-activation rule
 
 The files under `.dicoimpro/` are workflow architecture documents and examples.

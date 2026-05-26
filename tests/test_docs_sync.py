@@ -62,11 +62,14 @@ WORKFLOW_COACH_CONTEXT_STATE_MACHINE_PATH = (
 WORKFLOW_COACH_GPT_STAGE_RUNNER_PATH = (
     DOCS_DIR / "WORKFLOW_COACH_GPT_STAGE_RUNNER_v0.2.3-auto.md"
 )
+WORKFLOW_COACH_CODEX_HANDOFF_BRIDGE_PATH = (
+    DOCS_DIR / "WORKFLOW_COACH_CODEX_HANDOFF_BRIDGE_v0.2.3-auto.md"
+)
 PROMPT_PACKAGE_FIXTURE_DIR = REPO_ROOT / "tests" / "fixtures" / "prompt_packages"
 SRC_DIR = REPO_ROOT / "src" / "dico_impro"
 
 EXPECTED_CODEX_FIRST = 1
-EXPECTED_CODEX_LAST = 37
+EXPECTED_CODEX_LAST = 38
 EXPECTED_CODEX_IDS = tuple(
     f"{number:03d}" for number in range(EXPECTED_CODEX_FIRST, EXPECTED_CODEX_LAST + 1)
 )
@@ -181,6 +184,7 @@ def test_readme_active_docs_include_current_review_and_prompt_protocol():
         WORKFLOW_GPT_CODEX_COACH_LOOP_PATH.name,
         WORKFLOW_COACH_CONTEXT_STATE_MACHINE_PATH.name,
         WORKFLOW_COACH_GPT_STAGE_RUNNER_PATH.name,
+        WORKFLOW_COACH_CODEX_HANDOFF_BRIDGE_PATH.name,
     )
 
     active_hierarchy = extract_markdown_section(readme, "Hiérarchie active")
@@ -1406,6 +1410,52 @@ def test_codex_037_is_docs_tests_scripts_local_gpt_stage_runner():
         assert "src runtime behavior change" in normalized_document, (
             f"{source_name} must state Codex 037 changes no src runtime behavior."
         )
+
+
+def test_codex_038_is_docs_tests_scripts_manual_codex_handoff_bridge():
+    readme = read_text(README_PATH)
+    review = read_text(POST_015_REVIEW_PATH)
+    workflow = read_text(WORKFLOW_COACH_CODEX_HANDOFF_BRIDGE_PATH)
+
+    for source_name, document in (
+        ("README", readme),
+        ("post-015 architecture review", review),
+        ("Codex 038 workflow doc", workflow),
+    ):
+        normalized_document = normalize_text(document)
+        assert "codex 038" in normalized_document, (
+            f"{source_name} must list Codex 038."
+        )
+        assert "manual codex handoff bridge" in normalized_document, (
+            f"{source_name} must frame Codex 038 as a manual Codex handoff bridge."
+        )
+        assert "coach loop" in normalized_document, (
+            f"{source_name} must tie Codex 038 to the coach loop."
+        )
+        assert "docs/tests/scripts" in normalized_document, (
+            f"{source_name} must keep Codex 038 framed as docs/tests/scripts."
+        )
+        assert "codex sdk/cli" in normalized_document or (
+            "codex sdk" in normalized_document and "codex cli" in normalized_document
+        ), f"{source_name} must state Codex 038 adds no Codex SDK/CLI."
+        assert "does not execute codex" in normalized_document or (
+            "sans execution codex" in normalized_document
+            or "no codex execution" in normalized_document
+            or "do not execute codex" in normalized_document
+        ), f"{source_name} must state repository scripts do not execute Codex."
+        assert "autonomous loop" in normalized_document, (
+            f"{source_name} must state Codex 038 adds no autonomous loop."
+        )
+        assert "repository-script pr/merge automation" in normalized_document or (
+            "repository scripts do not create prs or merge" in normalized_document
+        ), f"{source_name} must state repository scripts do not automate PR/merge."
+        assert "merge remains human-controlled" in normalized_document, (
+            f"{source_name} must keep merge human-controlled after review."
+        )
+        assert "src runtime behavior change" in normalized_document or (
+            "`src/` production code changes" in normalized_document
+            or "prompt activation inside `src/`" in normalized_document
+        ), f"{source_name} must state Codex 038 changes no src runtime behavior."
 
 
 def test_prompt_package_fixtures_validate_and_remain_disabled_metadata_only():
