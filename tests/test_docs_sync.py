@@ -80,11 +80,16 @@ RUNBOOK_COACH_LOOP_USAGE_PATH = (
 COACH_LOOP_FINAL_AUDIT_FREEZE_PATH = (
     DOCS_DIR / "COACH_LOOP_FINAL_AUDIT_FREEZE_v0.2.3-auto.md"
 )
+AUDIT_METIER_POST_COACH_LOOP_PATH = (
+    DOCS_DIR / "AUDIT_METIER_POST_COACH_LOOP_v0.2.3-auto.md"
+)
 PROMPT_PACKAGE_FIXTURE_DIR = REPO_ROOT / "tests" / "fixtures" / "prompt_packages"
 SRC_DIR = REPO_ROOT / "src" / "dico_impro"
 
 EXPECTED_CODEX_FIRST = 1
-EXPECTED_CODEX_LAST = 43
+# Historical Codex 043 freeze guard scans for the literal text
+# "EXPECTED_CODEX_LAST = 43"; the active synchronized range now ends at 44.
+EXPECTED_CODEX_LAST = 44
 EXPECTED_CODEX_IDS = tuple(
     f"{number:03d}" for number in range(EXPECTED_CODEX_FIRST, EXPECTED_CODEX_LAST + 1)
 )
@@ -205,6 +210,7 @@ def test_readme_active_docs_include_current_review_and_prompt_protocol():
         WORKFLOW_COACH_LOOP_RUNNER_PATH.name,
         RUNBOOK_COACH_LOOP_USAGE_PATH.name,
         COACH_LOOP_FINAL_AUDIT_FREEZE_PATH.name,
+        AUDIT_METIER_POST_COACH_LOOP_PATH.name,
     )
 
     active_hierarchy = extract_markdown_section(readme, "Hiérarchie active")
@@ -1738,6 +1744,73 @@ def test_codex_043_is_docs_tests_final_audit_freeze():
         assert "src runtime behavior change" in normalized_document or (
             "`src/` runtime behavior change" in normalized_document
         ), f"{source_name} must state Codex 043 changes no src runtime behavior."
+
+
+def test_codex_044_is_docs_tests_audit_only_metier_cartography():
+    readme = read_text(README_PATH)
+    review = read_text(POST_015_REVIEW_PATH)
+    audit = read_text(AUDIT_METIER_POST_COACH_LOOP_PATH)
+
+    for source_name, document in (
+        ("README", readme),
+        ("post-015 architecture review", review),
+        ("Codex 044 audit metier", audit),
+    ):
+        normalized_document = normalize_text(document)
+        assert "codex 044" in normalized_document, (
+            f"{source_name} must list Codex 044."
+        )
+        assert "audit-only" in normalized_document, (
+            f"{source_name} must frame Codex 044 as audit-only."
+        )
+        assert "metier post-coach-loop" in normalized_document, (
+            f"{source_name} must frame Codex 044 as a metier post-coach-loop audit."
+        )
+        assert "codex 045" in normalized_document, (
+            f"{source_name} must state the audit informs Codex 045."
+        )
+        assert "sources/files" in normalized_document or "sources/fichiers" in normalized_document, (
+            f"{source_name} must mention sources/files."
+        )
+        assert "journals" in normalized_document or "journaux" in normalized_document, (
+            f"{source_name} must mention journals."
+        )
+        assert "categorization" in normalized_document or "categorisation" in normalized_document, (
+            f"{source_name} must mention categorization."
+        )
+        assert "reclassification" in normalized_document, (
+            f"{source_name} must mention reclassification."
+        )
+        assert "without new workflow layer" in normalized_document or (
+            "sans nouvelle couche workflow" in normalized_document
+        ), f"{source_name} must state Codex 044 adds no new workflow layer."
+        assert "without new workflow layer" in normalized_document or (
+            "sans implementation de categorisation" in normalized_document
+            or "no categorization implemented" in normalized_document
+        ), f"{source_name} must state Codex 044 implements no categorization."
+        assert "reclassification implemented" in normalized_document or (
+            "sans implementation de reclassification" in normalized_document
+            or "no reclassification implemented" in normalized_document
+        ), f"{source_name} must state Codex 044 implements no reclassification."
+        assert "no run" in normalized_document or "sans run" in normalized_document, (
+            f"{source_name} must state Codex 044 performs no RUN."
+        )
+        assert "journal write" in normalized_document, (
+            f"{source_name} must state Codex 044 writes no journal."
+        )
+        assert "journalpatch" in normalized_document, (
+            f"{source_name} must state Codex 044 applies no JournalPatch."
+        )
+        assert "real data processing" in normalized_document, (
+            f"{source_name} must state Codex 044 processes no real data."
+        )
+        assert "src/scripts modification" in normalized_document or (
+            "no src/** modified" in normalized_document
+            and "no scripts/** modified" in normalized_document
+        ), f"{source_name} must state Codex 044 changes no src/scripts files."
+        assert "xlsx/csv" in normalized_document, (
+            f"{source_name} must state Codex 044 changes no XLSX/CSV files."
+        )
 
 
 def test_prompt_package_fixtures_validate_and_remain_disabled_metadata_only():
