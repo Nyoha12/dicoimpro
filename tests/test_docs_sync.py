@@ -65,11 +65,14 @@ WORKFLOW_COACH_GPT_STAGE_RUNNER_PATH = (
 WORKFLOW_COACH_CODEX_HANDOFF_BRIDGE_PATH = (
     DOCS_DIR / "WORKFLOW_COACH_CODEX_HANDOFF_BRIDGE_v0.2.3-auto.md"
 )
+WORKFLOW_COACH_AUTONOMY_VERIFY_GATE_PATH = (
+    DOCS_DIR / "WORKFLOW_COACH_AUTONOMY_VERIFY_GATE_v0.2.3-auto.md"
+)
 PROMPT_PACKAGE_FIXTURE_DIR = REPO_ROOT / "tests" / "fixtures" / "prompt_packages"
 SRC_DIR = REPO_ROOT / "src" / "dico_impro"
 
 EXPECTED_CODEX_FIRST = 1
-EXPECTED_CODEX_LAST = 38
+EXPECTED_CODEX_LAST = 39
 EXPECTED_CODEX_IDS = tuple(
     f"{number:03d}" for number in range(EXPECTED_CODEX_FIRST, EXPECTED_CODEX_LAST + 1)
 )
@@ -185,6 +188,7 @@ def test_readme_active_docs_include_current_review_and_prompt_protocol():
         WORKFLOW_COACH_CONTEXT_STATE_MACHINE_PATH.name,
         WORKFLOW_COACH_GPT_STAGE_RUNNER_PATH.name,
         WORKFLOW_COACH_CODEX_HANDOFF_BRIDGE_PATH.name,
+        WORKFLOW_COACH_AUTONOMY_VERIFY_GATE_PATH.name,
     )
 
     active_hierarchy = extract_markdown_section(readme, "Hiérarchie active")
@@ -1456,6 +1460,61 @@ def test_codex_038_is_docs_tests_scripts_manual_codex_handoff_bridge():
             "`src/` production code changes" in normalized_document
             or "prompt activation inside `src/`" in normalized_document
         ), f"{source_name} must state Codex 038 changes no src runtime behavior."
+
+
+def test_codex_039_is_docs_tests_scripts_autonomy_policy_verify_gate():
+    readme = read_text(README_PATH)
+    review = read_text(POST_015_REVIEW_PATH)
+    workflow = read_text(WORKFLOW_COACH_AUTONOMY_VERIFY_GATE_PATH)
+
+    for source_name, document in (
+        ("README", readme),
+        ("post-015 architecture review", review),
+        ("Codex 039 workflow doc", workflow),
+    ):
+        normalized_document = normalize_text(document)
+        assert "codex 039" in normalized_document, (
+            f"{source_name} must list Codex 039."
+        )
+        assert "autonomy policy and pre-merge verify gate" in normalized_document, (
+            f"{source_name} must frame Codex 039 as autonomy policy and verify gate."
+        )
+        assert "coach-loop program" in normalized_document or "coach loop" in normalized_document, (
+            f"{source_name} must tie Codex 039 to the coach-loop program."
+        )
+        assert "docs/tests/scripts" in normalized_document, (
+            f"{source_name} must keep Codex 039 framed as docs/tests/scripts."
+        )
+        assert "stop_human" in normalized_document, (
+            f"{source_name} must mention stop_human."
+        )
+        assert "auto_merge_after_verify" in normalized_document, (
+            f"{source_name} must mention auto_merge_after_verify."
+        )
+        assert "manual by default" in normalized_document or "manual by default" in normalized_document, (
+            f"{source_name} must state merge is manual by default."
+        )
+        assert "complete verify gate" in normalized_document or "full verify gate" in normalized_document, (
+            f"{source_name} must require complete verify gate before auto-merge."
+        )
+        assert "without real merge" in normalized_document or "does not perform real merge" in normalized_document, (
+            f"{source_name} must state Codex 039 performs no real merge."
+        )
+        assert "github api" in normalized_document, (
+            f"{source_name} must state Codex 039 has no GitHub API."
+        )
+        assert "git/gh execution" in normalized_document or (
+            "does not run git" in normalized_document and "does not run gh" in normalized_document
+        ), f"{source_name} must state Codex 039 has no git/gh execution."
+        assert "codex sdk/cli" in normalized_document or (
+            "codex sdk" in normalized_document and "codex cli" in normalized_document
+        ), f"{source_name} must state Codex 039 adds no Codex SDK/CLI."
+        assert "autonomous full loop" in normalized_document, (
+            f"{source_name} must state Codex 039 adds no autonomous full loop."
+        )
+        assert "src runtime behavior change" in normalized_document or (
+            "`src/` runtime behavior change" in normalized_document
+        ), f"{source_name} must state Codex 039 changes no src runtime behavior."
 
 
 def test_prompt_package_fixtures_validate_and_remain_disabled_metadata_only():

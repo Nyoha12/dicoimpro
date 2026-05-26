@@ -1,0 +1,102 @@
+{
+  "api_budget": {
+    "fail_closed": true,
+    "max_codex_handoffs_per_run": 10,
+    "max_gpt_calls_per_run": 10,
+    "max_total_external_calls_per_run": 20,
+    "max_usd_per_run": 5.0,
+    "requires_explicit_launch_authorization": true
+  },
+  "auto_merge_policy_statement": "Auto-merge is possible only after the complete verify gate passes and only when merge_mode is auto_after_verify.",
+  "allowed_merge_modes": [
+    "manual",
+    "auto_after_verify"
+  ],
+  "autonomy_levels": [
+    "stop_human",
+    "auto_local",
+    "auto_external_with_budget",
+    "auto_merge_after_verify"
+  ],
+  "default_autonomy_level": "stop_human",
+  "forbidden_path_patterns": [
+    "src/",
+    ".github/workflows/",
+    "data/local_files/",
+    "data/active_journal/",
+    "data/outputs/",
+    "data/logs/"
+  ],
+  "max_reflections_per_stage": 3,
+  "merge_mode": "manual",
+  "post_merge_verify_required": {
+    "fields": [
+      "main_synced",
+      "post_merge_tests",
+      "post_merge_result_recorded",
+      "stop_human_on_failure",
+      "no_destructive_auto_repair"
+    ],
+    "stop_human_on_failure": true
+  },
+  "pre_merge_verify_required": {
+    "fields": [
+      "merge_mode_auto_after_verify",
+      "pr_detected",
+      "pr_open",
+      "pr_not_draft",
+      "pr_mergeable",
+      "base_branch_main",
+      "head_branch_authorized",
+      "head_sha_stable_or_verified",
+      "changed_files_within_authorized_scope",
+      "no_forbidden_file_touched",
+      "no_secret_detected",
+      "codex_return_archived",
+      "codex_return_valid",
+      "guardrail_guarantee_present",
+      "tests_ok",
+      "git_diff_check_ok",
+      "ci_ok_or_not_required",
+      "no_blocking_review",
+      "no_request_changes_review",
+      "no_contradiction_detected",
+      "auto_merge_explicitly_authorized_by_policy_and_run_config"
+    ],
+    "required_base_branch": "main"
+  },
+  "requires_human_intervention": {
+    "triggers": [
+      "run_objective_absent_or_ambiguous",
+      "scope_change_proposed",
+      "transition_gate_required_user_intervention_true",
+      "transition_gate_can_advance_false_with_substantive_decision",
+      "contradiction_between_gpt_note_codex_return_actual_diff_pr_metadata_or_tests",
+      "sensitive_files_touched_without_explicit_authorization",
+      "src_touched_while_run_is_docs_tests_scripts_only",
+      "dependencies_modified_without_explicit_authorization",
+      "github_workflows_modified",
+      "secrets_api_keys_or_tokens_detected",
+      "tests_fail",
+      "git_diff_check_fails",
+      "gpt_note_invalid",
+      "codex_return_invalid",
+      "pr_not_mergeable",
+      "ci_red",
+      "review_requests_changes",
+      "api_budget_exceeded",
+      "risk_cannot_be_classified"
+    ]
+  },
+  "schema_version": "coach_autonomy_policy.v1",
+  "sensitive_path_patterns": [
+    "src/",
+    "pyproject.toml",
+    ".github/workflows/",
+    ".env",
+    "*.env",
+    "*secret*",
+    "*token*",
+    "*credential*"
+  ]
+}

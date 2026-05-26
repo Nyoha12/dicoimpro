@@ -34,6 +34,7 @@ En cas de contradiction, lire dans cet ordre :
 25. WORKFLOW_COACH_CONTEXT_STATE_MACHINE_v0.2.3-auto.md
 26. WORKFLOW_COACH_GPT_STAGE_RUNNER_v0.2.3-auto.md
 27. WORKFLOW_COACH_CODEX_HANDOFF_BRIDGE_v0.2.3-auto.md
+28. WORKFLOW_COACH_AUTONOMY_VERIFY_GATE_v0.2.3-auto.md
 ```
 
 ## Documents actifs
@@ -252,6 +253,16 @@ automation, no OpenAI calls, no RUN, no journal, no JournalPatch, no real data,
 no `src/` runtime behavior change. Repository scripts do not create PRs or
 merge, and merge remains human-controlled after GPT review.
 
+### `WORKFLOW_COACH_AUTONOMY_VERIFY_GATE_v0.2.3-auto.md`
+
+Gate Codex 039 docs/tests/scripts autonomy policy and pre-merge verify gate
+pour le coach-loop program. Modele `stop_human`, `auto_local`,
+`auto_external_with_budget` et `auto_merge_after_verify`, avec merge manual by default
+et auto-merge possible uniquement after complete verify gate depuis des
+preuves structurees fournies. Without real merge, GitHub API, git/gh execution,
+Codex SDK/CLI, autonomous full loop, RUN, journal, JournalPatch, real data or
+src runtime behavior change.
+
 ## Document superseded
 
 ### `ARCHITECTURE_SDK_v0.2.3-auto.md`
@@ -299,6 +310,7 @@ Codex 035 - docs/tests/scaffold-only local GPT-5.5 Thinking / Codex coach loop o
 Codex 036 - docs/tests/scripts scaffold-only local coach context collector and state machine, without API calls, Codex SDK, autonomous loop, prompt execution, RUN, journal, JournalPatch, real data, production code or behavior change.
 Codex 037 - docs/tests/scripts local GPT-5.5 Thinking stage runner for coach loop, explicit API only, no API calls by default, no Codex SDK/CLI, no autonomous loop, no src runtime behavior change.
 Codex 038 - docs/tests/scripts manual Codex handoff bridge for coach loop, packaging next_prompt/codex_prompt into handoff packets and archiving Codex returns, without Codex SDK/CLI, autonomous loop, repository-script PR/merge automation, RUN, journal, JournalPatch, real data, src runtime behavior change.
+Codex 039 - docs/tests/scripts autonomy policy and pre-merge verify gate for the coach-loop program, with stop_human, auto_local, auto_external_with_budget and auto_merge_after_verify decision modeling, without real merge, GitHub API, git/gh execution, Codex SDK/CLI, autonomous full loop, RUN, journal, JournalPatch, real data or src runtime behavior change.
 ```
 
 ## Règles non négociables

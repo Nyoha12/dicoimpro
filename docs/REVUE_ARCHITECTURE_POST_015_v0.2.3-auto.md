@@ -1,6 +1,6 @@
 # Revue architecture post-015 — dicoimpro v0.2.3-auto
 
-Statut : revue documentaire post-Codex 015, synchronisee apres Codex 038.
+Statut : revue documentaire post-Codex 015, synchronisee apres Codex 039.
 Objet : consolider l'état courant, les garde-fous, les risques et les conditions
 obligatoires avant tout futur travail sur un appel OpenAI reel ou sur des prompts actifs.
 
@@ -16,7 +16,7 @@ aucune boucle autonome et aucune execution de prompt.
 Etat attendu au moment de cette revue :
 
 ```text
-Codex 001 a Codex 037 sont fusionnes dans main avant Codex 038.
+Codex 001 a Codex 038 sont fusionnes dans main avant Codex 039.
 pytest passe.
 Etat courant de main avant Codex 019 : 252 tests passing.
 Etat courant apres Codex 019 : 253 tests passing.
@@ -55,6 +55,8 @@ Etat courant apres Codex 036 : 493 tests passing (docs/tests/scripts scaffold-on
 Etat courant de main avant Codex 037 : 493 tests passing.
 Etat courant apres Codex 037 : 513 tests passing (docs/tests/scripts local GPT stage runner).
 Etat courant de main avant Codex 038 : 513 tests passing.
+Etat courant apres Codex 038 : 535 tests passing (docs/tests/scripts manual Codex handoff bridge).
+Etat courant de main avant Codex 039 : 535 tests passing.
 Le dry-run CLI manuel post-015 a été validé par l'utilisateur.
 Les fixtures PromptPackage metadata-only sont présentes et désactivées.
 Codex 019 ajoute le smoke test CLI dry-run fake-only end-to-end.
@@ -77,6 +79,7 @@ Codex 035 ajoute une architecture de sorties docs/tests/scaffold-only pour un fu
 Codex 036 ajoute un scaffold docs/tests/scripts-only pour le collecteur local de contexte et la state machine transition_gate du futur coach loop GPT-5.5 Thinking / Codex, sans API calls, sans Codex SDK, sans Codex CLI, sans autonomous loop, sans prompt execution, sans RUN, sans journal/JournalPatch, sans real data, sans PR/merge automation, sans production code ni changement de comportement.
 Codex 037 ajoute un runner local GPT-5.5 Thinking docs/tests/scripts pour le coach loop, avec preparation de prompt, API OpenAI Responses uniquement explicite via --execute-api et OPENAI_API_KEY, validation de stage note, extraction transition_gate/next_prompt et update d'etat local uniquement via transition_gate, sans appel API par defaut, sans OpenAI runtime dans l'application dicoimpro, sans Codex SDK/CLI, sans autonomous loop, sans RUN, sans journal/JournalPatch, sans real data, sans PR/merge automation dans les scripts, sans src runtime behavior change.
 Codex 038 ajoute un manual Codex handoff bridge docs/tests/scripts pour le coach loop, avec packaging local de next_prompt/codex_prompt en handoff packets, archive de retours Codex fournis manuellement, validation PR/tests/diff-check/files/guardrail et extraction PR URL, sans Codex SDK/CLI, sans execution Codex depuis les scripts repository, sans OpenAI call, sans autonomous loop, sans PR/merge automation dans les scripts repository, sans RUN, sans journal/JournalPatch, sans real data, sans publication, sans src runtime behavior change.
+Codex 039 ajoute une autonomy policy and pre-merge verify gate docs/tests/scripts pour le coach-loop program, avec modelisation stop_human, auto_local, auto_external_with_budget et auto_merge_after_verify, merge manual by default, decisions depuis supplied verification reports, sans real merge, sans GitHub API, sans git/gh execution, sans Codex SDK/CLI, sans autonomous full loop, sans RUN, sans journal/JournalPatch, sans real data, sans publication, sans src runtime behavior change.
 ```
 
 Résumé des couches déjà matérialisées :
@@ -120,6 +123,7 @@ Codex 035 - docs/tests/scaffold-only local GPT-5.5 Thinking / Codex coach loop o
 Codex 036 - docs/tests/scripts scaffold-only local coach context collector and state machine, without API calls, Codex SDK, autonomous loop, prompt execution, RUN, journal, JournalPatch, real data, production code or behavior change.
 Codex 037 - docs/tests/scripts local GPT-5.5 Thinking stage runner for coach loop, explicit API only, no API calls by default, no Codex SDK/CLI, no autonomous loop, no src runtime behavior change.
 Codex 038 - docs/tests/scripts manual Codex handoff bridge for coach loop, packaging next_prompt/codex_prompt into handoff packets and archiving Codex returns, without Codex SDK/CLI, autonomous loop, repository-script PR/merge automation, RUN, journal, JournalPatch, real data, src runtime behavior change.
+Codex 039 - docs/tests/scripts autonomy policy and pre-merge verify gate for the coach-loop program, with stop_human, auto_local, auto_external_with_budget and auto_merge_after_verify decision modeling, without real merge, GitHub API, git/gh execution, Codex SDK/CLI, autonomous full loop, RUN, journal, JournalPatch, real data or src runtime behavior change.
 ```
 
 ## 2. Statut du dry-run CLI manuel
@@ -154,7 +158,7 @@ Garde-fous confirmés pour ce chemin :
 
 ## 3. Chemins actuellement autorisés
 
-Les seuls chemins runtime autorises apres Codex 038 restent ceux de Codex 020, Codex 021 et Codex 022 :
+Les seuls chemins runtime autorises apres Codex 039 restent ceux de Codex 020, Codex 021 et Codex 022 :
 
 ```text
 1. fake CLI dry-run ;
@@ -165,9 +169,9 @@ Les seuls chemins runtime autorises apres Codex 038 restent ceux de Codex 020, C
 Ces chemins restent locaux, deterministes, sans OpenAI reel, sans reseau, sans prompt actif,
 sans source discovery et sans écriture dans le journal actif.
 
-Codex 035, Codex 036, Codex 037 et Codex 038 ne modifient aucun chemin runtime autorise.
+Codex 035, Codex 036, Codex 037, Codex 038 et Codex 039 ne modifient aucun chemin runtime autorise.
 Le scaffold coach loop Codex 035 reste workflow architecture documentation/tests
-only. Les scripts locaux Codex 036, Codex 037 et Codex 038 sont workflow tooling scripts
+only. Les scripts locaux Codex 036, Codex 037, Codex 038 et Codex 039 sont workflow tooling scripts
 only. Aucun de ces scaffolds ne donne une autorisation runtime nouvelle.
 
 Les scripts sous `scripts/` ajoutes par Codex 036 sont uniquement des utilitaires
@@ -185,6 +189,12 @@ Codex. Repository scripts do not create PRs or merge PRs. External Codex
 finalization may create PRs only by explicit user workflow prompt and only
 after checks pass. Merge remains human-controlled after GPT review.
 
+Le verify gate Codex 039 est workflow tooling only. Auto-merge is now a policy
+possibility, not an implemented merge action. Codex 039 only decides from
+supplied verification reports. Il n'appelle pas GitHub API, gh, git, OpenAI,
+GPT, Codex SDK ou Codex CLI, ne fait aucun real merge et ne cree aucune boucle
+autonome complete.
+
 ## 4. Chemins actuellement interdits
 
 Sont explicitement interdits dans l'état post-015 :
@@ -195,6 +205,9 @@ Sont explicitement interdits dans l'état post-015 :
 - Codex SDK ;
 - Codex CLI ;
 - execution Codex depuis les scripts repository ;
+- GitHub API ;
+- git/gh execution ;
+- real merge ;
 - rendu ou chargement de prompt ;
 - execution ou consommation de prompt ;
 - prompts.py ;
@@ -213,9 +226,9 @@ Ces interdictions s'appliquent aussi aux tests, scripts, fixtures et chemins CLI
 autorisation explicite dans une mission future dédiée.
 
 Le scaffold coach loop Codex 035, le scaffold context/state Codex 036, le
-runner stage Codex 037 et le handoff bridge Codex 038 ne les changent pas : ils n'autorisent pas OpenAI runtime
+runner stage Codex 037, le handoff bridge Codex 038 et le verify gate Codex 039 ne les changent pas : ils n'autorisent pas OpenAI runtime
 dans l'application dicoimpro, prompt activation/rendering/execution dans le
-runtime dicoimpro, autonomous loop, Codex SDK, Codex CLI, execution Codex, RUN, journal
+runtime dicoimpro, autonomous loop, autonomous full loop, Codex SDK, Codex CLI, execution Codex, GitHub API, git/gh execution, real merge, RUN, journal
 read/write, JournalPatch, real data processing, publication, PR/merge
 automation dans les scripts repository, XLSX/CSV export, old PDF usage ou
 behavior change.
@@ -224,7 +237,10 @@ Codex 035 n'autorise pas OpenAI runtime. Codex 036 n'autorise pas OpenAI
 runtime non plus. Codex 037 n'autorise pas OpenAI runtime dans l'application
 dicoimpro. Codex 038 n'autorise pas OpenAI runtime, Codex SDK/CLI, execution
 Codex, RUN, journal, JournalPatch, real data, publication ou PR/merge
-automation dans les scripts repository.
+automation dans les scripts repository. Codex 039 n'autorise pas OpenAI
+runtime, GitHub API, gh, git, real merge, Codex SDK/CLI, autonomous full loop,
+RUN, journal, JournalPatch, real data, publication ou src runtime behavior
+change.
 
 ## 5. Couches d'architecture
 
@@ -530,6 +546,34 @@ JournalPatch, ne traite pas de donnees reelles, ne publie pas, n'exporte pas
 XLSX/CSV, n'utilise pas l'ancien PDF et ne change aucun comportement
 production.
 
+### Coach autonomy verify gate
+
+`WORKFLOW_COACH_AUTONOMY_VERIFY_GATE_v0.2.3-auto.md` documente Codex 039 :
+autonomy policy and pre-merge verify gate docs/tests/scripts pour le futur
+coach-loop program. `.dicoimpro/WORKFLOW_AUTONOMY_POLICY.example.json` encode
+les niveaux `stop_human`, `auto_local`, `auto_external_with_budget` et
+`auto_merge_after_verify`. `scripts/coach_autonomy.py` valide cette policy,
+decide l'autonomie d'un transition_gate, decide l'auto-reflection, evalue un
+budget API fourni, valide un pre-merge report fourni et decide si auto-merge
+serait allowed, blocked ou stop_human.
+
+Auto-merge is now a policy possibility, not an implemented merge action. Merge
+reste manual by default. Auto-merge serait possible uniquement avec
+`merge_mode: auto_after_verify` et seulement apres verify gate complet. Codex
+039 only decides from supplied verification reports.
+
+Ce gate est workflow tooling only. Il n'appelle pas GitHub API, gh, git,
+pytest, OpenAI, GPT, Codex SDK ou Codex CLI. Il ne fait aucun real merge, ne
+push aucune branche, ne cree aucun commit depuis les scripts repository et ne
+cree aucune autonomous full loop.
+
+Ce gate ne modifie aucun chemin runtime autorise, n'active aucun prompt dans
+`src/`, ne rend pas et n'execute pas de prompt dans le runtime dicoimpro, ne
+lance pas RUN, ne lit pas et n'ecrit pas le journal actif, n'applique pas
+JournalPatch, ne traite pas de donnees reelles, ne publie pas, n'exporte pas
+XLSX/CSV, n'utilise pas l'ancien PDF et ne change aucun comportement
+production.
+
 ## 6. Verdict Go/No-Go
 
 ```text
@@ -540,7 +584,11 @@ NO-GO - prompt actif/consomme ;
 NO-GO - Codex SDK ;
 NO-GO - Codex CLI ;
 NO-GO - execution Codex depuis les scripts repository ;
+NO-GO - GitHub API ;
+NO-GO - git/gh execution ;
+NO-GO - real merge ;
 NO-GO - PR/merge automation dans les scripts repository ;
+NO-GO - autonomous full loop ;
 NO-GO - boucle autonome ;
 NO-GO - source discovery ;
 NO-GO - RUN.
@@ -604,13 +652,14 @@ Ces conditions sont cumulatives. L'absence d'une seule condition maintient le st
 20. Codex 036 ajoute un scaffold docs/tests/scripts-only local coach context collector and state machine, avec etat local ignore, dossiers de run, paquets de contexte markdown filtres et application deterministe de transition_gate, sans API calls, sans Codex SDK, sans Codex CLI, sans autonomous loop, sans prompt activation/rendering/execution/consumption, sans RUN, sans journal/JournalPatch, sans real data, sans PR/merge automation, sans production code ni changement de comportement ; ce point est courant et complété.
 21. Codex 037 ajoute un runner local GPT-5.5 Thinking docs/tests/scripts pour le coach loop, explicit API only, no API calls by default, avec import OpenAI lazy/dynamic, validation de stage notes, extraction transition_gate/next_prompt et update d'etat local seulement via transition_gate, sans OpenAI runtime dans l'application dicoimpro, sans Codex SDK/CLI, sans autonomous loop, sans RUN, sans journal/JournalPatch, sans real data, sans PR/merge automation dans les scripts, sans src runtime behavior change ; ce point est courant et complété.
 22. Codex 038 ajoute un manual Codex handoff bridge docs/tests/scripts pour le coach loop, avec packaging next_prompt/codex_prompt en handoff packets, archive de retours Codex fournis manuellement, validation PR/tests/diff-check/files/guardrail et extraction PR URL, sans Codex SDK/CLI, sans execution Codex depuis les scripts repository, sans OpenAI call, sans GPT call, sans autonomous loop, sans repository-script PR/merge automation, sans RUN, sans journal/JournalPatch, sans real data, sans publication, sans src runtime behavior change ; ce point est courant et complété.
-23. Maintenir un contrôle de synchronisation documentation/tests.
+23. Codex 039 ajoute une autonomy policy and pre-merge verify gate docs/tests/scripts pour le coach-loop program, avec stop_human, auto_local, auto_external_with_budget et auto_merge_after_verify decision modeling, merge manual by default, auto-merge comme policy possibility only after complete verify gate, decisions depuis supplied verification reports, sans real merge, sans GitHub API, sans git/gh execution, sans Codex SDK/CLI, sans autonomous full loop, sans RUN, sans journal/JournalPatch, sans real data, sans publication, sans src runtime behavior change ; ce point est courant et complété.
+24. Maintenir un contrôle de synchronisation documentation/tests.
 ```
 
 Ces étapes restent documentaires ou mock-only. Elles ne doivent pas introduire de prompt
 actif, de prompt body consomme, de rendu/chargement/execution de prompt dans le
 runtime dicoimpro, d'appel OpenAI reel par defaut, de Codex SDK, de Codex CLI,
-d'execution Codex depuis les scripts repository, de boucle autonome, de lecture de donnees reelles, de publication, de RUN,
+d'execution Codex depuis les scripts repository, de GitHub API, de git/gh execution, de real merge, de boucle autonome, d'autonomous full loop, de lecture de donnees reelles, de publication, de RUN,
 d'application de JournalPatch, de source discovery, de selection de candidats,
 de contrat JSON final, d'enum runtime, d'ancien PDF actif, d'export XLSX/CSV ou
 d'automatisation PR/merge dans les scripts repository.
