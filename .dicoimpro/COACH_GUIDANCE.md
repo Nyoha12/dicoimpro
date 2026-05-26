@@ -174,6 +174,31 @@ Repository scripts in Codex 039 only decide, they do not merge. They do not call
 GitHub API, git, gh, OpenAI, GPT, Codex SDK, Codex CLI, or run a full autonomous
 loop.
 
+## Guarded PR verification and merge execution boundary
+
+Merge is possible only through explicit verify runner tooling. Merge never
+happens by default.
+
+`--execute-merge` and `merge_mode auto_after_verify` are required before the
+program may attempt a real merge. A fresh verify gate and stable head SHA are
+required. The verify gate must confirm PR state, authorized changed files, no
+forbidden paths, no detected secrets, valid archived Codex return, guardrail
+guarantee, tests, diff-check, CI status, review state, and absence of
+contradictions.
+--execute-merge and merge_mode auto_after_verify are required. Fresh verify
+gate and stable head SHA are required.
+
+Post-merge tests are required after an executed merge. Post-merge failure stops
+human and must not trigger destructive auto-repair, auto-revert, or automatic
+follow-up merge behavior.
+No destructive auto-repair.
+
+This boundary does not authorize RUN/journal/JournalPatch/real data/src runtime
+behavior change. It also does not authorize prompt activation, prompt rendering,
+prompt execution, candidate selection, publication, XLSX/CSV export, old PDF
+usage, OpenAI runtime in `src/`, Codex SDK/CLI, automatic Codex execution, or
+autonomous full loop behavior.
+
 ## Non-activation rule
 
 The files under `.dicoimpro/` are workflow architecture documents and examples.

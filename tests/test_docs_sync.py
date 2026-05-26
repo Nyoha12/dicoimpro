@@ -68,11 +68,14 @@ WORKFLOW_COACH_CODEX_HANDOFF_BRIDGE_PATH = (
 WORKFLOW_COACH_AUTONOMY_VERIFY_GATE_PATH = (
     DOCS_DIR / "WORKFLOW_COACH_AUTONOMY_VERIFY_GATE_v0.2.3-auto.md"
 )
+WORKFLOW_COACH_PR_VERIFY_MERGE_RUNNER_PATH = (
+    DOCS_DIR / "WORKFLOW_COACH_PR_VERIFY_MERGE_RUNNER_v0.2.3-auto.md"
+)
 PROMPT_PACKAGE_FIXTURE_DIR = REPO_ROOT / "tests" / "fixtures" / "prompt_packages"
 SRC_DIR = REPO_ROOT / "src" / "dico_impro"
 
 EXPECTED_CODEX_FIRST = 1
-EXPECTED_CODEX_LAST = 39
+EXPECTED_CODEX_LAST = 40
 EXPECTED_CODEX_IDS = tuple(
     f"{number:03d}" for number in range(EXPECTED_CODEX_FIRST, EXPECTED_CODEX_LAST + 1)
 )
@@ -189,6 +192,7 @@ def test_readme_active_docs_include_current_review_and_prompt_protocol():
         WORKFLOW_COACH_GPT_STAGE_RUNNER_PATH.name,
         WORKFLOW_COACH_CODEX_HANDOFF_BRIDGE_PATH.name,
         WORKFLOW_COACH_AUTONOMY_VERIFY_GATE_PATH.name,
+        WORKFLOW_COACH_PR_VERIFY_MERGE_RUNNER_PATH.name,
     )
 
     active_hierarchy = extract_markdown_section(readme, "Hiérarchie active")
@@ -1515,6 +1519,55 @@ def test_codex_039_is_docs_tests_scripts_autonomy_policy_verify_gate():
         assert "src runtime behavior change" in normalized_document or (
             "`src/` runtime behavior change" in normalized_document
         ), f"{source_name} must state Codex 039 changes no src runtime behavior."
+
+
+def test_codex_040_is_docs_tests_scripts_guarded_pr_verify_merge_runner():
+    readme = read_text(README_PATH)
+    review = read_text(POST_015_REVIEW_PATH)
+    workflow = read_text(WORKFLOW_COACH_PR_VERIFY_MERGE_RUNNER_PATH)
+
+    for source_name, document in (
+        ("README", readme),
+        ("post-015 architecture review", review),
+        ("Codex 040 workflow doc", workflow),
+    ):
+        normalized_document = normalize_text(document)
+        assert "codex 040" in normalized_document, (
+            f"{source_name} must list Codex 040."
+        )
+        assert "guarded pr verification and optional auto-merge runner" in normalized_document, (
+            f"{source_name} must frame Codex 040 as a guarded PR verify runner."
+        )
+        assert "coach-loop program" in normalized_document or "coach loop" in normalized_document, (
+            f"{source_name} must tie Codex 040 to the coach-loop program."
+        )
+        assert "docs/tests/scripts" in normalized_document, (
+            f"{source_name} must keep Codex 040 framed as docs/tests/scripts."
+        )
+        assert "pre_merge_report" in normalized_document, (
+            f"{source_name} must mention pre_merge_report."
+        )
+        assert "--execute-merge" in normalized_document, (
+            f"{source_name} must require --execute-merge."
+        )
+        assert "auto_after_verify" in normalized_document, (
+            f"{source_name} must require auto_after_verify."
+        )
+        assert "fresh verify gate" in normalized_document, (
+            f"{source_name} must require a fresh verify gate."
+        )
+        assert "stable head sha" in normalized_document, (
+            f"{source_name} must require a stable head SHA."
+        )
+        assert "codex sdk/cli" in normalized_document or (
+            "codex sdk" in normalized_document and "codex cli" in normalized_document
+        ), f"{source_name} must state Codex 040 adds no Codex SDK/CLI."
+        assert "autonomous full loop" in normalized_document, (
+            f"{source_name} must state Codex 040 adds no autonomous full loop."
+        )
+        assert "src runtime behavior change" in normalized_document or (
+            "`src/` runtime behavior change" in normalized_document
+        ), f"{source_name} must state Codex 040 changes no src runtime behavior."
 
 
 def test_prompt_package_fixtures_validate_and_remain_disabled_metadata_only():
