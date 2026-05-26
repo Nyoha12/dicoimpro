@@ -243,6 +243,21 @@ prompt execution inside `src/`, candidate selection, publication, XLSX/CSV
 export, old PDF usage, Codex SDK/CLI, automatic Codex execution, or unbounded
 autonomous loop behavior.
 
+## Coach-loop freeze status
+
+The coach-loop block is frozen after Codex 043 if tests pass. This freeze adds
+no new autonomy and no new workflow capability.
+
+Controlled usage is allowed through the runbook and final audit. API, Codex,
+PR verification, and merge boundaries remain unchanged: API requires explicit
+`--execute-api`, Codex remains manual handoff, PR verification remains guarded,
+and merge remains non-default and explicit.
+
+Any future production integration requires a separate explicit decision. This
+freeze authorizes no RUN/journal/JournalPatch/real data/src runtime behavior
+change, no prompt activation, no source discovery, no candidate selection, no
+publication, no XLSX/CSV export, and no old PDF usage.
+
 ## Non-activation rule
 
 The files under `.dicoimpro/` are workflow architecture documents and examples.
