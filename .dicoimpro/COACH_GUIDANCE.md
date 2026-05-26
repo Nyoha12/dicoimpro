@@ -146,6 +146,34 @@ behavior change. It also authorizes no prompt activation, prompt rendering,
 prompt execution, OpenAI runtime in `src/`, candidate selection, publication,
 XLSX/CSV export, old PDF usage, or production behavior change.
 
+## Program autonomy and verification policy
+
+The future local coach-loop program uses four autonomy levels:
+
+- `stop_human`: the program stops and requires a human decision.
+- `auto_local`: the program may perform local non-destructive operations.
+- `auto_external_with_budget`: the program may call explicitly authorized
+  external services such as GPT within budget and only when the run was
+  launched with that authorization.
+- `auto_merge_after_verify`: the program may merge a PR only after a complete
+  verification gate passes and only when `merge_mode` explicitly allows it.
+
+Merge is manual by default. Auto-merge possible only with auto_after_verify,
+meaning `merge_mode: auto_after_verify`, and auto-merge requires complete verify
+gate evidence. Verification must stop for a human when objective, scope, risk,
+tests, secrets, reviews, CI, PR state, budget, or contradictions are unresolved.
+Risk unknown means `stop_human`.
+
+Auto-reflection is allowed only when `reflection_required` is true,
+`required_user_intervention` is false, the blocking question is not a
+substantive human decision, and `max_reflections_per_stage` is not exceeded.
+The recommended default limit is 3; after the limit, stop_human with a summary
+of the unresolved blockage.
+
+Repository scripts in Codex 039 only decide, they do not merge. They do not call
+GitHub API, git, gh, OpenAI, GPT, Codex SDK, Codex CLI, or run a full autonomous
+loop.
+
 ## Non-activation rule
 
 The files under `.dicoimpro/` are workflow architecture documents and examples.

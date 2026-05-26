@@ -99,6 +99,16 @@ Field rules:
   the next stage can proceed.
 - `allowed_to_execute_automatically` remains false in this scaffold.
 
+Autonomy rules:
+
+- `transition_gate.required_user_intervention` controls autonomy. When it is
+  true, local workflow tooling must stop for a human before advancing.
+- `blocking_question` may trigger `stop_human` when it asks for a substantive
+  human decision such as scope approval, risk acceptance, budget approval,
+  secret handling, publication, merge, or production behavior change.
+- `next_prompt_ready` is not sufficient for auto-advance when
+  `required_user_intervention` is true.
+
 The transition_gate block must remain parseable enough for
 `scripts/coach_step.py`: keep the `transition_gate:` line followed by indented
 simple `key: value` fields. The local state machine follows this block and does
