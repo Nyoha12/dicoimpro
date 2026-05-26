@@ -77,11 +77,14 @@ WORKFLOW_COACH_LOOP_RUNNER_PATH = (
 RUNBOOK_COACH_LOOP_USAGE_PATH = (
     DOCS_DIR / "RUNBOOK_COACH_LOOP_USAGE_v0.2.3-auto.md"
 )
+COACH_LOOP_FINAL_AUDIT_FREEZE_PATH = (
+    DOCS_DIR / "COACH_LOOP_FINAL_AUDIT_FREEZE_v0.2.3-auto.md"
+)
 PROMPT_PACKAGE_FIXTURE_DIR = REPO_ROOT / "tests" / "fixtures" / "prompt_packages"
 SRC_DIR = REPO_ROOT / "src" / "dico_impro"
 
 EXPECTED_CODEX_FIRST = 1
-EXPECTED_CODEX_LAST = 42
+EXPECTED_CODEX_LAST = 43
 EXPECTED_CODEX_IDS = tuple(
     f"{number:03d}" for number in range(EXPECTED_CODEX_FIRST, EXPECTED_CODEX_LAST + 1)
 )
@@ -201,6 +204,7 @@ def test_readme_active_docs_include_current_review_and_prompt_protocol():
         WORKFLOW_COACH_PR_VERIFY_MERGE_RUNNER_PATH.name,
         WORKFLOW_COACH_LOOP_RUNNER_PATH.name,
         RUNBOOK_COACH_LOOP_USAGE_PATH.name,
+        COACH_LOOP_FINAL_AUDIT_FREEZE_PATH.name,
     )
 
     active_hierarchy = extract_markdown_section(readme, "Hiérarchie active")
@@ -1682,6 +1686,58 @@ def test_codex_042_is_docs_tests_scripts_runner_hardening_runbook():
         assert "src runtime behavior change" in normalized_document or (
             "`src/` runtime behavior change" in normalized_document
         ), f"{source_name} must state Codex 042 changes no src runtime behavior."
+
+
+def test_codex_043_is_docs_tests_final_audit_freeze():
+    readme = read_text(README_PATH)
+    review = read_text(POST_015_REVIEW_PATH)
+    freeze = read_text(COACH_LOOP_FINAL_AUDIT_FREEZE_PATH)
+
+    for source_name, document in (
+        ("README", readme),
+        ("post-015 architecture review", review),
+        ("Codex 043 final audit freeze", freeze),
+    ):
+        normalized_document = normalize_text(document)
+        assert "codex 043" in normalized_document, (
+            f"{source_name} must list Codex 043."
+        )
+        assert "final audit" in normalized_document, (
+            f"{source_name} must frame Codex 043 as a final audit."
+        )
+        assert "freeze" in normalized_document, (
+            f"{source_name} must frame Codex 043 as a freeze."
+        )
+        assert "codex 035-042 coherence" in normalized_document or (
+            "coherence codex 035-042" in normalized_document
+        ), f"{source_name} must confirm Codex 035-042 coherence."
+        assert "controlled local usage" in normalized_document, (
+            f"{source_name} must state controlled local usage readiness."
+        )
+        assert "no runtime feature" in normalized_document, (
+            f"{source_name} must state Codex 043 adds no runtime feature."
+        )
+        assert "no script change" in normalized_document, (
+            f"{source_name} must state Codex 043 adds no script change."
+        )
+        assert "no new autonomy" in normalized_document, (
+            f"{source_name} must state Codex 043 adds no new autonomy."
+        )
+        assert "no openai/gpt call" in normalized_document or (
+            "sans openai/gpt call" in normalized_document
+        ), f"{source_name} must state Codex 043 makes no OpenAI/GPT call."
+        assert "codex sdk/cli" in normalized_document, (
+            f"{source_name} must state Codex 043 adds no Codex SDK/CLI."
+        )
+        assert "automatic codex execution" in normalized_document, (
+            f"{source_name} must state Codex 043 adds no automatic Codex execution."
+        )
+        assert "unbounded autonomous loop" in normalized_document, (
+            f"{source_name} must state Codex 043 adds no unbounded autonomous loop."
+        )
+        assert "src runtime behavior change" in normalized_document or (
+            "`src/` runtime behavior change" in normalized_document
+        ), f"{source_name} must state Codex 043 changes no src runtime behavior."
 
 
 def test_prompt_package_fixtures_validate_and_remain_disabled_metadata_only():

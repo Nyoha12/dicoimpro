@@ -38,6 +38,7 @@ En cas de contradiction, lire dans cet ordre :
 29. WORKFLOW_COACH_PR_VERIFY_MERGE_RUNNER_v0.2.3-auto.md
 30. WORKFLOW_COACH_LOOP_RUNNER_v0.2.3-auto.md
 31. RUNBOOK_COACH_LOOP_USAGE_v0.2.3-auto.md
+32. COACH_LOOP_FINAL_AUDIT_FREEZE_v0.2.3-auto.md
 ```
 
 ## Documents actifs
@@ -296,6 +297,15 @@ Without new autonomy, OpenAI/GPT direct calls, Codex SDK/CLI, automatic Codex
 execution, gh/git/pytest execution from diagnostics, unbounded autonomous loop,
 RUN, journal, JournalPatch, real data or src runtime behavior change.
 
+### `COACH_LOOP_FINAL_AUDIT_FREEZE_v0.2.3-auto.md`
+
+Final audit Codex 043 docs/tests of the coach-loop development block. Confirms
+Codex 035-042 coherence, controlled local usage readiness, final guardrails,
+usage checklist and optional remaining work. No runtime feature, no script
+change, no new autonomy, no OpenAI/GPT call, no Codex SDK/CLI, no automatic
+Codex execution, no unbounded autonomous loop, no RUN, journal, JournalPatch,
+real data or src runtime behavior change.
+
 ## Document superseded
 
 ### `ARCHITECTURE_SDK_v0.2.3-auto.md`
@@ -347,6 +357,7 @@ Codex 039 - docs/tests/scripts autonomy policy and pre-merge verify gate for the
 Codex 040 - docs/tests/scripts guarded PR verification and optional auto-merge runner for the coach-loop program, building pre_merge_report from PR evidence, deciding through autonomy policy and executing merge only with --execute-merge plus auto_after_verify, without OpenAI/GPT/Codex SDK/CLI, autonomous full loop, RUN, journal, JournalPatch, real data or src runtime behavior change.
 Codex 041 - docs/tests/scripts semi-automatic coach-loop runner orchestrating context collection, GPT stage execution, transition_gate validation, bounded auto-reflection, Codex handoff, Codex return resume, PR verification and guarded merge delegation, without Codex SDK/CLI, automatic Codex execution, unbounded autonomous loop, RUN, journal, JournalPatch, real data or src runtime behavior change.
 Codex 042 - docs/tests/scripts hardening and operational runbook for the semi-automatic coach-loop runner, adding local-only doctor, validate-run and explain-next diagnostics without new autonomy, OpenAI/GPT direct calls, Codex SDK/CLI, automatic Codex execution, gh/git/pytest execution from diagnostics, unbounded autonomous loop, RUN, journal, JournalPatch, real data or src runtime behavior change.
+Codex 043 - docs/tests final audit and freeze of the coach-loop development block, confirming Codex 035-042 coherence, controlled local usage readiness, no new runtime feature, no script change, no new autonomy, no OpenAI/GPT call, no Codex SDK/CLI, no automatic Codex execution, no unbounded autonomous loop, no RUN, journal, JournalPatch, real data or src runtime behavior change.
 ```
 
 ## Règles non négociables
