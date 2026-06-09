@@ -1,6 +1,6 @@
 # Revue architecture post-015 — dicoimpro v0.2.3-auto
 
-Statut : revue documentaire post-Codex 015, synchronisee apres Codex 044.
+Statut : revue documentaire post-Codex 015, synchronisee apres Codex 045.
 Objet : consolider l'état courant, les garde-fous, les risques et les conditions
 obligatoires avant tout futur travail sur un appel OpenAI reel ou sur des prompts actifs.
 
@@ -16,7 +16,7 @@ aucune boucle autonome et aucune execution de prompt.
 Etat attendu au moment de cette revue :
 
 ```text
-Codex 001 a Codex 043 sont fusionnes dans main avant Codex 044.
+Codex 001 a Codex 044 sont fusionnes dans main avant Codex 045.
 pytest passe.
 Etat courant de main avant Codex 019 : 252 tests passing.
 Etat courant apres Codex 019 : 253 tests passing.
@@ -67,6 +67,8 @@ Etat courant apres Codex 042 : 609 tests passing (docs/tests/scripts hardening a
 Etat courant de main avant Codex 043 : 609 tests passing.
 Etat courant apres Codex 043 : 620 tests passing (user-reported after PR #43 merge).
 Etat courant de main avant Codex 044 : 620 tests passing.
+Etat courant apres Codex 044 : 628 tests passing (user-reported after PR #45 merge).
+Etat courant de main avant Codex 045 : 628 tests passing.
 Le dry-run CLI manuel post-015 a été validé par l'utilisateur.
 Les fixtures PromptPackage metadata-only sont présentes et désactivées.
 Codex 019 ajoute le smoke test CLI dry-run fake-only end-to-end.
@@ -95,6 +97,7 @@ Codex 041 ajoute un semi-automatic coach-loop runner docs/tests/scripts, avec or
 Codex 042 ajoute un hardening and operational runbook docs/tests/scripts pour le semi-automatic coach-loop runner, avec diagnostics local-only doctor, validate-run et explain-next, sans nouvelle autonomie, sans OpenAI/GPT direct calls, sans Codex SDK/CLI, sans automatic Codex execution, sans gh/git/pytest execution from diagnostics, sans unbounded autonomous loop, sans RUN, sans journal/JournalPatch, sans real data, sans publication, sans src runtime behavior change.
 Codex 043 ajoute un final audit and freeze docs/tests du coach-loop development block, confirme la coherence Codex 035-042 et la readiness de controlled local usage after merge if tests pass, avec no runtime feature, no script change, sans nouvelle autonomie, sans OpenAI/GPT call, sans Codex SDK/CLI, sans automatic Codex execution, sans unbounded autonomous loop, sans RUN, sans journal/JournalPatch, sans real data, sans publication, sans src runtime behavior change.
 Codex 044 ajoute une specification docs/tests-only d'alignement entry/fiche, gardant id_entree_original comme runtime anchor et fiche_id/type_fiche comme future-only, sans id_fiche, Fiche model, categorization, RUN, journal write, JournalPatch application, data processing, scripts change ni src runtime behavior change.
+Codex 045 ajoute une specification docs/tests-only de vocabulaire entry RUN reprise, gardant type_unite_RUN comme pre-RUN framing et future type_fiche mappe a type_unite_RUN avant tout champ ou enum runtime, sans id_fiche, fiche_id, Fiche model, type_fiche runtime, categorization, RUN, journal write, JournalPatch application, data processing, schemas change, scripts change ni src runtime behavior change.
 ```
 
 Résumé des couches déjà matérialisées :
@@ -144,6 +147,7 @@ Codex 041 - docs/tests/scripts semi-automatic coach-loop runner orchestrating co
 Codex 042 - docs/tests/scripts hardening and operational runbook for the semi-automatic coach-loop runner, adding local-only doctor, validate-run and explain-next diagnostics without new autonomy, OpenAI/GPT direct calls, Codex SDK/CLI, automatic Codex execution, gh/git/pytest execution from diagnostics, unbounded autonomous loop, RUN, journal, JournalPatch, real data or src runtime behavior change.
 Codex 043 - docs/tests final audit and freeze of the coach-loop development block, confirming Codex 035-042 coherence, controlled local usage readiness, no new runtime feature, no script change, no new autonomy, no OpenAI/GPT call, no Codex SDK/CLI, no automatic Codex execution, no unbounded autonomous loop, no RUN, journal, JournalPatch, real data or src runtime behavior change.
 Codex 044 - docs/tests-only entry/fiche alignment specification, keeping id_entree_original as the runtime anchor now and fiche_id/type_fiche future-only, without id_fiche, Fiche model, categorization, RUN, journal write, JournalPatch application, data processing, scripts change or src runtime behavior change.
+Codex 045 - docs/tests-only entry RUN reprise vocabulary specification, keeping type_unite_RUN as pre-RUN framing and future type_fiche mapped to type_unite_RUN before any runtime field or enum, without id_fiche, fiche_id, Fiche model, type_fiche runtime, categorization, RUN, journal write, JournalPatch application, data processing, schemas change, scripts change or src runtime behavior change.
 ```
 
 ## 2. Statut du dry-run CLI manuel
@@ -178,7 +182,7 @@ Garde-fous confirmés pour ce chemin :
 
 ## 3. Chemins actuellement autorisés
 
-Les seuls chemins runtime autorises apres Codex 044 restent ceux de Codex 020, Codex 021 et Codex 022 :
+Les seuls chemins runtime autorises apres Codex 045 restent ceux de Codex 020, Codex 021 et Codex 022 :
 
 ```text
 1. fake CLI dry-run ;
@@ -713,6 +717,22 @@ etre mappe a `type_unite_RUN` avant tout champ ou enum. Codex 044 n'ajoute pas
 `id_fiche`, ne cree pas de `Fiche` model, n'introduit pas de categorization,
 ne modifie pas `src/`, ne modifie pas `scripts/`, ne traite pas de donnees,
 ne lance pas RUN, n'ecrit pas le journal actif et n'applique pas JournalPatch.
+
+### Entry RUN reprise vocabulary specification
+
+`SPEC_VOCABULAIRE_ENTREES_RUN_REPRISE_v0.2.3-auto.md` documente Codex 045 :
+specification docs/tests-only du vocabulaire entry RUN reprise avant toute
+implementation future.
+
+Cette specification garde `type_unite_RUN` comme pre-RUN framing et conserve
+`type_fiche` comme future-only. Un futur `type_fiche` doit etre mappe a
+`type_unite_RUN` avant tout champ ou enum runtime. RUN possible ne signifie pas
+fiche ready, fiche lifecycle complete ou categorization. Codex 045 n'ajoute pas
+`id_fiche`, `fiche_id`, `Fiche` model, `type_fiche` runtime, relation graph,
+changelog ou fiche lifecycle. Codex 045 ne modifie pas `src/`, ne modifie pas
+`scripts/`, ne modifie pas `data/`, ne modifie pas `schemas/`, ne traite pas
+de donnees, ne lance pas RUN, n'ecrit pas le journal actif et n'applique pas
+JournalPatch.
 
 ## 6. Verdict Go/No-Go
 

@@ -40,6 +40,7 @@ En cas de contradiction, lire dans cet ordre :
 31. RUNBOOK_COACH_LOOP_USAGE_v0.2.3-auto.md
 32. COACH_LOOP_FINAL_AUDIT_FREEZE_v0.2.3-auto.md
 33. SPEC_ALIGNEMENT_ENTREES_FICHES_v0.2.3-auto.md
+34. SPEC_VOCABULAIRE_ENTREES_RUN_REPRISE_v0.2.3-auto.md
 ```
 
 ## Documents actifs
@@ -317,6 +318,17 @@ to `type_unite_RUN`, and adds no `id_fiche`, no `Fiche` model, no
 categorization, no RUN, no journal write, no JournalPatch application, no data
 processing, no script change and no src runtime behavior change.
 
+### `SPEC_VOCABULAIRE_ENTREES_RUN_REPRISE_v0.2.3-auto.md`
+
+Specification Codex 045 docs/tests-only for entry RUN reprise vocabulary. It
+keeps the repository centered on `id_entree_original`, treats
+`type_unite_RUN` as pre-RUN framing, keeps future `type_fiche` mapped to
+`type_unite_RUN` before any runtime field or enum, and states that RUN possible
+does not mean fiche ready. It adds no `id_fiche`, no `fiche_id`, no `Fiche`
+model, no `type_fiche` runtime, no categorization, no RUN, no journal write,
+no JournalPatch application, no data processing, no schema change, no script
+change and no src runtime behavior change.
+
 ## Document superseded
 
 ### `ARCHITECTURE_SDK_v0.2.3-auto.md`
@@ -370,6 +382,7 @@ Codex 041 - docs/tests/scripts semi-automatic coach-loop runner orchestrating co
 Codex 042 - docs/tests/scripts hardening and operational runbook for the semi-automatic coach-loop runner, adding local-only doctor, validate-run and explain-next diagnostics without new autonomy, OpenAI/GPT direct calls, Codex SDK/CLI, automatic Codex execution, gh/git/pytest execution from diagnostics, unbounded autonomous loop, RUN, journal, JournalPatch, real data or src runtime behavior change.
 Codex 043 - docs/tests final audit and freeze of the coach-loop development block, confirming Codex 035-042 coherence, controlled local usage readiness, no new runtime feature, no script change, no new autonomy, no OpenAI/GPT call, no Codex SDK/CLI, no automatic Codex execution, no unbounded autonomous loop, no RUN, journal, JournalPatch, real data or src runtime behavior change.
 Codex 044 - docs/tests-only entry/fiche alignment specification, keeping id_entree_original as the runtime anchor now and fiche_id/type_fiche future-only, without id_fiche, Fiche model, categorization, RUN, journal write, JournalPatch application, data processing, scripts change or src runtime behavior change.
+Codex 045 - docs/tests-only entry RUN reprise vocabulary specification, keeping type_unite_RUN as pre-RUN framing and future type_fiche mapped to type_unite_RUN before any runtime field or enum, without id_fiche, fiche_id, Fiche model, type_fiche runtime, categorization, RUN, journal write, JournalPatch application, data processing, schemas change, scripts change or src runtime behavior change.
 ```
 
 ## Règles non négociables
