@@ -130,11 +130,13 @@ def test_guidance_readme_and_post_015_reference_codex_043_freeze():
     assert "production integration reste hors scope" in review
 
 
-def test_docs_sync_expects_codex_043_and_final_audit_doc():
+def test_docs_sync_expects_current_codex_range_and_final_audit_doc():
     source = read_text(DOCS_SYNC_TEST_PATH)
-    assert "EXPECTED_CODEX_LAST = 43" in source
+    assert "EXPECTED_CODEX_LAST = 44" in source
     assert "COACH_LOOP_FINAL_AUDIT_FREEZE_PATH" in source
     assert "COACH_LOOP_FINAL_AUDIT_FREEZE_v0.2.3-auto.md" in source
+    assert "ENTRY_FICHE_ALIGNMENT_SPEC_PATH" in source
+    assert "SPEC_ALIGNEMENT_ENTREES_FICHES_v0.2.3-auto.md" in source
 
 
 def test_scripts_do_not_reference_codex_043_or_final_audit_doc():

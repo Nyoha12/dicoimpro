@@ -80,11 +80,14 @@ RUNBOOK_COACH_LOOP_USAGE_PATH = (
 COACH_LOOP_FINAL_AUDIT_FREEZE_PATH = (
     DOCS_DIR / "COACH_LOOP_FINAL_AUDIT_FREEZE_v0.2.3-auto.md"
 )
+ENTRY_FICHE_ALIGNMENT_SPEC_PATH = (
+    DOCS_DIR / "SPEC_ALIGNEMENT_ENTREES_FICHES_v0.2.3-auto.md"
+)
 PROMPT_PACKAGE_FIXTURE_DIR = REPO_ROOT / "tests" / "fixtures" / "prompt_packages"
 SRC_DIR = REPO_ROOT / "src" / "dico_impro"
 
 EXPECTED_CODEX_FIRST = 1
-EXPECTED_CODEX_LAST = 43
+EXPECTED_CODEX_LAST = 44
 EXPECTED_CODEX_IDS = tuple(
     f"{number:03d}" for number in range(EXPECTED_CODEX_FIRST, EXPECTED_CODEX_LAST + 1)
 )
@@ -205,6 +208,7 @@ def test_readme_active_docs_include_current_review_and_prompt_protocol():
         WORKFLOW_COACH_LOOP_RUNNER_PATH.name,
         RUNBOOK_COACH_LOOP_USAGE_PATH.name,
         COACH_LOOP_FINAL_AUDIT_FREEZE_PATH.name,
+        ENTRY_FICHE_ALIGNMENT_SPEC_PATH.name,
     )
 
     active_hierarchy = extract_markdown_section(readme, "Hiérarchie active")
@@ -1738,6 +1742,63 @@ def test_codex_043_is_docs_tests_final_audit_freeze():
         assert "src runtime behavior change" in normalized_document or (
             "`src/` runtime behavior change" in normalized_document
         ), f"{source_name} must state Codex 043 changes no src runtime behavior."
+
+
+def test_codex_044_is_docs_tests_entry_fiche_alignment():
+    readme = read_text(README_PATH)
+    review = read_text(POST_015_REVIEW_PATH)
+    spec = read_text(ENTRY_FICHE_ALIGNMENT_SPEC_PATH)
+
+    for source_name, document in (
+        ("README", readme),
+        ("post-015 architecture review", review),
+        ("Codex 044 entry/fiche alignment spec", spec),
+    ):
+        normalized_document = normalize_text(document)
+        assert "codex 044" in normalized_document, (
+            f"{source_name} must list Codex 044."
+        )
+        assert "entry/fiche alignment" in normalized_document or (
+            "entry / fiche alignment" in normalized_document
+        ), f"{source_name} must frame Codex 044 as entry/fiche alignment."
+        assert "docs/tests-only" in normalized_document, (
+            f"{source_name} must keep Codex 044 framed as docs/tests-only."
+        )
+        assert "id_entree_original" in normalized_document, (
+            f"{source_name} must mention id_entree_original."
+        )
+        assert "runtime anchor" in normalized_document, (
+            f"{source_name} must keep id_entree_original as the runtime anchor."
+        )
+        assert "fiche_id" in normalized_document, (
+            f"{source_name} must mention future fiche_id."
+        )
+        assert "type_fiche" in normalized_document, (
+            f"{source_name} must mention future type_fiche."
+        )
+        assert "type_unite_run" in normalized_document, (
+            f"{source_name} must mention type_unite_RUN."
+        )
+        assert (
+            "no id_fiche" in normalized_document
+            or "sans id_fiche" in normalized_document
+            or "without id_fiche" in normalized_document
+            or "does not introduce `id_fiche`" in normalized_document
+        ), (
+            f"{source_name} must state Codex 044 adds no id_fiche."
+        )
+        assert "fiche model" in normalized_document, (
+            f"{source_name} must state Codex 044 adds no Fiche model."
+        )
+        assert "categorization" in normalized_document, (
+            f"{source_name} must state categorization remains out of scope."
+        )
+        assert "journalpatch application" in normalized_document, (
+            f"{source_name} must state Codex 044 applies no JournalPatch."
+        )
+        assert "src runtime behavior change" in normalized_document, (
+            f"{source_name} must state Codex 044 changes no src runtime behavior."
+        )
 
 
 def test_prompt_package_fixtures_validate_and_remain_disabled_metadata_only():
